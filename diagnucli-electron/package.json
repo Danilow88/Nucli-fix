@@ -1,0 +1,41 @@
+{
+  "name": "diagnucli-electron",
+  "version": "1.0.0",
+  "description": "DiagnuCLI Electron app",
+  "main": "main.js",
+  "author": "DiagnuCLI",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.diagnucli.app",
+    "productName": "DiagnuCLI",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../diagnucli",
+        "to": "diagnucli"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "icon": "assets/icon.icns"
+    }
+  }
+}

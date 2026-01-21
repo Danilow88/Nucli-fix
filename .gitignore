@@ -1,0 +1,21 @@
+.DS_Store
+*.log
+*.tmp
+*.swp
+*.zip.blockmap
+*.dmg
+*.dmg.blockmap
+*.app
+nucli-comandos-executados-*.txt
+nucli-diagnostico-final-*.txt
+nucli-troubleshoot-report-*.txt
+nucli-troubleshoot-detailed-report-*.txt
+nucli-troubleshoot-test-report-*.txt
+
+# Electron / Node
+node_modules/
+dist/
+
+# OS / IDE
+.idea/
+.vscode/

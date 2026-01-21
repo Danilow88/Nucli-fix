@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DiagnuCLI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="brand">
+          <div class="logo">NU</div>
+          <div>
+            <h1>DiagnuCLI</h1>
+            <p data-i18n="subtitle">Diagnóstico interativo NuCLI + AWS</p>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="lang-toggle">
+            <button class="lang-btn" data-lang="pt">PT-BR</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <button id="startButton" data-i18n="startButton">
+            Iniciar diagnóstico
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="panel">
+          <div class="panel-title" data-i18n="liveTitle">
+            Execução em tempo real
+          </div>
+          <div class="status" id="statusText" data-i18n="statusIdle">
+            Aguardando início. O Terminal do macOS abrirá em segundo plano.
+          </div>
+          <div class="menu-grid">
+            <button class="menu-card" data-option="1">
+              <span class="menu-title" data-i18n="opt1Title">
+                Verificação completa
+              </span>
+              <span class="menu-desc" data-i18n="opt1Desc">
+                Roda todas as verificações e gera relatório final.
+              </span>
+            </button>
+            <button class="menu-card" data-option="7">
+              <span class="menu-title" data-i18n="opt7Title">
+                Testar comandos NuCLI
+              </span>
+              <span class="menu-desc" data-i18n="opt7Desc">
+                Checa nu doctor, versões e comandos essenciais.
+              </span>
+            </button>
+            <button class="menu-card" data-option="10">
+              <span class="menu-title" data-i18n="opt10Title">
+                Roles, escopos e países
+              </span>
+              <span class="menu-desc" data-i18n="opt10Desc">
+                Valida permissões e acessos por conta.
+              </span>
+            </button>
+            <button class="menu-card" data-option="12">
+              <span class="menu-title" data-i18n="opt12Title">
+                Relatório consolidado
+              </span>
+              <span class="menu-desc" data-i18n="opt12Desc">
+                Gera relatório final com detalhes completos.
+              </span>
+            </button>
+            <button class="menu-card" data-option="19">
+              <span class="menu-title" data-i18n="opt19Title">
+                Erro br prod / Missing Groups
+              </span>
+              <span class="menu-desc" data-i18n="opt19Desc">
+                Diagnóstico guiado para grupos e roles BR.
+              </span>
+            </button>
+            <button class="menu-card" data-option="22">
+              <span class="menu-title" data-i18n="opt22Title">
+                Cadastrar digital
+              </span>
+              <span class="menu-desc" data-i18n="opt22Desc">
+                Configura IAM user, Okta e FIDO/Touch ID.
+              </span>
+            </button>
+          </div>
+          <div class="terminal-input">
+            <div class="terminal-label" data-i18n="terminalInputLabel">
+              Enviar comando para o Terminal do macOS
+            </div>
+            <div class="terminal-row">
+              <input
+                id="terminalInput"
+                type="text"
+                placeholder="Ex: 1 ou nu doctor"
+                data-i18n-placeholder="terminalInputPlaceholder"
+              />
+              <button id="sendTerminal" data-i18n="sendButton">Enviar</button>
+            </div>
+            <div class="terminal-hint" data-i18n="terminalInputHint">
+              Pressione Enter para enviar. O texto aparece no Terminal do macOS.
+            </div>
+          </div>
+          <div class="log" id="logOutput"></div>
+          <div class="hint" data-i18n="hint">
+            Digite e responda no Terminal do macOS. Aqui você acompanha os
+            comandos sendo executados.
+          </div>
+        </section>
+        <section class="panel info">
+          <div class="panel-title" data-i18n="howTitle">
+            How it works / Como funciona
+          </div>
+          <ul data-i18n-list="howList"></ul>
+          <div class="panel-title" data-i18n="guideTitle">
+            Quick guidance / Orientações
+          </div>
+          <ul data-i18n-list="guideList"></ul>
+          <div class="panel-title" data-i18n="noteTitle">
+            Important / Importante
+          </div>
+          <ul data-i18n-list="noteList"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
