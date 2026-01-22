@@ -57,6 +57,14 @@ O instalador:
 - Instala em `/Applications/DiagnuCLI.app`
 - Remove a quarentena do macOS (quando necessario)
 
+### Instalacao automatica (estilo jira-monitor)
+
+Execute:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash
+```
+
 ### Rodar via CLI (sem .app / sem Gatekeeper)
 
 Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app):
