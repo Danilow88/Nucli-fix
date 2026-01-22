@@ -140,6 +140,7 @@ const initTerminal = () => {
   terminal = new window.xterm.Terminal({
     fontSize: 12,
     fontFamily: '"Menlo", "Monaco", "Consolas", monospace',
+    convertEol: true,
     theme: {
       background: "#0b0715",
       foreground: "#efe7ff",
