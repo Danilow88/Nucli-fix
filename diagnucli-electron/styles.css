@@ -259,16 +259,12 @@ body {
   opacity: 0.7;
 }
 
-.log {
+.terminal-embed {
   height: 520px;
   border-radius: 12px;
-  overflow: auto;
+  overflow: hidden;
   background: #0b0715;
-  padding: 16px;
-  font-family: "Menlo", "Monaco", "Consolas", monospace;
-  font-size: 12.5px;
-  line-height: 1.6;
-  white-space: pre-wrap;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .hint {

@@ -9,7 +9,11 @@
     "start": "electron .",
     "build": "electron-builder --mac"
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-pty": "^1.0.0",
+    "xterm": "^5.0.0",
+    "xterm-addon-fit": "^0.8.0"
+  },
   "devDependencies": {
     "electron": "^30.0.0",
     "electron-builder": "^24.13.3"
