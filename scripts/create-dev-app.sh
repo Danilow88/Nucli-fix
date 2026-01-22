@@ -17,10 +17,18 @@ fi
 mkdir -p "$HOME/Applications"
 
 osascript_tmp="$(mktemp)"
-cat > "$osascript_tmp" <<EOF
-set appDir to "$APP_DIR"
-do shell script "/bin/zsh -lc " & quoted form of ("cd " & appDir & " && npm start")
-EOF
+/usr/bin/python3 - <<PY
+import pathlib
+
+app_dir = r"""$APP_DIR"""
+script = f"""set appDir to "{app_dir}"
+set cmd to "cd " & quoted form of appDir & " && npm start"
+do shell script "/bin/zsh -lc " & quoted form of cmd
+"""
+
+path = pathlib.Path(r"""$osascript_tmp""")
+path.write_text(script, encoding="utf-8")
+PY
 
 osacompile -o "$APP_TARGET" "$osascript_tmp"
 rm -f "$osascript_tmp"

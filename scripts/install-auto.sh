@@ -76,11 +76,9 @@ mkdir -p "$SCRIPTS_DIR"
 fetch_script() {
   local name="$1"
   local url="https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/$name"
-  if [ ! -f "$SCRIPTS_DIR/$name" ]; then
-    echo -e "${YELLOW}⚠️  $name nao encontrado. Baixando...${NC}"
-    curl -fsSL "$url" -o "$SCRIPTS_DIR/$name"
-    chmod +x "$SCRIPTS_DIR/$name"
-  fi
+  echo -e "${BLUE}Atualizando $name...${NC}"
+  curl -fsSL "$url" -o "$SCRIPTS_DIR/$name"
+  chmod +x "$SCRIPTS_DIR/$name"
 }
 
 fetch_script "create-dev-app.sh"
