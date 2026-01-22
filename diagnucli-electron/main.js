@@ -33,6 +33,13 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
+
+  if (process.platform === "darwin") {
+    const iconPath = path.join(__dirname, "assets", "icon.png");
+    if (fs.existsSync(iconPath)) {
+      app.dock.setIcon(iconPath);
+    }
+  }
 }
 
 function openRovoInChrome() {
