@@ -57,6 +57,16 @@ O instalador:
 - Instala em `/Applications/DiagnuCLI.app`
 - Remove a quarentena do macOS (quando necessario)
 
+### Rodar via CLI (sem .app / sem Gatekeeper)
+
+Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app):
+
+```bash
+git clone https://github.com/Danilow88/Nucli-fix
+cd Nucli-fix
+./run-cli.sh
+```
+
 Para remover:
 
 ```bash
