@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, session } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -7,7 +7,6 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
-let rovoWindow = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -35,29 +34,29 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 }
 
-function openRovo() {
-  if (rovoWindow && !rovoWindow.isDestroyed()) {
-    rovoWindow.focus();
-    return rovoWindow;
-  }
-
-  rovoWindow = new BrowserWindow({
-    width: 1100,
-    height: 760,
-    title: "Rovo Support",
-    backgroundColor: "#0F0B13",
-    webPreferences: {
-      contextIsolation: true,
-      nodeIntegration: false
-    }
-  });
-
-  rovoWindow.loadURL(ROVO_URL);
-  rovoWindow.on("closed", () => {
-    rovoWindow = null;
-  });
-
-  return rovoWindow;
+function openRovoInChrome() {
+  const osa = `
+    set rovoUrl to "${ROVO_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to missing value
+      repeat with t in tabs of targetWindow
+        if (URL of t as text) is rovoUrl then
+          set targetTab to t
+          exit repeat
+        end if
+      end repeat
+      if targetTab is missing value then
+        set targetTab to make new tab at end of tabs of targetWindow with properties {URL: rovoUrl}
+      end if
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
 }
 
 function sendStatus(payload) {
@@ -258,7 +257,7 @@ ipcMain.handle("run-action", (_event, actionId) => {
 });
 
 ipcMain.handle("open-rovo", () => {
-  openRovo();
+  openRovoInChrome();
   return { ok: true, url: ROVO_URL };
 });
 
@@ -266,55 +265,42 @@ ipcMain.handle("rovo-send-text", (_event, text) => {
   if (!text) {
     return { ok: false, reason: "empty" };
   }
-  const rovo = openRovo();
-  const insert = () => {
-    const focusScript = `
+  const escapedText = String(text).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  const osa = `
+    set rovoUrl to "${ROVO_URL}"
+    tell application "Google Chrome"
+      if (count of windows) = 0 then return
+      set targetWindow to front window
+      set targetTab to missing value
+      repeat with t in tabs of targetWindow
+        if (URL of t as text) is rovoUrl then
+          set targetTab to t
+          exit repeat
+        end if
+      end repeat
+      if targetTab is missing value then
+        set targetTab to make new tab at end of tabs of targetWindow with properties {URL: rovoUrl}
+      end if
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+    delay 0.5
+    tell application "Google Chrome" to execute front window's active tab javascript "
       (function () {
         const el =
-          document.querySelector('[contenteditable="true"]') ||
-          document.querySelector('textarea, input[type="text"]');
-        if (el) {
-          el.focus();
-        }
+          document.querySelector('[contenteditable=\\\"true\\\"]') ||
+          document.querySelector('textarea, input[type=\\\"text\\\"]');
+        if (!el) return;
+        el.focus();
+        el.value = (el.value || '') + \\"${escapedText}\\";
+        el.dispatchEvent(new Event('input', { bubbles: true }));
       })();
-    `;
-    rovo.webContents.executeJavaScript(focusScript).finally(() => {
-      rovo.webContents.insertText(String(text));
-    });
-  };
-
-  if (rovo.webContents.isLoading()) {
-    rovo.webContents.once("did-finish-load", insert);
-  } else {
-    insert();
-  }
-
+    "
+  `;
+  spawn("osascript", ["-e", osa]);
   return { ok: true };
 });
 
-app.whenReady().then(() => {
-  session.defaultSession.setPermissionRequestHandler(
-    (webContents, permission, callback, details) => {
-      if (permission !== "media") {
-        callback(false);
-        return;
-      }
-
-      const url = details?.requestingUrl || "";
-      if (
-        url.startsWith("file://") ||
-        url.startsWith("https://home.atlassian.com/")
-      ) {
-        callback(true);
-        return;
-      }
-
-      callback(false);
-    }
-  );
-
-  createWindow();
-});
+app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

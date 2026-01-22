@@ -48,8 +48,8 @@ const translations = {
     updateTitle: "Atualizar o app",
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
     rovoTitle: "Abrir Rovo (Suporte)",
-    rovoDesc: "Chat de suporte Atlassian com voz, se disponível.",
-    voiceTitle: "Ditado de voz para o Rovo",
+    rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
+    voiceTitle: "Ditado de voz para o Rovo no Chrome",
     voiceStatusIdle: "Microfone pronto. Clique em iniciar.",
     voiceStatusListening: "Ouvindo... fale naturalmente.",
     voiceStatusStopped: "Ditado pausado.",
@@ -60,7 +60,8 @@ const translations = {
     voiceCopy: "Copiar",
     voiceSendRovo: "Enviar para o Rovo",
     voicePlaceholder: "Transcrição aparecerá aqui...",
-    voiceHint: "Dica: abra o Rovo e clique no campo de mensagem antes de enviar.",
+    voiceHint:
+      "Dica: abra o Rovo no Chrome e clique no campo de mensagem antes de enviar.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -111,8 +112,8 @@ const translations = {
     updateTitle: "Update app",
     updateDesc: "Pulls latest Git version and reinstalls.",
     rovoTitle: "Open Rovo (Support)",
-    rovoDesc: "Atlassian support chat with voice, if available.",
-    voiceTitle: "Voice dictation for Rovo",
+    rovoDesc: "Opens chat in Google Chrome (uses browser login).",
+    voiceTitle: "Voice dictation for Rovo in Chrome",
     voiceStatusIdle: "Microphone ready. Click start.",
     voiceStatusListening: "Listening... speak naturally.",
     voiceStatusStopped: "Dictation paused.",
@@ -123,7 +124,8 @@ const translations = {
     voiceCopy: "Copy",
     voiceSendRovo: "Send to Rovo",
     voicePlaceholder: "Transcript will appear here...",
-    voiceHint: "Tip: open Rovo and click the message field before sending.",
+    voiceHint:
+      "Tip: open Rovo in Chrome and click the message field before sending.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
