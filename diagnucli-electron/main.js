@@ -160,11 +160,17 @@ const MAINTENANCE_ACTIONS = {
         path.join(chromeBase, "GPUCache"),
         path.join(chromeBase, "Service Worker", "CacheStorage")
       ];
+      const cookieFiles = [
+        path.join(chromeBase, "Cookies"),
+        path.join(chromeBase, "Cookies-journal")
+      ];
       const rmTargets = targets.map((target) => `"${target}"`).join(" ");
+      const rmCookies = cookieFiles.map((file) => `"${file}"`).join(" ");
       return [
         `echo "[DiagnuCLI] Chrome cache cleanup started"`,
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
         `rm -rf ${rmTargets}`,
+        `rm -f ${rmCookies}`,
         `echo "[DiagnuCLI] Chrome cache cleanup finished"`
       ].join("; ");
     }
