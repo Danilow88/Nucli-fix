@@ -33,6 +33,7 @@ update_dock_shortcut() {
     /usr/bin/python3 - <<PY
 import os
 import plistlib
+import urllib.parse
 
 plist_path = os.path.expanduser("$plist_path")
 app_path = "$app_path"
@@ -45,9 +46,19 @@ except Exception:
 
 apps = data.get("persistent-apps", [])
 
+def normalize(path_value: str) -> str:
+    value = path_value.strip()
+    if value.startswith("file://"):
+        value = urllib.parse.unquote(value[7:])
+    return value.rstrip("/")
+
 def matches(item):
     try:
-        return item["tile-data"]["file-data"]["_CFURLString"] == app_path
+        url = item["tile-data"]["file-data"]["_CFURLString"]
+        normalized = normalize(url)
+        if normalized == app_path:
+            return True
+        return normalized.endswith("/" + os.path.basename(app_path))
     except Exception:
         return False
 
