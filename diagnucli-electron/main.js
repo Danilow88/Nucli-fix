@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, shell, session, systemPreferences } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -35,28 +35,7 @@ function createWindow() {
 }
 
 function openRovoInChrome() {
-  const osa = `
-    set rovoUrl to "${ROVO_URL}"
-    tell application "Google Chrome" to activate
-    tell application "Google Chrome"
-      if (count of windows) = 0 then
-        make new window
-      end if
-      set targetWindow to front window
-      set targetTab to missing value
-      repeat with t in tabs of targetWindow
-        if (URL of t as text) is rovoUrl then
-          set targetTab to t
-          exit repeat
-        end if
-      end repeat
-      if targetTab is missing value then
-        set targetTab to make new tab at end of tabs of targetWindow with properties {URL: rovoUrl}
-      end if
-      set active tab index of targetWindow to (index of targetTab)
-    end tell
-  `;
-  spawn("osascript", ["-e", osa]);
+  spawn("open", ["-a", "Google Chrome", ROVO_URL]);
 }
 
 function sendStatus(payload) {
@@ -261,6 +240,22 @@ ipcMain.handle("open-rovo", () => {
   return { ok: true, url: ROVO_URL };
 });
 
+ipcMain.handle("send-voice-to-chrome", (_event, text) => {
+  if (!text) {
+    return { ok: false, reason: "empty" };
+  }
+  const escapedText = escapeAppleScript(String(text));
+  const osa = [
+    'tell application "Google Chrome" to activate',
+    'tell application "System Events" to tell process "Google Chrome" to set frontmost to true',
+    "delay 0.2",
+    `tell application "System Events" to tell process "Google Chrome" to keystroke "${escapedText}"`,
+    'tell application "System Events" to tell process "Google Chrome" to key code 36'
+  ];
+  spawn("osascript", osa.flatMap((line) => ["-e", line]));
+  return { ok: true };
+});
+
 ipcMain.handle("rovo-send-text", (_event, text) => {
   if (!text) {
     return { ok: false, reason: "empty" };
@@ -307,7 +302,31 @@ ipcMain.handle("open-mic-permissions", () => {
   return { ok: true };
 });
 
-app.whenReady().then(createWindow);
+ipcMain.handle("open-microphone-permissions", () => {
+  shell.openExternal(
+    "x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone"
+  );
+  return { ok: true };
+});
+
+ipcMain.handle("request-microphone", async () => {
+  if (process.platform !== "darwin") {
+    return { granted: false };
+  }
+  const granted = await systemPreferences.askForMediaAccess("microphone");
+  return { granted };
+});
+
+app.whenReady().then(() => {
+  session.defaultSession.setPermissionRequestHandler((_, permission, callback) => {
+    if (permission === "media") {
+      callback(true);
+      return;
+    }
+    callback(false);
+  });
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

@@ -193,6 +193,9 @@ const updateLang = (lang) => {
   if (voiceStatus && dict[currentVoiceStatus]) {
     voiceStatus.textContent = dict[currentVoiceStatus];
   }
+  if (recognition) {
+    recognition.lang = lang === "pt" ? "pt-BR" : "en-US";
+  }
 };
 
 window.diagnucli.onLog((data) => {
@@ -291,10 +294,10 @@ const initSpeechRecognition = () => {
     }
   };
 
-  recognition.onerror = () => {
+  recognition.onerror = async () => {
     recognitionActive = false;
     updateVoiceStatus("voiceStatusError");
-    window.diagnucli.openMicPermissions();
+    await window.diagnucli.openMicrophonePermissions();
   };
 
   recognition.onresult = (event) => {
@@ -342,12 +345,27 @@ if (rovoButton) {
 }
 
 if (voiceStart) {
-  voiceStart.addEventListener("click", () => {
+  voiceStart.addEventListener("click", async () => {
     if (!recognition) {
-      updateVoiceStatus("voiceStatusUnsupported");
-      return;
+      initSpeechRecognition();
     }
     if (recognitionActive) {
+      return;
+    }
+    transcriptValue = "";
+    if (voiceTranscript) {
+      voiceTranscript.value = "";
+    }
+    await window.diagnucli.requestMicrophone();
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch {
+      updateVoiceStatus("voiceStatusError");
+      await window.diagnucli.openMicrophonePermissions();
+      return;
+    }
+    if (!recognition) {
+      updateVoiceStatus("voiceStatusUnsupported");
       return;
     }
     recognition.lang = currentLang === "pt" ? "pt-BR" : "en-US";
@@ -384,7 +402,10 @@ if (voiceSendRovo) {
     if (!text) {
       return;
     }
-    await window.diagnucli.sendToRovo(text);
+    await window.diagnucli.openRovo();
+    setTimeout(() => {
+      window.diagnucli.sendVoiceTextToChrome(text);
+    }, 800);
     appendLog("\n[DiagnuCLI] Voice transcript sent to Rovo.\n");
   });
 }
