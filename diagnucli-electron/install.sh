@@ -100,7 +100,7 @@ else
   (cd "$PROJECT_DIR" && npm install)
 fi
 
-(cd "$PROJECT_DIR" && npx electron-builder --mac)
+(cd "$PROJECT_DIR" && npx electron-builder --mac --dir)
 app_path="$(find_app_bundle)"
 if [[ -z "$app_path" ]]; then
   say "Nao foi possivel localizar o app apos o build."
