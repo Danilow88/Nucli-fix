@@ -8,6 +8,9 @@ let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
 
+app.setName("DiagnuCLI");
+process.title = "DiagnuCLI";
+
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
   : path.resolve(__dirname, "..", "diagnucli");
@@ -20,11 +23,13 @@ const ROVO_URL =
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
 
 function createWindow() {
+  const iconPath = path.join(__dirname, "assets", "icon.png");
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 760,
     backgroundColor: "#1B0B2E",
     title: "DiagnuCLI",
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -34,11 +39,8 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  if (process.platform === "darwin") {
-    const iconPath = path.join(__dirname, "assets", "icon.png");
-    if (fs.existsSync(iconPath)) {
-      app.dock.setIcon(iconPath);
-    }
+  if (process.platform === "darwin" && fs.existsSync(iconPath)) {
+    app.dock.setIcon(iconPath);
   }
 }
 
