@@ -6,6 +6,7 @@ const menuCards = document.querySelectorAll(".menu-card[data-option]");
 const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
+const rovoButton = document.getElementById("openRovo");
 
 let runStarted = false;
 let currentLang = "pt";
@@ -36,6 +37,8 @@ const translations = {
     cacheChromeDesc: "Fecha o Chrome e remove caches locais.",
     updateTitle: "Atualizar o app",
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
+    rovoTitle: "Abrir Rovo (Suporte)",
+    rovoDesc: "Chat de suporte Atlassian com voz, se disponível.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -85,6 +88,8 @@ const translations = {
     cacheChromeDesc: "Quits Chrome and removes local caches.",
     updateTitle: "Update app",
     updateDesc: "Pulls latest Git version and reinstalls.",
+    rovoTitle: "Open Rovo (Support)",
+    rovoDesc: "Atlassian support chat with voice, if available.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -234,6 +239,13 @@ terminalInput.addEventListener("keydown", (event) => {
     sendTerminalText();
   }
 });
+
+if (rovoButton) {
+  rovoButton.addEventListener("click", async () => {
+    await window.diagnucli.openRovo();
+    appendLog("\n[DiagnuCLI] Rovo support opened.\n");
+  });
+}
 
 langButtons.forEach((btn) => {
   btn.addEventListener("click", () => updateLang(btn.dataset.lang));

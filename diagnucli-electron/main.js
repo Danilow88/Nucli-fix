@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, session } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -7,6 +7,7 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
+let rovoWindow = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -15,6 +16,8 @@ const SCRIPT_PATH = process.env.DIAGNUCLI_PATH || DEFAULT_SCRIPT_PATH;
 const DEFAULT_REPO_PATH = path.join(os.homedir(), "Nucli-fix");
 const REPO_PATH = process.env.DIAGNUCLI_REPO_PATH || DEFAULT_REPO_PATH;
 const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
+const ROVO_URL =
+  "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -30,6 +33,29 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
+}
+
+function openRovo() {
+  if (rovoWindow && !rovoWindow.isDestroyed()) {
+    rovoWindow.focus();
+    return;
+  }
+
+  rovoWindow = new BrowserWindow({
+    width: 1100,
+    height: 760,
+    title: "Rovo Support",
+    backgroundColor: "#0F0B13",
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false
+    }
+  });
+
+  rovoWindow.loadURL(ROVO_URL);
+  rovoWindow.on("closed", () => {
+    rovoWindow = null;
+  });
 }
 
 function sendStatus(payload) {
@@ -221,7 +247,27 @@ ipcMain.handle("run-action", (_event, actionId) => {
   return runMaintenanceAction(actionId);
 });
 
-app.whenReady().then(createWindow);
+ipcMain.handle("open-rovo", () => {
+  openRovo();
+  return { ok: true, url: ROVO_URL };
+});
+
+app.whenReady().then(() => {
+  session.defaultSession.setPermissionRequestHandler(
+    (webContents, permission, callback, details) => {
+      if (
+        permission === "media" &&
+        details?.requestingUrl?.startsWith("https://home.atlassian.com/")
+      ) {
+        callback(true);
+        return;
+      }
+      callback(false);
+    }
+  );
+
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

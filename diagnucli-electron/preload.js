@@ -8,5 +8,6 @@ contextBridge.exposeInMainWorld("diagnucli", {
   sendChoice: (choice) => ipcRenderer.invoke("send-choice", choice),
   sendText: (text, pressEnter = false) =>
     ipcRenderer.invoke("send-text", text, pressEnter),
-  runAction: (actionId) => ipcRenderer.invoke("run-action", actionId)
+  runAction: (actionId) => ipcRenderer.invoke("run-action", actionId),
+  openRovo: () => ipcRenderer.invoke("open-rovo")
 });
