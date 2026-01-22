@@ -18,7 +18,8 @@ mkdir -p "$HOME/Applications"
 
 osascript_tmp="$(mktemp)"
 cat > "$osascript_tmp" <<EOF
-do shell script "/bin/zsh -lc 'cd \"$APP_DIR\" && npm start'"
+set appDir to "$APP_DIR"
+do shell script "/bin/zsh -lc " & quoted form of ("cd " & appDir & " && npm start")
 EOF
 
 osacompile -o "$APP_TARGET" "$osascript_tmp"
