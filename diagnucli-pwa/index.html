@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#6d28d9" />
+    <title>DiagnuCLI PWA</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="brand">
+          <div class="logo">NU</div>
+          <div>
+            <h1>DiagnuCLI</h1>
+            <p data-i18n="subtitle">
+              Diagnóstico interativo NuCLI + AWS + Suporte em geral
+            </p>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="lang-toggle">
+            <button class="lang-btn" data-lang="pt">PT-BR</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+          </div>
+          <button id="installPwa" class="primary-btn" data-i18n="installPwa">
+            Instalar PWA
+          </button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="panel">
+          <div class="panel-title" data-i18n="quickTitle">Acesso rápido</div>
+          <div class="menu-grid">
+            <button class="menu-card" id="openRovo">
+              <span class="menu-title" data-i18n="rovoTitle">
+                Abrir Rovo (Suporte)
+              </span>
+              <span class="menu-desc" data-i18n="rovoDesc">
+                Abre o chat no Google Chrome.
+              </span>
+            </button>
+            <button class="menu-card" id="openSupport">
+              <span class="menu-title" data-i18n="supportTitle">
+                Abrir chamado (Suporte)
+              </span>
+              <span class="menu-desc" data-i18n="supportDesc">
+                Abre o portal de chamados da Nubank.
+              </span>
+            </button>
+          </div>
+          <div class="panel-title" data-i18n="cliTitle">
+            Rodar diagnucli via Terminal
+          </div>
+          <div class="code-block">
+            <code id="cliCommand">
+git clone https://github.com/Danilow88/Nucli-fix && cd Nucli-fix/diagnucli-electron && npm install --omit=dev && npm start
+            </code>
+            <button id="copyCli" data-i18n="copyCommand">Copiar</button>
+          </div>
+          <div class="note" data-i18n="pwaNote">
+            PWA nao executa comandos locais. Use o Terminal para rodar o diagnucli.
+          </div>
+        </section>
+        <section class="panel info">
+          <div class="panel-title" data-i18n="howTitle">
+            Como funciona
+          </div>
+          <ul data-i18n-list="howList"></ul>
+          <div class="panel-title" data-i18n="noteTitle">Importante</div>
+          <ul data-i18n-list="noteList"></ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
