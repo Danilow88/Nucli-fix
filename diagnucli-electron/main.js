@@ -3,12 +3,10 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const { spawn } = require("child_process");
-const pty = require("node-pty");
 
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
-let ptyProcess = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -99,10 +97,11 @@ function startLogTail() {
   });
 }
 
-function startPtyRun() {
-  if (ptyProcess) {
+function startRun() {
+  if (runStarted) {
     return;
   }
+  runStarted = true;
 
   const exists = fs.existsSync(SCRIPT_PATH);
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
@@ -114,42 +113,24 @@ function startPtyRun() {
     exists
   });
 
-  const command = exists
-    ? `export TERM=xterm-256color; export JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED"; ` +
-      `export DIAGNUCLI_LOG_PATH="${LOG_PATH}"; bash "${SCRIPT_PATH}"`
-    : `echo "Script not found: ${SCRIPT_PATH}"`;
+  startLogTail();
 
-  const shell = process.env.SHELL || "/bin/bash";
-  ptyProcess = pty.spawn(shell, ["-lc", command], {
-    name: "xterm-256color",
-    cwd: os.homedir(),
-    cols: 100,
-    rows: 30,
-    env: {
-      ...process.env,
-      TERM: "xterm-256color",
-      JAVA_TOOL_OPTIONS: "--enable-native-access=ALL-UNNAMED"
-    }
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
+  const runCommand = exists
+    ? `TERM=xterm-256color JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED" ` +
+      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"; ${closeTerminal}`
+    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
+
+  const escaped = escapeAppleScript(runCommand);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`
+  ];
+
+  const osaProc = spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
+  osaProc.on("exit", () => {
+    sendStatus({ terminalStarted: true });
   });
-
-  ptyProcess.onData((data) => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send("pty-data", data);
-    }
-  });
-
-  ptyProcess.onExit(() => {
-    ptyProcess = null;
-  });
-}
-
-function startRun() {
-  if (runStarted) {
-    return;
-  }
-  runStarted = true;
-
-  startPtyRun();
 }
 
 ipcMain.handle("start-run", () => {
@@ -158,17 +139,19 @@ ipcMain.handle("start-run", () => {
 });
 
 function sendTextToTerminal(text, pressEnter = false) {
-  if (!ptyProcess) {
-    startPtyRun();
-  }
-  if (!ptyProcess) {
-    return;
-  }
-  const textValue = String(text);
-  ptyProcess.write(textValue);
+  const escapedText = escapeAppleScript(String(text));
+  const osa = [
+    'tell application "Terminal" to activate',
+    'tell application "System Events" to tell process "Terminal" to set frontmost to true',
+    "delay 0.2",
+    `tell application "System Events" to tell process "Terminal" to keystroke "${escapedText}"`
+  ];
   if (pressEnter) {
-    ptyProcess.write("\r");
+    osa.push(
+      'tell application "System Events" to tell process "Terminal" to key code 36'
+    );
   }
+  spawn("osascript", osa.flatMap((line) => ["-e", line]));
 }
 
 ipcMain.handle("send-choice", (_event, choice) => {
@@ -179,26 +162,6 @@ ipcMain.handle("send-choice", (_event, choice) => {
 ipcMain.handle("send-text", (_event, text, pressEnter = false) => {
   sendTextToTerminal(text, pressEnter);
   return { ok: true };
-});
-
-ipcMain.handle("start-pty", () => {
-  startPtyRun();
-  return { ok: true };
-});
-
-ipcMain.on("pty-input", (_event, data) => {
-  if (!ptyProcess) {
-    startPtyRun();
-  }
-  if (ptyProcess) {
-    ptyProcess.write(String(data));
-  }
-});
-
-ipcMain.on("pty-resize", (_event, cols, rows) => {
-  if (ptyProcess) {
-    ptyProcess.resize(cols, rows);
-  }
 });
 
 const MAINTENANCE_ACTIONS = {

@@ -1,3 +1,4 @@
+const logOutput = document.getElementById("logOutput");
 const statusText = document.getElementById("statusText");
 const startButton = document.getElementById("startButton");
 const langButtons = document.querySelectorAll(".lang-btn");
@@ -7,10 +8,6 @@ const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
-const embeddedTerminal = document.getElementById("embeddedTerminal");
-
-let terminal = null;
-let fitAddon = null;
 let runStarted = false;
 let currentLang = "pt";
 
@@ -128,39 +125,8 @@ const translations = {
 };
 
 const appendLog = (text) => {
-  if (terminal) {
-    terminal.write(text);
-  }
-};
-
-const initTerminal = () => {
-  if (!embeddedTerminal || terminal || !window.xterm) {
-    return;
-  }
-  terminal = new window.xterm.Terminal({
-    fontSize: 12,
-    fontFamily: '"Menlo", "Monaco", "Consolas", monospace',
-    theme: {
-      background: "#0b0715",
-      foreground: "#efe7ff",
-      cursor: "#a855f7"
-    }
-  });
-  fitAddon = new window.xterm.FitAddon();
-  terminal.loadAddon(fitAddon);
-  terminal.open(embeddedTerminal);
-  fitAddon.fit();
-  terminal.focus();
-
-  terminal.onData((data) => {
-    window.diagnucli.sendPtyInput(data);
-  });
-
-  window.addEventListener("resize", () => {
-    if (fitAddon) {
-      fitAddon.fit();
-    }
-  });
+  logOutput.textContent += text;
+  logOutput.scrollTop = logOutput.scrollHeight;
 };
 
 const updateLang = (lang) => {
@@ -202,10 +168,6 @@ window.diagnucli.onLog((data) => {
   appendLog(data);
 });
 
-window.diagnucli.onPtyData((data) => {
-  appendLog(data);
-});
-
 window.diagnucli.onStatus((payload) => {
   if (payload?.scriptPath) {
     const existsLabel = payload.exists ? "ok" : "não encontrado";
@@ -225,16 +187,6 @@ const startRun = async () => {
   }
   runStarted = true;
   startButton.disabled = true;
-  initTerminal();
-  if (fitAddon) {
-    fitAddon.fit();
-  }
-  if (terminal) {
-    const cols = terminal.cols || 100;
-    const rows = terminal.rows || 30;
-    window.diagnucli.resizePty(cols, rows);
-  }
-  await window.diagnucli.startPty();
   const { scriptPath } = await window.diagnucli.start();
   appendLog(`\n[DiagnuCLI] Start requested for: ${scriptPath}\n`);
 };
@@ -318,5 +270,4 @@ langButtons.forEach((btn) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLang(currentLang);
-  initTerminal();
 });
