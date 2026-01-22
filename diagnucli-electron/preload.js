@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("diagnucli", {
   openRovo: () => ipcRenderer.invoke("open-rovo"),
   sendToRovo: (text) => ipcRenderer.invoke("rovo-send-text", text),
   sendVoiceTextToChrome: (text) => ipcRenderer.invoke("send-voice-to-chrome", text),
+  startChromeDictation: () => ipcRenderer.invoke("start-chrome-dictation"),
   openMicPermissions: () => ipcRenderer.invoke("open-mic-permissions"),
   openMicrophonePermissions: () =>
     ipcRenderer.invoke("open-microphone-permissions"),

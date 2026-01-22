@@ -50,6 +50,26 @@ function openRovoInChrome() {
   spawn("osascript", ["-e", osa]);
 }
 
+function startChromeDictation() {
+  const osa = `
+    tell application "Google Chrome" to activate
+    delay 0.2
+    tell application "System Events"
+      tell process "Google Chrome"
+        set frontmost to true
+        try
+          click menu item "Start Dictation" of menu "Edit" of menu bar 1
+        on error
+          try
+            click menu item "Iniciar Ditado" of menu "Editar" of menu bar 1
+          end try
+        end try
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function sendStatus(payload) {
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.webContents.send("run-status", payload);
@@ -250,6 +270,11 @@ ipcMain.handle("run-action", (_event, actionId) => {
 ipcMain.handle("open-rovo", () => {
   openRovoInChrome();
   return { ok: true, url: ROVO_URL };
+});
+
+ipcMain.handle("start-chrome-dictation", () => {
+  startChromeDictation();
+  return { ok: true };
 });
 
 ipcMain.handle("send-voice-to-chrome", (_event, text) => {
