@@ -22,6 +22,7 @@ const DOCK_ICON_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "assets", "icon.png")
   : path.join(__dirname, "assets", "icon.png");
 
+app.setName("DiagnuCLI");
 const gotSingleInstanceLock = app.requestSingleInstanceLock();
 if (!gotSingleInstanceLock) {
   app.quit();
@@ -339,8 +340,12 @@ ipcMain.handle("open-mic-permissions", () => {
 });
 
 app.whenReady().then(() => {
-  if (app.dock && fs.existsSync(DOCK_ICON_PATH)) {
-    app.dock.setIcon(DOCK_ICON_PATH);
+  if (app.dock) {
+    if (app.isPackaged && fs.existsSync(DOCK_ICON_PATH)) {
+      app.dock.setIcon(DOCK_ICON_PATH);
+    } else if (!app.isPackaged) {
+      app.dock.hide();
+    }
   }
   createWindow();
 });
