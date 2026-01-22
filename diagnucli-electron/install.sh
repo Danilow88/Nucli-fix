@@ -129,6 +129,15 @@ fi
 say "Removendo quarentena (se existir)..."
 run_cmd /usr/bin/xattr -dr com.apple.quarantine "$INSTALL_DIR/$APP_NAME" || true
 
+if [[ -z "${DIAGNUCLI_SKIP_DOCK:-}" ]]; then
+  say "Adicionando atalho no Dock..."
+  /usr/bin/defaults write com.apple.dock persistent-apps -array-add \
+    "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$INSTALL_DIR/$APP_NAME</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>" || true
+  /usr/bin/killall Dock || true
+else
+  say "Atalho no Dock ignorado (DIAGNUCLI_SKIP_DOCK=1)."
+fi
+
 say "Concluido. Abra o app em $INSTALL_DIR/$APP_NAME"
 }
 
