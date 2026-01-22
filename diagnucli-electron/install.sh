@@ -6,6 +6,14 @@ INSTALL_DIR="/Applications"
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DIST_DIR="$PROJECT_DIR/dist"
 UNPACK_DIR="$DIST_DIR/unpacked"
+SOURCE_FILES=(
+  "$PROJECT_DIR/main.js"
+  "$PROJECT_DIR/preload.js"
+  "$PROJECT_DIR/renderer.js"
+  "$PROJECT_DIR/index.html"
+  "$PROJECT_DIR/styles.css"
+  "$PROJECT_DIR/package.json"
+)
 
 say() { printf "%s\n" "$*"; }
 
@@ -38,12 +46,38 @@ fi
 echo ""
 }
 
+needs_rebuild() {
+  local app_path="$1"
+  local asar_path="$app_path/Contents/Resources/app.asar"
+  if [[ ! -f "$asar_path" ]]; then
+    return 0
+  fi
+
+  local asar_mtime
+  asar_mtime="$(/usr/bin/stat -f %m "$asar_path")"
+  for src in "${SOURCE_FILES[@]}"; do
+    if [[ -f "$src" ]]; then
+      local src_mtime
+      src_mtime="$(/usr/bin/stat -f %m "$src")"
+      if [[ "$src_mtime" -gt "$asar_mtime" ]]; then
+        return 0
+      fi
+    fi
+  done
+  return 1
+}
+
 ensure_built() {
   local app_path
   app_path="$(find_app_bundle)"
   if [[ -n "$app_path" ]]; then
-    echo "$app_path"
-    return
+    if needs_rebuild "$app_path"; then
+      say "Build desatualizado. Recriando app..."
+      app_path=""
+    else
+      echo "$app_path"
+      return
+    fi
   fi
 
 if [[ -f "$DIST_DIR/DiagnuCLI-1.0.0-universal-mac-finder.zip" ]]; then
