@@ -9,9 +9,10 @@
     "start": "electron .",
     "build": "electron-builder --mac"
   },
-  "dependencies": {},
+  "dependencies": {
+    "electron": "^30.0.0"
+  },
   "devDependencies": {
-    "electron": "^30.0.0",
     "electron-builder": "^24.13.3"
   },
   "build": {

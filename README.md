@@ -67,6 +67,9 @@ cd Nucli-fix
 ./run-cli.sh
 ```
 
+Observacao: este modo instala somente dependencias necessarias (sem `electron-builder`),
+entao nao dispara bloqueios de politica corporativa.
+
 Para remover:
 
 ```bash

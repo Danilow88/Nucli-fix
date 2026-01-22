@@ -11,8 +11,8 @@ fi
 cd "$PROJECT_DIR"
 
 if [[ ! -d "node_modules" ]]; then
-  echo "Dependencias nao encontradas. Instalando..."
-  npm install
+  echo "Dependencias nao encontradas. Instalando (sem devDependencies)..."
+  npm install --omit=dev
 fi
 
 echo "Iniciando DiagnuCLI via CLI (sem app bundle)..."
