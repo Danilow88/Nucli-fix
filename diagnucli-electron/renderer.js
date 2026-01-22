@@ -13,7 +13,7 @@ let currentLang = "pt";
 
 const translations = {
   pt: {
-    subtitle: "Diagnóstico interativo NuCLI + AWS",
+    subtitle: "Diagnóstico interativo NuCLI + AWS + Suporte em geral",
     startButton: "Iniciar diagnóstico",
     liveTitle: "Execução em tempo real",
     statusIdle: "Aguardando início. O Terminal do macOS abrirá em segundo plano.",
@@ -68,7 +68,7 @@ const translations = {
     ]
   },
   en: {
-    subtitle: "Interactive NuCLI + AWS diagnostics",
+    subtitle: "Interactive NuCLI + AWS + General support",
     startButton: "Start diagnostics",
     liveTitle: "Live execution",
     statusIdle: "Waiting to start. macOS Terminal will open in background.",
