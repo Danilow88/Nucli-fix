@@ -116,6 +116,15 @@ echo ""
 echo -e "${BLUE}🚀 Para iniciar:${NC}"
 echo -e "   ${YELLOW}cd $APP_DIR && npm start${NC}"
 echo ""
+echo -e "${BLUE}🧩 Criar atalho com icone (modo dev):${NC}"
+echo -e "   ${YELLOW}$PROJECT_DIR/scripts/create-dev-app.sh${NC}"
+echo ""
+echo -e "${YELLOW}Deseja criar o app com icone agora? [s/N]${NC}"
+read -r response
+if [[ "$response" =~ ^([sS][iI][mM]|[sS])$ ]]; then
+  bash "$PROJECT_DIR/scripts/create-dev-app.sh" "$APP_DIR"
+fi
+echo ""
 echo -e "${YELLOW}Deseja iniciar agora? [s/N]${NC}"
 read -r response
 if [[ "$response" =~ ^([sS][iI][mM]|[sS])$ ]]; then
