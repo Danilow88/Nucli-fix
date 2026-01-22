@@ -38,7 +38,7 @@ function createWindow() {
 function openRovo() {
   if (rovoWindow && !rovoWindow.isDestroyed()) {
     rovoWindow.focus();
-    return;
+    return rovoWindow;
   }
 
   rovoWindow = new BrowserWindow({
@@ -56,6 +56,8 @@ function openRovo() {
   rovoWindow.on("closed", () => {
     rovoWindow = null;
   });
+
+  return rovoWindow;
 }
 
 function sendStatus(payload) {
@@ -252,16 +254,53 @@ ipcMain.handle("open-rovo", () => {
   return { ok: true, url: ROVO_URL };
 });
 
+ipcMain.handle("rovo-send-text", (_event, text) => {
+  if (!text) {
+    return { ok: false, reason: "empty" };
+  }
+  const rovo = openRovo();
+  const insert = () => {
+    const focusScript = `
+      (function () {
+        const el =
+          document.querySelector('[contenteditable="true"]') ||
+          document.querySelector('textarea, input[type="text"]');
+        if (el) {
+          el.focus();
+        }
+      })();
+    `;
+    rovo.webContents.executeJavaScript(focusScript).finally(() => {
+      rovo.webContents.insertText(String(text));
+    });
+  };
+
+  if (rovo.webContents.isLoading()) {
+    rovo.webContents.once("did-finish-load", insert);
+  } else {
+    insert();
+  }
+
+  return { ok: true };
+});
+
 app.whenReady().then(() => {
   session.defaultSession.setPermissionRequestHandler(
     (webContents, permission, callback, details) => {
+      if (permission !== "media") {
+        callback(false);
+        return;
+      }
+
+      const url = details?.requestingUrl || "";
       if (
-        permission === "media" &&
-        details?.requestingUrl?.startsWith("https://home.atlassian.com/")
+        url.startsWith("file://") ||
+        url.startsWith("https://home.atlassian.com/")
       ) {
         callback(true);
         return;
       }
+
       callback(false);
     }
   );

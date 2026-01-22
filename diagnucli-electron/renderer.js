@@ -7,9 +7,19 @@ const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
 const rovoButton = document.getElementById("openRovo");
+const voiceStart = document.getElementById("voiceStart");
+const voiceStop = document.getElementById("voiceStop");
+const voiceCopy = document.getElementById("voiceCopy");
+const voiceSendRovo = document.getElementById("voiceSendRovo");
+const voiceTranscript = document.getElementById("voiceTranscript");
+const voiceStatus = document.getElementById("voiceStatus");
 
 let runStarted = false;
 let currentLang = "pt";
+let currentVoiceStatus = "voiceStatusIdle";
+let recognition = null;
+let recognitionActive = false;
+let transcriptValue = "";
 
 const translations = {
   pt: {
@@ -39,6 +49,18 @@ const translations = {
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Chat de suporte Atlassian com voz, se disponível.",
+    voiceTitle: "Ditado de voz para o Rovo",
+    voiceStatusIdle: "Microfone pronto. Clique em iniciar.",
+    voiceStatusListening: "Ouvindo... fale naturalmente.",
+    voiceStatusStopped: "Ditado pausado.",
+    voiceStatusUnsupported: "Ditado indisponível neste macOS.",
+    voiceStatusError: "Erro no microfone. Verifique permissões.",
+    voiceStart: "Iniciar",
+    voiceStop: "Parar",
+    voiceCopy: "Copiar",
+    voiceSendRovo: "Enviar para o Rovo",
+    voicePlaceholder: "Transcrição aparecerá aqui...",
+    voiceHint: "Dica: abra o Rovo e clique no campo de mensagem antes de enviar.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -90,6 +112,18 @@ const translations = {
     updateDesc: "Pulls latest Git version and reinstalls.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Atlassian support chat with voice, if available.",
+    voiceTitle: "Voice dictation for Rovo",
+    voiceStatusIdle: "Microphone ready. Click start.",
+    voiceStatusListening: "Listening... speak naturally.",
+    voiceStatusStopped: "Dictation paused.",
+    voiceStatusUnsupported: "Dictation is not available on this macOS.",
+    voiceStatusError: "Microphone error. Check permissions.",
+    voiceStart: "Start",
+    voiceStop: "Stop",
+    voiceCopy: "Copy",
+    voiceSendRovo: "Send to Rovo",
+    voicePlaceholder: "Transcript will appear here...",
+    voiceHint: "Tip: open Rovo and click the message field before sending.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -153,6 +187,10 @@ const updateLang = (lang) => {
   langButtons.forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
+
+  if (voiceStatus && dict[currentVoiceStatus]) {
+    voiceStatus.textContent = dict[currentVoiceStatus];
+  }
 };
 
 window.diagnucli.onLog((data) => {
@@ -219,6 +257,59 @@ const sendAction = async (actionId) => {
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 
+const updateVoiceStatus = (key) => {
+  currentVoiceStatus = key;
+  const dict = translations[currentLang];
+  if (voiceStatus && dict[key]) {
+    voiceStatus.textContent = dict[key];
+  }
+};
+
+const initSpeechRecognition = () => {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    updateVoiceStatus("voiceStatusUnsupported");
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = () => {
+    recognitionActive = true;
+    updateVoiceStatus("voiceStatusListening");
+  };
+
+  recognition.onend = () => {
+    recognitionActive = false;
+    if (currentVoiceStatus !== "voiceStatusError") {
+      updateVoiceStatus("voiceStatusStopped");
+    }
+  };
+
+  recognition.onerror = () => {
+    recognitionActive = false;
+    updateVoiceStatus("voiceStatusError");
+  };
+
+  recognition.onresult = (event) => {
+    let interim = "";
+    for (let i = event.resultIndex; i < event.results.length; i += 1) {
+      const result = event.results[i];
+      if (result.isFinal) {
+        transcriptValue += `${result[0].transcript} `;
+      } else {
+        interim += result[0].transcript;
+      }
+    }
+    if (voiceTranscript) {
+      voiceTranscript.value = `${transcriptValue}${interim}`.trim();
+    }
+  };
+};
+
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
@@ -247,10 +338,59 @@ if (rovoButton) {
   });
 }
 
+if (voiceStart) {
+  voiceStart.addEventListener("click", () => {
+    if (!recognition) {
+      updateVoiceStatus("voiceStatusUnsupported");
+      return;
+    }
+    if (recognitionActive) {
+      return;
+    }
+    recognition.lang = currentLang === "pt" ? "pt-BR" : "en-US";
+    recognition.start();
+  });
+}
+
+if (voiceStop) {
+  voiceStop.addEventListener("click", () => {
+    if (recognition && recognitionActive) {
+      recognition.stop();
+    }
+  });
+}
+
+if (voiceCopy) {
+  voiceCopy.addEventListener("click", async () => {
+    const text = voiceTranscript?.value?.trim();
+    if (!text) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(text);
+      appendLog("\n[DiagnuCLI] Voice transcript copied.\n");
+    } catch {
+      appendLog("\n[DiagnuCLI] Failed to copy voice transcript.\n");
+    }
+  });
+}
+
+if (voiceSendRovo) {
+  voiceSendRovo.addEventListener("click", async () => {
+    const text = voiceTranscript?.value?.trim();
+    if (!text) {
+      return;
+    }
+    await window.diagnucli.sendToRovo(text);
+    appendLog("\n[DiagnuCLI] Voice transcript sent to Rovo.\n");
+  });
+}
+
 langButtons.forEach((btn) => {
   btn.addEventListener("click", () => updateLang(btn.dataset.lang));
 });
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLang(currentLang);
+  initSpeechRecognition();
 });

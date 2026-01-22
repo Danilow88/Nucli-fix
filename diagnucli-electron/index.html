@@ -138,6 +138,31 @@
               Pressione Enter para enviar. O texto aparece no Terminal do macOS.
             </div>
           </div>
+          <div class="voice-panel">
+            <div class="panel-title" data-i18n="voiceTitle">
+              Ditado de voz para o Rovo
+            </div>
+            <div class="voice-status" id="voiceStatus" data-i18n="voiceStatusIdle">
+              Microfone pronto. Clique em iniciar.
+            </div>
+            <div class="voice-actions">
+              <button id="voiceStart" data-i18n="voiceStart">Iniciar</button>
+              <button id="voiceStop" data-i18n="voiceStop">Parar</button>
+              <button id="voiceCopy" data-i18n="voiceCopy">Copiar</button>
+              <button id="voiceSendRovo" data-i18n="voiceSendRovo">
+                Enviar para o Rovo
+              </button>
+            </div>
+            <textarea
+              id="voiceTranscript"
+              rows="4"
+              placeholder="Transcrição aparecerá aqui..."
+              data-i18n-placeholder="voicePlaceholder"
+            ></textarea>
+            <div class="voice-hint" data-i18n="voiceHint">
+              Dica: abra o Rovo e clique no campo de mensagem antes de enviar.
+            </div>
+          </div>
           <div class="log" id="logOutput"></div>
           <div class="hint" data-i18n="hint">
             Digite e responda no Terminal do macOS. Aqui você acompanha os
