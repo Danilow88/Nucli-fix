@@ -46,6 +46,12 @@ cd diagnucli-electron
 ./install.sh
 ```
 
+Se o repositorio estiver em outro lugar, defina:
+
+```bash
+export DIAGNUCLI_REPO_PATH="/caminho/para/Nucli-fix"
+```
+
 O instalador:
 - Faz o build local se nao existir app pronto
 - Instala em `/Applications/DiagnuCLI.app`

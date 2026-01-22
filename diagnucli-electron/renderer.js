@@ -34,6 +34,8 @@ const translations = {
     cacheMacDesc: "Remove caches do usuario e do sistema (pode pedir senha).",
     cacheChromeTitle: "Limpar cache do Chrome",
     cacheChromeDesc: "Fecha o Chrome e remove caches locais.",
+    updateTitle: "Atualizar o app",
+    updateDesc: "Baixa a ultima versao do Git e reinstala.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -81,6 +83,8 @@ const translations = {
     cacheMacDesc: "Removes user and system caches (may ask for password).",
     cacheChromeTitle: "Clear Chrome cache",
     cacheChromeDesc: "Quits Chrome and removes local caches.",
+    updateTitle: "Update app",
+    updateDesc: "Pulls latest Git version and reinstalls.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -194,7 +198,8 @@ const sendTerminalText = async () => {
 
 const actionLabels = {
   "cache-mac": "macOS cache cleanup",
-  "cache-chrome": "Chrome cache cleanup"
+  "cache-chrome": "Chrome cache cleanup",
+  "update-app": "DiagnuCLI app update"
 };
 
 const sendAction = async (actionId) => {

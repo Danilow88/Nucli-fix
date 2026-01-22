@@ -12,6 +12,8 @@ const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
   : path.resolve(__dirname, "..", "diagnucli");
 const SCRIPT_PATH = process.env.DIAGNUCLI_PATH || DEFAULT_SCRIPT_PATH;
+const DEFAULT_REPO_PATH = path.join(os.homedir(), "Nucli-fix");
+const REPO_PATH = process.env.DIAGNUCLI_REPO_PATH || DEFAULT_REPO_PATH;
 const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
 
 function createWindow() {
@@ -164,6 +166,22 @@ const MAINTENANCE_ACTIONS = {
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
         `rm -rf ${rmTargets}`,
         `echo "[DiagnuCLI] Chrome cache cleanup finished"`
+      ].join("; ");
+    }
+  },
+  "update-app": {
+    label: "DiagnuCLI app update",
+    buildCommand: () => {
+      const repo = REPO_PATH;
+      const electronDir = path.join(repo, "diagnucli-electron");
+      return [
+        `echo "[DiagnuCLI] Update started"`,
+        `if [ ! -d "${repo}/.git" ]; then echo "[DiagnuCLI] Repo not found: ${repo}"; exit 1; fi`,
+        `cd "${repo}"`,
+        `git pull`,
+        `cd "${electronDir}"`,
+        `./install.sh`,
+        `echo "[DiagnuCLI] Update finished"`
       ].join("; ");
     }
   }
