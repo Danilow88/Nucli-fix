@@ -1,36 +1,35 @@
 #!/bin/bash
 
-# Cria um app wrapper que executa "npm start" e exibe nome/icone DiagnuCLI.
-
 set -e
 
-APP_NAME="DiagnuCLI Dev"
-APP_DIR="$HOME/Applications"
-PROJECT_DIR="${1:-$HOME/dev/nu/Nucli-fix/diagnucli-electron}"
-ICON_SRC="$PROJECT_DIR/assets/icon.icns"
-APP_BUNDLE="$APP_DIR/$APP_NAME.app"
+APP_NAME="DiagnuCLI"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+APP_DIR="$PROJECT_DIR/diagnucli-electron"
+ICON_SRC="$APP_DIR/assets/icon.icns"
+APP_TARGET="$HOME/Applications/${APP_NAME}-Dev.app"
 
-if [ ! -d "$PROJECT_DIR" ]; then
-  echo "Diretorio nao encontrado: $PROJECT_DIR"
+if ! command -v osacompile >/dev/null 2>&1; then
+  echo "osacompile nao encontrado. Instale o Xcode Command Line Tools."
+  echo "Execute: xcode-select --install"
   exit 1
 fi
 
-mkdir -p "$APP_DIR"
+mkdir -p "$HOME/Applications"
 
-osascript -e "tell application \"System Events\" to set frontmost of process \"Finder\" to true" || true
+SCRIPT_CONTENT="do shell script \"/bin/zsh -lc 'cd \"$APP_DIR\" && npm start'\""
 
-osacompile -o "$APP_BUNDLE" <<APPLESCRIPT
-do shell script "cd '$PROJECT_DIR' && npm start"
-APPLESCRIPT
+osacompile -o "$APP_TARGET" -e "$SCRIPT_CONTENT"
 
-if [ -f "$ICON_SRC" ]; then
-  cp "$ICON_SRC" "$APP_BUNDLE/Contents/Resources/applet.icns"
+INFO_PLIST="$APP_TARGET/Contents/Info.plist"
+RESOURCES_DIR="$APP_TARGET/Contents/Resources"
+
+/usr/libexec/PlistBuddy -c "Set :CFBundleName $APP_NAME" "$INFO_PLIST" || true
+/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$INFO_PLIST" || true
+/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.diagnucli.dev" "$INFO_PLIST" || true
+
+if [[ -f "$ICON_SRC" ]]; then
+  cp "$ICON_SRC" "$RESOURCES_DIR/DiagnuCLI.icns"
+  /usr/libexec/PlistBuddy -c "Set :CFBundleIconFile DiagnuCLI.icns" "$INFO_PLIST" || true
 fi
 
-if [ -x "/usr/libexec/PlistBuddy" ]; then
-  /usr/libexec/PlistBuddy -c "Set :CFBundleName $APP_NAME" "$APP_BUNDLE/Contents/Info.plist" || true
-  /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName $APP_NAME" "$APP_BUNDLE/Contents/Info.plist" || true
-  /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.diagnucli.dev" "$APP_BUNDLE/Contents/Info.plist" || true
-fi
-
-echo "App criado em: $APP_BUNDLE"
+echo "Atalho dev criado em: $APP_TARGET"

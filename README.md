@@ -65,14 +65,8 @@ Execute:
 curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash
 ```
 
-### Atalho com icone (modo dev)
-
-Para aparecer com nome/icone DiagnuCLI mesmo rodando via `npm start`:
-
-```bash
-cd ~/dev/nu/Nucli-fix
-./scripts/create-dev-app.sh ~/dev/nu/Nucli-fix/diagnucli-electron
-```
+O instalador tambem cria um atalho dev com nome e icone "DiagnuCLI" em:
+`~/Applications/DiagnuCLI-Dev.app`
 
 ### Rodar via CLI (sem .app / sem Gatekeeper)
 
