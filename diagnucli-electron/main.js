@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, nativeImage } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -24,12 +24,15 @@ const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/13
 
 function createWindow() {
   const iconPath = path.join(__dirname, "assets", "icon.png");
+  const iconImage = fs.existsSync(iconPath)
+    ? nativeImage.createFromPath(iconPath)
+    : null;
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 760,
     backgroundColor: "#1B0B2E",
     title: "DiagnuCLI",
-    icon: iconPath,
+    icon: iconImage || iconPath,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -39,8 +42,8 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
 
-  if (process.platform === "darwin" && fs.existsSync(iconPath)) {
-    app.dock.setIcon(iconPath);
+  if (process.platform === "darwin" && iconImage) {
+    app.dock.setIcon(iconImage);
   }
 }
 
@@ -339,7 +342,12 @@ ipcMain.handle("open-mic-permissions", () => {
   return { ok: true };
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  app.setName("DiagnuCLI");
+  process.title = "DiagnuCLI";
+  app.setAboutPanelOptions({ applicationName: "DiagnuCLI" });
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
