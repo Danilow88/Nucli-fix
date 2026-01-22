@@ -7,6 +7,7 @@ const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
 const rovoButton = document.getElementById("openRovo");
+const supportButton = document.getElementById("openSupport");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -40,6 +41,8 @@ const translations = {
     macosUpdateDesc: "Verifica e instala atualizacoes do sistema.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
+    supportTitle: "Abrir chamado (Suporte)",
+    supportDesc: "Abre o portal de chamados da Nubank no Chrome.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -93,6 +96,8 @@ const translations = {
     macosUpdateDesc: "Checks and installs system updates.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
+    supportTitle: "Open ticket (Support)",
+    supportDesc: "Opens Nubank support portal in Chrome.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -249,6 +254,13 @@ if (rovoButton) {
   rovoButton.addEventListener("click", async () => {
     await window.diagnucli.openRovo();
     appendLog("\n[DiagnuCLI] Rovo support opened.\n");
+  });
+}
+
+if (supportButton) {
+  supportButton.addEventListener("click", async () => {
+    await window.diagnucli.openSupport();
+    appendLog("\n[DiagnuCLI] Support portal opened.\n");
   });
 }
 

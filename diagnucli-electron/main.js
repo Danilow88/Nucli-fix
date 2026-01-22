@@ -17,6 +17,7 @@ const REPO_PATH = process.env.DIAGNUCLI_REPO_PATH || DEFAULT_REPO_PATH;
 const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
+const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -44,6 +45,22 @@ function openRovoInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: rovoUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openSupportInChrome() {
+  const osa = `
+    set supportUrl to "${SUPPORT_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: supportUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -260,6 +277,11 @@ ipcMain.handle("run-action", (_event, actionId) => {
 ipcMain.handle("open-rovo", () => {
   openRovoInChrome();
   return { ok: true, url: ROVO_URL };
+});
+
+ipcMain.handle("open-support", () => {
+  openSupportInChrome();
+  return { ok: true, url: SUPPORT_URL };
 });
 
 ipcMain.handle("rovo-send-text", (_event, text) => {
