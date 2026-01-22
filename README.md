@@ -68,6 +68,14 @@ curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/in
 O instalador tambem cria um atalho dev com nome e icone "DiagnuCLI" em:
 `~/Applications/DiagnuCLI-Dev.app`
 
+Para iniciar com nome/icone correto (estilo jira-monitor):
+
+```bash
+~/dev/nu/Nucli-fix/scripts/start.sh
+```
+
+Observacao: `npm start` em modo dev sempre mostra "Electron" no Dock.
+
 ### Rodar via CLI (sem .app / sem Gatekeeper)
 
 Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app):

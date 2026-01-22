@@ -122,10 +122,10 @@ echo -e "${GREEN}║     ✅ Instalacao concluida com sucesso!  ║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════╝${NC}"
 echo ""
 echo -e "${BLUE}🚀 Para iniciar:${NC}"
-echo -e "   ${YELLOW}cd $APP_DIR && npm start${NC}"
+echo -e "   ${YELLOW}$PROJECT_DIR/scripts/start.sh${NC}"
 echo ""
 echo -e "${YELLOW}Deseja iniciar agora? [s/N]${NC}"
 read -r response
 if [[ "$response" =~ ^([sS][iI][mM]|[sS])$ ]]; then
-  npm start
+  "$PROJECT_DIR/scripts/start.sh"
 fi
