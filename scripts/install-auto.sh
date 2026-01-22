@@ -70,6 +70,22 @@ else
   echo -e "${GREEN}✅ Repositorio clonado${NC}"
 fi
 
+SCRIPTS_DIR="$PROJECT_DIR/scripts"
+mkdir -p "$SCRIPTS_DIR"
+
+fetch_script() {
+  local name="$1"
+  local url="https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/$name"
+  if [ ! -f "$SCRIPTS_DIR/$name" ]; then
+    echo -e "${YELLOW}⚠️  $name nao encontrado. Baixando...${NC}"
+    curl -fsSL "$url" -o "$SCRIPTS_DIR/$name"
+    chmod +x "$SCRIPTS_DIR/$name"
+  fi
+}
+
+fetch_script "create-dev-app.sh"
+fetch_script "start.sh"
+
 echo ""
 echo -e "${BLUE}[5/6]${NC} Verificando Node.js..."
 export NVM_DIR="$HOME/.nvm"
