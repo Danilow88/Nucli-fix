@@ -114,12 +114,9 @@ function startPtyRun() {
     exists
   });
 
-  startLogTail();
-
   const command = exists
     ? `export TERM=xterm-256color; export JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED"; ` +
-      `export DIAGNUCLI_LOG_PATH="${LOG_PATH}"; ` +
-      `/usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"`
+      `export DIAGNUCLI_LOG_PATH="${LOG_PATH}"; bash "${SCRIPT_PATH}"`
     : `echo "Script not found: ${SCRIPT_PATH}"`;
 
   const shell = process.env.SHELL || "/bin/bash";
