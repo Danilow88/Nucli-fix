@@ -18,15 +18,6 @@ const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
-const DOCK_ICON_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, "assets", "icon.png")
-  : path.join(__dirname, "assets", "icon.png");
-
-app.setName("DiagnuCLI");
-const gotSingleInstanceLock = app.requestSingleInstanceLock();
-if (!gotSingleInstanceLock) {
-  app.quit();
-}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -339,25 +330,7 @@ ipcMain.handle("open-mic-permissions", () => {
   return { ok: true };
 });
 
-app.whenReady().then(() => {
-  if (app.dock) {
-    if (app.isPackaged && fs.existsSync(DOCK_ICON_PATH)) {
-      app.dock.setIcon(DOCK_ICON_PATH);
-    } else if (!app.isPackaged) {
-      app.dock.hide();
-    }
-  }
-  createWindow();
-});
-
-app.on("second-instance", () => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    mainWindow.focus();
-  }
-});
+app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
