@@ -64,7 +64,9 @@ Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app
 ```bash
 git clone https://github.com/Danilow88/Nucli-fix
 cd Nucli-fix
-./run-cli.sh
+cd diagnucli-electron
+npm install --omit=dev
+npm start
 ```
 
 Observacao: este modo instala somente dependencias necessarias (sem `electron-builder`),

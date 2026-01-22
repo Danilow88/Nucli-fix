@@ -16,4 +16,4 @@ if [[ ! -d "node_modules" ]]; then
 fi
 
 echo "Iniciando DiagnuCLI via CLI (sem app bundle)..."
-npx electron .
+npm start
