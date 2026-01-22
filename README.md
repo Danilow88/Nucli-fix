@@ -37,6 +37,15 @@ Depois use:
 diagnucli-app
 ```
 
+Atualizar o app via Git:
+
+```bash
+cd Nucli-fix
+git pull
+cd diagnucli-electron
+./install.sh
+```
+
 O instalador:
 - Faz o build local se nao existir app pronto
 - Instala em `/Applications/DiagnuCLI.app`

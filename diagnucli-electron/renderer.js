@@ -192,35 +192,18 @@ const sendTerminalText = async () => {
   terminalInput.value = "";
 };
 
-const actionCommands = {
-  "cache-mac": {
-    logLabel: "macOS cache cleanup",
-    command:
-      "rm -rf ~/Library/Caches/*; " +
-      "sudo rm -rf /Library/Caches/*; " +
-      "echo \"macOS cache cleanup finished\""
-  },
-  "cache-chrome": {
-    logLabel: "Chrome cache cleanup",
-    command:
-      "osascript -e 'tell application \"Google Chrome\" to quit' || true; " +
-      "rm -rf ~/Library/Caches/Google/Chrome/* " +
-      "\"~/Library/Application Support/Google/Chrome/Default/Cache\"/* " +
-      "\"~/Library/Application Support/Google/Chrome/Default/Code Cache\"/* " +
-      "\"~/Library/Application Support/Google/Chrome/Default/GPUCache\"/* " +
-      "\"~/Library/Application Support/Google/Chrome/Default/Service Worker/CacheStorage\"/*; " +
-      "echo \"Chrome cache cleanup finished\""
-  }
+const actionLabels = {
+  "cache-mac": "macOS cache cleanup",
+  "cache-chrome": "Chrome cache cleanup"
 };
 
 const sendAction = async (actionId) => {
-  const action = actionCommands[actionId];
-  if (!action) {
+  const label = actionLabels[actionId];
+  if (!label) {
     return;
   }
-  await startRun();
-  await window.diagnucli.sendText(action.command, true);
-  appendLog(`\n[DiagnuCLI] Action sent: ${action.logLabel}\n`);
+  await window.diagnucli.runAction(actionId);
+  appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 
 startButton.addEventListener("click", startRun);

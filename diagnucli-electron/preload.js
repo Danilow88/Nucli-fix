@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld("diagnucli", {
     ipcRenderer.on("run-status", (_event, payload) => handler(payload)),
   sendChoice: (choice) => ipcRenderer.invoke("send-choice", choice),
   sendText: (text, pressEnter = false) =>
-    ipcRenderer.invoke("send-text", text, pressEnter)
+    ipcRenderer.invoke("send-text", text, pressEnter),
+  runAction: (actionId) => ipcRenderer.invoke("run-action", actionId)
 });

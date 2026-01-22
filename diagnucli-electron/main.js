@@ -126,6 +126,77 @@ ipcMain.handle("send-text", (_event, text, pressEnter = false) => {
   return { ok: true };
 });
 
+const MAINTENANCE_ACTIONS = {
+  "cache-mac": {
+    label: "macOS cache cleanup",
+    buildCommand: () => {
+      const home = os.homedir();
+      return [
+        `echo "[DiagnuCLI] macOS cache cleanup started"`,
+        `rm -rf "${home}/Library/Caches/"*`,
+        `sudo rm -rf /Library/Caches/*`,
+        `echo "[DiagnuCLI] macOS cache cleanup finished"`
+      ].join("; ");
+    }
+  },
+  "cache-chrome": {
+    label: "Chrome cache cleanup",
+    buildCommand: () => {
+      const home = os.homedir();
+      const chromeBase = path.join(
+        home,
+        "Library",
+        "Application Support",
+        "Google",
+        "Chrome",
+        "Default"
+      );
+      const targets = [
+        path.join(home, "Library", "Caches", "Google", "Chrome"),
+        path.join(chromeBase, "Cache"),
+        path.join(chromeBase, "Code Cache"),
+        path.join(chromeBase, "GPUCache"),
+        path.join(chromeBase, "Service Worker", "CacheStorage")
+      ];
+      const rmTargets = targets.map((target) => `"${target}/"*`).join(" ");
+      return [
+        `echo "[DiagnuCLI] Chrome cache cleanup started"`,
+        `osascript -e 'tell application "Google Chrome" to quit' || true`,
+        `rm -rf ${rmTargets}`,
+        `echo "[DiagnuCLI] Chrome cache cleanup finished"`
+      ].join("; ");
+    }
+  }
+};
+
+function runMaintenanceAction(actionId) {
+  const action = MAINTENANCE_ACTIONS[actionId];
+  if (!action) {
+    return { ok: false, reason: "unknown action" };
+  }
+
+  fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
+  if (!fs.existsSync(LOG_PATH)) {
+    fs.writeFileSync(LOG_PATH, "");
+  }
+
+  startLogTail();
+
+  const command = `${action.buildCommand()} | tee -a "${LOG_PATH}"`;
+  const escaped = escapeAppleScript(command);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`
+  ];
+  spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
+  sendStatus({ actionStarted: action.label });
+  return { ok: true };
+}
+
+ipcMain.handle("run-action", (_event, actionId) => {
+  return runMaintenanceAction(actionId);
+});
+
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
