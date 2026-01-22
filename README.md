@@ -57,25 +57,6 @@ O instalador:
 - Instala em `/Applications/DiagnuCLI.app`
 - Remove a quarentena do macOS (quando necessario)
 
-### Instalacao automatica (estilo jira-monitor)
-
-Execute:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash
-```
-
-O instalador tambem cria um atalho dev com nome e icone "DiagnuCLI" em:
-`~/Applications/DiagnuCLI-Dev.app`
-
-Para iniciar com nome/icone correto (estilo jira-monitor):
-
-```bash
-~/dev/nu/Nucli-fix/scripts/start.sh
-```
-
-Observacao: `npm start` em modo dev sempre mostra "Electron" no Dock.
-
 ### Rodar via CLI (sem .app / sem Gatekeeper)
 
 Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app):
@@ -90,6 +71,12 @@ npm start
 
 Observacao: este modo instala somente dependencias necessarias (sem `electron-builder`),
 entao nao dispara bloqueios de politica corporativa.
+
+### Instalação automática (estilo jira-monitor)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash
+```
 
 ## DiagnuCLI PWA (instalacao via navegador)
 
