@@ -108,10 +108,11 @@ function startRun() {
 
   startLogTail();
 
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
   const runCommand = exists
     ? `TERM=xterm-256color JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED" ` +
-      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"`
-    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"`;
+      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"; ${closeTerminal}`
+    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
 
   const escaped = escapeAppleScript(runCommand);
   const osa = [
@@ -208,6 +209,11 @@ const MAINTENANCE_ACTIONS = {
     buildCommand: () => {
       const repo = REPO_PATH;
       const electronDir = path.join(repo, "diagnucli-electron");
+      const relaunch = [
+        `osascript -e 'tell application "DiagnuCLI" to quit' || true`,
+        `sleep 1`,
+        `open -a "/Applications/DiagnuCLI.app"`
+      ].join("; ");
       return [
         `echo "[DiagnuCLI] Update started"`,
         `if [ ! -d "${repo}/.git" ]; then echo "[DiagnuCLI] Repo not found: ${repo}"; exit 1; fi`,
@@ -215,7 +221,8 @@ const MAINTENANCE_ACTIONS = {
         `git pull`,
         `cd "${electronDir}"`,
         `./install.sh`,
-        `echo "[DiagnuCLI] Update finished"`
+        `echo "[DiagnuCLI] Update finished"`,
+        relaunch
       ].join("; ");
     }
   }
@@ -234,7 +241,8 @@ function runMaintenanceAction(actionId) {
 
   startLogTail();
 
-  const command = `${action.buildCommand()} | tee -a "${LOG_PATH}"`;
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
+  const command = `(${action.buildCommand()}; ${closeTerminal}) | tee -a "${LOG_PATH}"`;
   const escaped = escapeAppleScript(command);
   const osa = [
     'tell application "Terminal" to activate',

@@ -25,6 +25,44 @@ run_cmd() {
   fi
 }
 
+update_dock_shortcut() {
+  local app_path="$INSTALL_DIR/$APP_NAME"
+  local plist_path="$HOME/Library/Preferences/com.apple.dock.plist"
+
+  if [[ -f "$plist_path" ]]; then
+    /usr/bin/python3 - <<PY
+import os
+import plistlib
+
+plist_path = os.path.expanduser("$plist_path")
+app_path = "$app_path"
+
+try:
+    with open(plist_path, "rb") as f:
+        data = plistlib.load(f)
+except Exception:
+    data = {}
+
+apps = data.get("persistent-apps", [])
+
+def matches(item):
+    try:
+        return item["tile-data"]["file-data"]["_CFURLString"] == app_path
+    except Exception:
+        return False
+
+data["persistent-apps"] = [item for item in apps if not matches(item)]
+
+with open(plist_path, "wb") as f:
+    plistlib.dump(data, f)
+PY
+  fi
+
+  /usr/bin/defaults write com.apple.dock persistent-apps -array-add \
+    "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$app_path</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>" || true
+  /usr/bin/killall Dock || true
+}
+
 find_app_bundle() {
   if [[ -d "$DIST_DIR/mac-universal/$APP_NAME" ]]; then
     echo "$DIST_DIR/mac-universal/$APP_NAME"
@@ -130,10 +168,8 @@ say "Removendo quarentena (se existir)..."
 run_cmd /usr/bin/xattr -dr com.apple.quarantine "$INSTALL_DIR/$APP_NAME" || true
 
 if [[ -z "${DIAGNUCLI_SKIP_DOCK:-}" ]]; then
-  say "Adicionando atalho no Dock..."
-  /usr/bin/defaults write com.apple.dock persistent-apps -array-add \
-    "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>$INSTALL_DIR/$APP_NAME</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>" || true
-  /usr/bin/killall Dock || true
+  say "Atualizando atalho no Dock..."
+  update_dock_shortcut
 else
   say "Atalho no Dock ignorado (DIAGNUCLI_SKIP_DOCK=1)."
 fi
