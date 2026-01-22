@@ -11,6 +11,23 @@ let runStarted = false;
 app.setName("DiagnuCLI");
 process.title = "DiagnuCLI";
 
+const ICON_PATHS = [
+  path.join(__dirname, "assets", "icon.icns"),
+  path.join(__dirname, "assets", "icon.png")
+];
+
+function loadAppIcon() {
+  for (const iconPath of ICON_PATHS) {
+    if (fs.existsSync(iconPath)) {
+      const image = nativeImage.createFromPath(iconPath);
+      if (!image.isEmpty()) {
+        return { image, iconPath };
+      }
+    }
+  }
+  return { image: null, iconPath: null };
+}
+
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
   : path.resolve(__dirname, "..", "diagnucli");
@@ -23,16 +40,13 @@ const ROVO_URL =
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
 
 function createWindow() {
-  const iconPath = path.join(__dirname, "assets", "icon.png");
-  const iconImage = fs.existsSync(iconPath)
-    ? nativeImage.createFromPath(iconPath)
-    : null;
+  const { image: iconImage, iconPath } = loadAppIcon();
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 760,
     backgroundColor: "#1B0B2E",
     title: "DiagnuCLI",
-    icon: iconImage || iconPath,
+    icon: iconImage || iconPath || undefined,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -346,6 +360,10 @@ app.whenReady().then(() => {
   app.setName("DiagnuCLI");
   process.title = "DiagnuCLI";
   app.setAboutPanelOptions({ applicationName: "DiagnuCLI" });
+  const { image: iconImage } = loadAppIcon();
+  if (process.platform === "darwin" && iconImage) {
+    app.dock.setIcon(iconImage);
+  }
   createWindow();
 });
 
