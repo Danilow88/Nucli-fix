@@ -16,9 +16,13 @@ fi
 
 mkdir -p "$HOME/Applications"
 
-SCRIPT_CONTENT="do shell script \"/bin/zsh -lc 'cd \"$APP_DIR\" && npm start'\""
+osascript_tmp="$(mktemp)"
+cat > "$osascript_tmp" <<EOF
+do shell script "/bin/zsh -lc 'cd \"$APP_DIR\" && npm start'"
+EOF
 
-osacompile -o "$APP_TARGET" -e "$SCRIPT_CONTENT"
+osacompile -o "$APP_TARGET" "$osascript_tmp"
+rm -f "$osascript_tmp"
 
 INFO_PLIST="$APP_TARGET/Contents/Info.plist"
 RESOURCES_DIR="$APP_TARGET/Contents/Resources"
