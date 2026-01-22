@@ -2,7 +2,7 @@ const logOutput = document.getElementById("logOutput");
 const statusText = document.getElementById("statusText");
 const startButton = document.getElementById("startButton");
 const langButtons = document.querySelectorAll(".lang-btn");
-const menuCards = document.querySelectorAll(".menu-card");
+const menuCards = document.querySelectorAll(".menu-card[data-option]");
 const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
@@ -178,6 +178,9 @@ const startRun = async () => {
 };
 
 const sendMenuChoice = async (choice) => {
+  if (!choice) {
+    return;
+  }
   await startRun();
   setTimeout(async () => {
     await window.diagnucli.sendChoice(choice);
