@@ -294,6 +294,7 @@ const initSpeechRecognition = () => {
   recognition.onerror = () => {
     recognitionActive = false;
     updateVoiceStatus("voiceStatusError");
+    window.diagnucli.openMicPermissions();
   };
 
   recognition.onresult = (event) => {

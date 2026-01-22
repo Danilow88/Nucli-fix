@@ -300,6 +300,13 @@ ipcMain.handle("rovo-send-text", (_event, text) => {
   return { ok: true };
 });
 
+ipcMain.handle("open-mic-permissions", () => {
+  spawn("open", [
+    "x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone"
+  ]);
+  return { ok: true };
+});
+
 app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {

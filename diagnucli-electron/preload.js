@@ -10,5 +10,6 @@ contextBridge.exposeInMainWorld("diagnucli", {
     ipcRenderer.invoke("send-text", text, pressEnter),
   runAction: (actionId) => ipcRenderer.invoke("run-action", actionId),
   openRovo: () => ipcRenderer.invoke("open-rovo"),
-  sendToRovo: (text) => ipcRenderer.invoke("rovo-send-text", text)
+  sendToRovo: (text) => ipcRenderer.invoke("rovo-send-text", text),
+  openMicPermissions: () => ipcRenderer.invoke("open-mic-permissions")
 });
