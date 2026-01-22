@@ -36,6 +36,8 @@ const translations = {
     cacheChromeDesc: "Fecha o Chrome e remove caches locais.",
     updateTitle: "Atualizar o app",
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
+    macosUpdateTitle: "Atualizar macOS",
+    macosUpdateDesc: "Verifica e instala atualizacoes do sistema.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
@@ -87,6 +89,8 @@ const translations = {
     cacheChromeDesc: "Quits Chrome and removes local caches.",
     updateTitle: "Update app",
     updateDesc: "Pulls latest Git version and reinstalls.",
+    macosUpdateTitle: "Update macOS",
+    macosUpdateDesc: "Checks and installs system updates.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     terminalInputLabel: "Send command to macOS Terminal",
@@ -207,7 +211,8 @@ const sendTerminalText = async () => {
 const actionLabels = {
   "cache-mac": "macOS cache cleanup",
   "cache-chrome": "Chrome cache cleanup",
-  "update-app": "DiagnuCLI app update"
+  "update-app": "DiagnuCLI app update",
+  "update-macos": "macOS update"
 };
 
 const sendAction = async (actionId) => {

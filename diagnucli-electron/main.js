@@ -215,6 +215,16 @@ const MAINTENANCE_ACTIONS = {
         relaunch
       ].join("; ");
     }
+  },
+  "update-macos": {
+    label: "macOS update",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] macOS update started"`,
+        `sudo /usr/sbin/softwareupdate --install --all --force`,
+        `echo "[DiagnuCLI] macOS update finished"`
+      ].join("; ");
+    }
   }
 };
 
