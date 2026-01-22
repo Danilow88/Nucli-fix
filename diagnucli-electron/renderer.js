@@ -7,14 +7,8 @@ const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
 const rovoButton = document.getElementById("openRovo");
-const rovoInlineButton = document.getElementById("openRovoInline");
-const startChromeDictation = document.getElementById("startChromeDictation");
-const openMicSettings = document.getElementById("openMicSettings");
-const voiceStatus = document.getElementById("voiceStatus");
-
 let runStarted = false;
 let currentLang = "pt";
-let currentVoiceStatus = "voiceStatusIdle";
 
 const translations = {
   pt: {
@@ -44,13 +38,6 @@ const translations = {
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
-    voiceTitle: "Ditado direto no Chrome",
-    voiceStatusIdle: "Use o ditado no navegador para transcrever direto no Rovo.",
-    rovoOpenInline: "Abrir Rovo no Chrome",
-    voiceStartChrome: "Iniciar ditado no Chrome",
-    openMicPermissions: "Permissões do microfone",
-    voiceHint:
-      "Dica: clique no campo de mensagem do Rovo antes de iniciar o ditado.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -102,14 +89,6 @@ const translations = {
     updateDesc: "Pulls latest Git version and reinstalls.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
-    voiceTitle: "Dictation in Chrome",
-    voiceStatusIdle:
-      "Use browser dictation to transcribe directly into Rovo.",
-    rovoOpenInline: "Open Rovo in Chrome",
-    voiceStartChrome: "Start dictation in Chrome",
-    openMicPermissions: "Microphone permissions",
-    voiceHint:
-      "Tip: click the Rovo message field before starting dictation.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -174,9 +153,6 @@ const updateLang = (lang) => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
-  if (voiceStatus && dict[currentVoiceStatus]) {
-    voiceStatus.textContent = dict[currentVoiceStatus];
-  }
 };
 
 window.diagnucli.onLog((data) => {
@@ -243,14 +219,6 @@ const sendAction = async (actionId) => {
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 
-const updateVoiceStatus = (key) => {
-  currentVoiceStatus = key;
-  const dict = translations[currentLang];
-  if (voiceStatus && dict[key]) {
-    voiceStatus.textContent = dict[key];
-  }
-};
-
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
@@ -279,33 +247,10 @@ if (rovoButton) {
   });
 }
 
-if (rovoInlineButton) {
-  rovoInlineButton.addEventListener("click", async () => {
-    await window.diagnucli.openRovo();
-    appendLog("\n[DiagnuCLI] Rovo opened in Chrome.\n");
-  });
-}
-
-if (startChromeDictation) {
-  startChromeDictation.addEventListener("click", async () => {
-    await window.diagnucli.openRovo();
-    setTimeout(() => {
-      window.diagnucli.startChromeDictation();
-    }, 800);
-  });
-}
-
-if (openMicSettings) {
-  openMicSettings.addEventListener("click", () =>
-    window.diagnucli.openMicrophonePermissions()
-  );
-}
-
 langButtons.forEach((btn) => {
   btn.addEventListener("click", () => updateLang(btn.dataset.lang));
 });
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLang(currentLang);
-  updateVoiceStatus("voiceStatusIdle");
 });

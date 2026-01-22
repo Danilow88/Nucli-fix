@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell, session, systemPreferences } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -45,26 +45,6 @@ function openRovoInChrome() {
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: rovoUrl}
       set active tab index of targetWindow to (index of targetTab)
-    end tell
-  `;
-  spawn("osascript", ["-e", osa]);
-}
-
-function startChromeDictation() {
-  const osa = `
-    tell application "Google Chrome" to activate
-    delay 0.2
-    tell application "System Events"
-      tell process "Google Chrome"
-        set frontmost to true
-        try
-          click menu item "Start Dictation" of menu "Edit" of menu bar 1
-        on error
-          try
-            click menu item "Iniciar Ditado" of menu "Editar" of menu bar 1
-          end try
-        end try
-      end tell
     end tell
   `;
   spawn("osascript", ["-e", osa]);
@@ -272,27 +252,6 @@ ipcMain.handle("open-rovo", () => {
   return { ok: true, url: ROVO_URL };
 });
 
-ipcMain.handle("start-chrome-dictation", () => {
-  startChromeDictation();
-  return { ok: true };
-});
-
-ipcMain.handle("send-voice-to-chrome", (_event, text) => {
-  if (!text) {
-    return { ok: false, reason: "empty" };
-  }
-  const escapedText = escapeAppleScript(String(text));
-  const osa = [
-    'tell application "Google Chrome" to activate',
-    'tell application "System Events" to tell process "Google Chrome" to set frontmost to true',
-    "delay 0.2",
-    `tell application "System Events" to tell process "Google Chrome" to keystroke "${escapedText}"`,
-    'tell application "System Events" to tell process "Google Chrome" to key code 36'
-  ];
-  spawn("osascript", osa.flatMap((line) => ["-e", line]));
-  return { ok: true };
-});
-
 ipcMain.handle("rovo-send-text", (_event, text) => {
   if (!text) {
     return { ok: false, reason: "empty" };
@@ -339,31 +298,7 @@ ipcMain.handle("open-mic-permissions", () => {
   return { ok: true };
 });
 
-ipcMain.handle("open-microphone-permissions", () => {
-  shell.openExternal(
-    "x-apple.systempreferences:com.apple.preference.security?Privacy_Microphone"
-  );
-  return { ok: true };
-});
-
-ipcMain.handle("request-microphone", async () => {
-  if (process.platform !== "darwin") {
-    return { granted: false };
-  }
-  const granted = await systemPreferences.askForMediaAccess("microphone");
-  return { granted };
-});
-
-app.whenReady().then(() => {
-  session.defaultSession.setPermissionRequestHandler((_, permission, callback) => {
-    if (permission === "media") {
-      callback(true);
-      return;
-    }
-    callback(false);
-  });
-  createWindow();
-});
+app.whenReady().then(createWindow);
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
