@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, nativeImage } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -7,26 +7,6 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
-
-app.setName("DiagnuCLI");
-process.title = "DiagnuCLI";
-
-const ICON_PATHS = [
-  path.join(__dirname, "assets", "icon.icns"),
-  path.join(__dirname, "assets", "icon.png")
-];
-
-function loadAppIcon() {
-  for (const iconPath of ICON_PATHS) {
-    if (fs.existsSync(iconPath)) {
-      const image = nativeImage.createFromPath(iconPath);
-      if (!image.isEmpty()) {
-        return { image, iconPath };
-      }
-    }
-  }
-  return { image: null, iconPath: null };
-}
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -38,15 +18,21 @@ const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
+const DOCK_ICON_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "assets", "icon.png")
+  : path.join(__dirname, "assets", "icon.png");
+
+const gotSingleInstanceLock = app.requestSingleInstanceLock();
+if (!gotSingleInstanceLock) {
+  app.quit();
+}
 
 function createWindow() {
-  const { image: iconImage, iconPath } = loadAppIcon();
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 760,
     backgroundColor: "#1B0B2E",
     title: "DiagnuCLI",
-    icon: iconImage || iconPath || undefined,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -55,10 +41,6 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
-
-  if (process.platform === "darwin" && iconImage) {
-    app.dock.setIcon(iconImage);
-  }
 }
 
 function openRovoInChrome() {
@@ -357,14 +339,19 @@ ipcMain.handle("open-mic-permissions", () => {
 });
 
 app.whenReady().then(() => {
-  app.setName("DiagnuCLI");
-  process.title = "DiagnuCLI";
-  app.setAboutPanelOptions({ applicationName: "DiagnuCLI" });
-  const { image: iconImage } = loadAppIcon();
-  if (process.platform === "darwin" && iconImage) {
-    app.dock.setIcon(iconImage);
+  if (app.dock && fs.existsSync(DOCK_ICON_PATH)) {
+    app.dock.setIcon(DOCK_ICON_PATH);
   }
   createWindow();
+});
+
+app.on("second-instance", () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
+    mainWindow.focus();
+  }
 });
 
 app.on("window-all-closed", () => {
