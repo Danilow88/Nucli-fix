@@ -3,6 +3,7 @@ const statusText = document.getElementById("statusText");
 const startButton = document.getElementById("startButton");
 const langButtons = document.querySelectorAll(".lang-btn");
 const menuCards = document.querySelectorAll(".menu-card");
+const actionCards = document.querySelectorAll("[data-action]");
 const terminalInput = document.getElementById("terminalInput");
 const sendTerminal = document.getElementById("sendTerminal");
 
@@ -29,6 +30,10 @@ const translations = {
     opt19Desc: "Diagnóstico guiado para grupos e roles BR.",
     opt22Title: "Cadastrar digital",
     opt22Desc: "Configura IAM user, Okta e FIDO/Touch ID.",
+    cacheMacTitle: "Limpar cache do macOS",
+    cacheMacDesc: "Remove caches do usuario e do sistema (pode pedir senha).",
+    cacheChromeTitle: "Limpar cache do Chrome",
+    cacheChromeDesc: "Fecha o Chrome e remove caches locais.",
     terminalInputLabel: "Enviar comando para o Terminal do macOS",
     terminalInputPlaceholder: "Ex: 1 ou nu doctor",
     terminalInputHint:
@@ -44,7 +49,8 @@ const translations = {
     guideList: [
       "Mantenha o Terminal aberto para responder aos prompts.",
       "Se pedir MFA, confirme no Okta ou Touch ID.",
-      "Permita acesso de Acessibilidade caso solicitado."
+      "Permita acesso de Acessibilidade caso solicitado.",
+      "Feche o Google Chrome antes de limpar o cache."
     ],
     noteTitle: "Importante",
     noteList: [
@@ -71,6 +77,10 @@ const translations = {
     opt19Desc: "Guided diagnostics for BR groups and roles.",
     opt22Title: "Register biometrics",
     opt22Desc: "Configure IAM user, Okta and FIDO/Touch ID.",
+    cacheMacTitle: "Clear macOS cache",
+    cacheMacDesc: "Removes user and system caches (may ask for password).",
+    cacheChromeTitle: "Clear Chrome cache",
+    cacheChromeDesc: "Quits Chrome and removes local caches.",
     terminalInputLabel: "Send command to macOS Terminal",
     terminalInputPlaceholder: "Ex: 1 or nu doctor",
     terminalInputHint:
@@ -86,7 +96,8 @@ const translations = {
     guideList: [
       "Keep Terminal open to answer prompts.",
       "If MFA is requested, approve in Okta or Touch ID.",
-      "Allow Accessibility access if prompted."
+      "Allow Accessibility access if prompted.",
+      "Close Google Chrome before clearing cache."
     ],
     noteTitle: "Important",
     noteList: [
@@ -181,11 +192,48 @@ const sendTerminalText = async () => {
   terminalInput.value = "";
 };
 
+const actionCommands = {
+  "cache-mac": {
+    logLabel: "macOS cache cleanup",
+    command:
+      "rm -rf ~/Library/Caches/*; " +
+      "sudo rm -rf /Library/Caches/*; " +
+      "echo \"macOS cache cleanup finished\""
+  },
+  "cache-chrome": {
+    logLabel: "Chrome cache cleanup",
+    command:
+      "osascript -e 'tell application \"Google Chrome\" to quit' || true; " +
+      "rm -rf ~/Library/Caches/Google/Chrome/* " +
+      "\"~/Library/Application Support/Google/Chrome/Default/Cache\"/* " +
+      "\"~/Library/Application Support/Google/Chrome/Default/Code Cache\"/* " +
+      "\"~/Library/Application Support/Google/Chrome/Default/GPUCache\"/* " +
+      "\"~/Library/Application Support/Google/Chrome/Default/Service Worker/CacheStorage\"/*; " +
+      "echo \"Chrome cache cleanup finished\""
+  }
+};
+
+const sendAction = async (actionId) => {
+  const action = actionCommands[actionId];
+  if (!action) {
+    return;
+  }
+  await startRun();
+  await window.diagnucli.sendText(action.command, true);
+  appendLog(`\n[DiagnuCLI] Action sent: ${action.logLabel}\n`);
+};
+
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
   card.addEventListener("click", () => {
     sendMenuChoice(card.dataset.option);
+  });
+});
+
+actionCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    sendAction(card.dataset.action);
   });
 });
 

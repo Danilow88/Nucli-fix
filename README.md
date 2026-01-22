@@ -24,6 +24,19 @@ cd Nucli-fix/diagnucli-electron
 ./install.sh
 ```
 
+Alias para iniciar o app pelo Terminal:
+
+```bash
+cd Nucli-fix/diagnucli-electron
+./alias.sh
+```
+
+Depois use:
+
+```bash
+diagnucli-app
+```
+
 O instalador:
 - Faz o build local se nao existir app pronto
 - Instala em `/Applications/DiagnuCLI.app`
