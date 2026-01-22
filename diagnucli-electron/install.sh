@@ -122,6 +122,10 @@ say "Instalando $APP_NAME em $INSTALL_DIR..."
 run_cmd rm -rf "$INSTALL_DIR/$APP_NAME"
 run_cmd /usr/bin/ditto "$app_path" "$INSTALL_DIR/$APP_NAME"
 
+if [[ -x "/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister" ]]; then
+  run_cmd /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$INSTALL_DIR/$APP_NAME" || true
+fi
+
 say "Removendo quarentena (se existir)..."
 run_cmd /usr/bin/xattr -dr com.apple.quarantine "$INSTALL_DIR/$APP_NAME" || true
 

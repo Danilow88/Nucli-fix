@@ -135,7 +135,7 @@ const MAINTENANCE_ACTIONS = {
       const home = os.homedir();
       return [
         `echo "[DiagnuCLI] macOS cache cleanup started"`,
-        `rm -rf "${home}/Library/Caches/"*`,
+        `rm -rf "${home}/Library/Caches"`,
         `sudo rm -rf /Library/Caches/*`,
         `echo "[DiagnuCLI] macOS cache cleanup finished"`
       ].join("; ");
@@ -160,7 +160,7 @@ const MAINTENANCE_ACTIONS = {
         path.join(chromeBase, "GPUCache"),
         path.join(chromeBase, "Service Worker", "CacheStorage")
       ];
-      const rmTargets = targets.map((target) => `"${target}/"*`).join(" ");
+      const rmTargets = targets.map((target) => `"${target}"`).join(" ");
       return [
         `echo "[DiagnuCLI] Chrome cache cleanup started"`,
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
