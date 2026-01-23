@@ -289,7 +289,7 @@ const MAINTENANCE_ACTIONS = {
       return [
         `echo "[DiagnuCLI] macOS cache cleanup started"`,
         `sudo rm -rf "${home}/Library/Caches"`,
-        `sudo rm -rf /Library/Caches`,
+        `sudo find /Library/Caches -mindepth 1 -maxdepth 1 -exec rm -rf {} + >/dev/null 2>&1`,
         `echo "[DiagnuCLI] macOS cache cleanup finished"`
       ].join("; ");
     }
