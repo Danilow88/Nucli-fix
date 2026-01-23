@@ -271,6 +271,42 @@ function openKeychainMyCertificates() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openTouchIdAndAddFingerprint() {
+  const osa = `
+    tell application "System Settings" to activate
+    delay 0.4
+    do shell script "open 'x-apple.systempreferences:com.apple.preference.security?TouchID'"
+    delay 0.8
+    tell application "System Events"
+      tell process "System Settings"
+        set frontmost to true
+        repeat with i from 1 to 20
+          delay 0.2
+          try
+            if exists button "Adicionar Impressão Digital" of window 1 then
+              click button "Adicionar Impressão Digital" of window 1
+              exit repeat
+            end if
+          end try
+          try
+            if exists button "Add Fingerprint" of window 1 then
+              click button "Add Fingerprint" of window 1
+              exit repeat
+            end if
+          end try
+          try
+            if exists button "Agregar huella" of window 1 then
+              click button "Agregar huella" of window 1
+              exit repeat
+            end if
+          end try
+        end repeat
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openGuideInChrome(lang) {
   const guideUrl = getGuideUrl(lang);
   const osa = `
@@ -581,9 +617,7 @@ const MAINTENANCE_ACTIONS = {
     label: "Open Touch ID & Password",
     detail: "Abre Touch ID e Senha nas Configurações do macOS.",
     runDirect: () => {
-      spawn("open", [
-        "x-apple.systempreferences:com.apple.preference.security?TouchID"
-      ]);
+      openTouchIdAndAddFingerprint();
     }
   },
   "open-mac-setup": {
