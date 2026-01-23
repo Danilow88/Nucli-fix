@@ -363,7 +363,12 @@ const MAINTENANCE_ACTIONS = {
   "manage-disk": {
     label: "Manage disk space",
     runDirect: () => {
-      spawn("open", ["x-apple.systempreferences:com.apple.preferences.storage"]);
+      spawn("open", ["x-apple.systempreferences:com.apple.SystemSettings?pane=General"]);
+      setTimeout(() => {
+        spawn("open", [
+          "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=Storage"
+        ]);
+      }, 600);
     }
   },
   "activity-monitor": {
