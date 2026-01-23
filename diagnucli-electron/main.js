@@ -21,6 +21,7 @@ const INSTALLER_PATH = app.isPackaged
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
+const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
@@ -419,6 +420,15 @@ const MAINTENANCE_ACTIONS = {
           "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=TransferOrReset"
         ]);
       }, 600);
+    }
+  },
+  "open-oncall": {
+    label: "Open WhatsApp on-call",
+    runDirect: () => {
+      spawn("open", ["-a", "WhatsApp", ONCALL_WHATSAPP_URL]);
+      setTimeout(() => {
+        spawn("open", [ONCALL_WHATSAPP_URL]);
+      }, 500);
     }
   }
 };

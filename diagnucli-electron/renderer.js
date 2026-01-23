@@ -56,6 +56,8 @@ const translations = {
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank no Chrome.",
+    oncallTitle: "Acionar on-call 24h (home office)",
+    oncallDesc: "Abre o WhatsApp para o número (11) 95185-7554.",
     setupHelpTitle:
       "Enviar dúvida para o canal Setup Help, canal para duvidas de aws e nucli setup.",
     setupHelpButton: "Abrir canal no Slack",
@@ -126,6 +128,8 @@ const translations = {
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens Nubank support portal in Chrome.",
+    oncallTitle: "Call on-call 24h (remote work)",
+    oncallDesc: "Opens WhatsApp for the number +55 11 95185-7554.",
     setupHelpTitle: "Send a question to the Setup Help channel",
     setupHelpButton: "Open Slack channel",
     setupHelpHint: "Click to open the channel and ask for help.",
@@ -195,6 +199,8 @@ const translations = {
     rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank en Chrome.",
+    oncallTitle: "Activar on-call 24h (home office)",
+    oncallDesc: "Abre WhatsApp para el número +55 11 95185-7554.",
     setupHelpTitle: "Enviar duda al canal Setup Help",
     setupHelpButton: "Abrir canal en Slack",
     setupHelpHint: "Haga clic para abrir el canal y pedir ayuda.",
@@ -310,7 +316,8 @@ const actionLabels = {
   "empty-trash": "Empty Trash",
   "open-keychain": "Open Keychain",
   "reset-general": "Reset general settings",
-  "exit-app": "Exit app"
+  "exit-app": "Exit app",
+  "open-oncall": "Open WhatsApp on-call"
 };
 
 const sendAction = async (actionId) => {
