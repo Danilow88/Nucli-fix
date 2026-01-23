@@ -50,6 +50,8 @@ const translations = {
     logCommandPlaceholder: "Digite um comando para enviar ao processo",
     logCommandSend: "Enviar comando",
     logCommandSendTip: "Envia o comando para o processo em execução.",
+    logCommandHint:
+      "Se o instalador pedir \"Pressione Enter\", deixe o campo vazio e pressione Enter.",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
     macosUpdateTitle: "Atualizar macOS",
@@ -174,6 +176,8 @@ const translations = {
     logCommandPlaceholder: "Type a command to send to the process",
     logCommandSend: "Send command",
     logCommandSendTip: "Sends the command to the running process.",
+    logCommandHint:
+      "If the installer asks for \"Press Enter\", leave the field empty and press Enter.",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
     macosUpdateTitle: "Update macOS",
@@ -298,6 +302,8 @@ const translations = {
     logCommandPlaceholder: "Escriba un comando para enviar al proceso",
     logCommandSend: "Enviar comando",
     logCommandSendTip: "Envía el comando al proceso en ejecución.",
+    logCommandHint:
+      "Si el instalador pide \"Presione Enter\", deje el campo vacío y presione Enter.",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
     macosUpdateTitle: "Actualizar macOS",
