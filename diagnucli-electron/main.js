@@ -475,18 +475,6 @@ const MAINTENANCE_ACTIONS = {
       openKeychainMyCertificates();
     }
   },
-  "reset-general": {
-    label: "Reset general settings",
-    detail: "Abre Configurações > Geral > Transferir ou Redefinir.",
-    runDirect: () => {
-      spawn("open", ["x-apple.systempreferences:com.apple.SystemSettings?pane=General"]);
-      setTimeout(() => {
-        spawn("open", [
-          "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=TransferOrReset"
-        ]);
-      }, 600);
-    }
-  },
   "open-mac-setup": {
     label: "Open Mac setup guide",
     detail: "Abre o guia de configuração do Mac no Chrome.",
