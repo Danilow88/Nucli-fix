@@ -11,9 +11,12 @@ fi
 cd "$PROJECT_DIR"
 
 if [[ ! -d "node_modules" ]]; then
-  echo "Dependencias nao encontradas. Instalando (sem devDependencies)..."
-  npm install --omit=dev
+  echo "Dependencias nao encontradas. Instalando..."
+  npm install
 fi
 
 echo "Iniciando DiagnuCLI via CLI (sem app bundle)..."
-npm start
+LOG_PATH="${DIAGNUCLI_CLI_LOG:-/tmp/diagnucli-electron.log}"
+nohup npx electron . >"$LOG_PATH" 2>&1 &
+disown
+echo "DiagnuCLI iniciado em background. Logs: $LOG_PATH"

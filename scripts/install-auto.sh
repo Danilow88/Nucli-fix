@@ -36,5 +36,7 @@ else
   (cd "$APP_REPO_PATH/diagnucli-electron" && npm install)
 fi
 
-say "Starting DiagnuCLI via npm start..."
-(cd "$APP_REPO_PATH/diagnucli-electron" && npm start)
+say "Starting DiagnuCLI via npm start (background)..."
+LOG_PATH="${DIAGNUCLI_NPM_LOG:-/tmp/diagnucli-npm-start.log}"
+(cd "$APP_REPO_PATH/diagnucli-electron" && nohup npm start >"$LOG_PATH" 2>&1 & disown)
+say "DiagnuCLI started. Logs: $LOG_PATH"
