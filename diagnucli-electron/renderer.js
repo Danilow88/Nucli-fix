@@ -48,6 +48,8 @@ const translations = {
     emptyTrashDesc: "Esvazia a lixeira do Finder.",
     openKeychainTitle: "Abrir Keychain",
     openKeychainDesc: "Abre em login e Meus Certificados.",
+    resetGeneralTitle: "Resetar configurações gerais",
+    resetGeneralDesc: "Abre a área de redefinições do macOS.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
@@ -114,6 +116,8 @@ const translations = {
     emptyTrashDesc: "Empties the Finder trash.",
     openKeychainTitle: "Open Keychain",
     openKeychainDesc: "Opens Login and My Certificates.",
+    resetGeneralTitle: "Reset general settings",
+    resetGeneralDesc: "Opens the macOS reset area.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     supportTitle: "Open ticket (Support)",
@@ -179,6 +183,8 @@ const translations = {
     emptyTrashDesc: "Vacía la papelera del Finder.",
     openKeychainTitle: "Abrir Keychain",
     openKeychainDesc: "Abre en login y Mis Certificados.",
+    resetGeneralTitle: "Restablecer ajustes generales",
+    resetGeneralDesc: "Abre el área de restablecimiento de macOS.",
     rovoTitle: "Abrir Rovo (Soporte)",
     rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
     supportTitle: "Abrir ticket (Soporte)",
@@ -296,7 +302,8 @@ const actionLabels = {
   "manage-disk": "Manage disk space",
   "activity-monitor": "Open Activity Monitor",
   "empty-trash": "Empty Trash",
-  "open-keychain": "Open Keychain"
+  "open-keychain": "Open Keychain",
+  "reset-general": "Reset general settings"
 };
 
 const sendAction = async (actionId) => {

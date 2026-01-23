@@ -388,6 +388,17 @@ const MAINTENANCE_ACTIONS = {
     runDirect: () => {
       openKeychainMyCertificates();
     }
+  },
+  "reset-general": {
+    label: "Reset general settings",
+    runDirect: () => {
+      spawn("open", ["x-apple.systempreferences:com.apple.SystemSettings?pane=General"]);
+      setTimeout(() => {
+        spawn("open", [
+          "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=TransferOrReset"
+        ]);
+      }, 600);
+    }
   }
 };
 
