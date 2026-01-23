@@ -105,6 +105,32 @@ function openSetupHelpInChrome() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openKeychainMyCertificates() {
+  const osa = `
+    tell application "Keychain Access" to activate
+    delay 0.4
+    tell application "System Events"
+      tell process "Keychain Access"
+        set frontmost to true
+        try
+          click row "login" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+        delay 0.2
+        try
+          click row "Meus Certificados" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+        try
+          click row "My Certificates" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+        try
+          click row "Mis certificados" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openGuideInChrome(lang) {
   const guideUrl = getGuideUrl(lang);
   const osa = `
@@ -327,6 +353,30 @@ const MAINTENANCE_ACTIONS = {
         `echo "[DiagnuCLI] macOS update finished"`
       ].join("; ");
     }
+  },
+  "manage-disk": {
+    label: "Manage disk space",
+    runDirect: () => {
+      spawn("open", ["x-apple.systempreferences:com.apple.preferences.storage"]);
+    }
+  },
+  "activity-monitor": {
+    label: "Open Activity Monitor",
+    runDirect: () => {
+      spawn("open", ["-a", "Activity Monitor"]);
+    }
+  },
+  "empty-trash": {
+    label: "Empty Trash",
+    runDirect: () => {
+      spawn("osascript", ["-e", 'tell application "Finder" to empty the trash']);
+    }
+  },
+  "open-keychain": {
+    label: "Open Keychain",
+    runDirect: () => {
+      openKeychainMyCertificates();
+    }
   }
 };
 
@@ -334,6 +384,12 @@ function runMaintenanceAction(actionId) {
   const action = MAINTENANCE_ACTIONS[actionId];
   if (!action) {
     return { ok: false, reason: "unknown action" };
+  }
+
+  if (action.runDirect) {
+    action.runDirect();
+    sendStatus({ actionStarted: action.label });
+    return { ok: true };
   }
 
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
