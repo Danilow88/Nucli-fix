@@ -48,7 +48,7 @@ tr() {
         step10_then) echo "Luego ejecute:" ;;
         step10_mx) echo "MX: nu-mx aws credentials setup" ;;
         step10_co) echo "CO: nu-co aws credentials setup" ;;
-        done) echo "Configuración finalizada." ;;
+        done) echo "Configuración finalizada. De vuelta en la app, haga clic en el botón 'Cadastrar digital'." ;;
         guide_link_label) echo "Guía:" ;;
         asknu) echo "Para escopos/permisos, solicite via Ask Nu en Slack." ;;
         ist_admin) echo "Para configurar NuCLI en la cuenta IST, solicite el scope Admin." ;;
@@ -93,7 +93,7 @@ tr() {
         step10_then) echo "Then run:" ;;
         step10_mx) echo "MX: nu-mx aws credentials setup" ;;
         step10_co) echo "CO: nu-co aws credentials setup" ;;
-        done) echo "Setup finished." ;;
+        done) echo "Setup finished. Back in the app, click the 'Cadastrar digital' button." ;;
         guide_link_label) echo "Guide:" ;;
         asknu) echo "For scopes/permissions, request via Ask Nu on Slack." ;;
         ist_admin) echo "For NuCLI setup in IST account, request Admin scope." ;;
@@ -138,7 +138,7 @@ tr() {
         step10_then) echo "Depois execute:" ;;
         step10_mx) echo "MX: nu-mx aws credentials setup" ;;
         step10_co) echo "CO: nu-co aws credentials setup" ;;
-        done) echo "Setup finalizado." ;;
+        done) echo "Setup finalizado. De volta ao app, clique no botão 'Cadastrar digital'." ;;
         guide_link_label) echo "Guia:" ;;
         asknu) echo "Para escopos/permissões, solicite via Ask Nu no Slack." ;;
         ist_admin) echo "Para configurar NuCLI na conta IST, solicite o escopo Admin." ;;
