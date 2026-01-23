@@ -110,6 +110,27 @@ function openKeychainMyCertificates() {
     tell application "Keychain Access" to activate
     delay 0.4
     tell application "System Events"
+      -- Auto-confirm "Abrir Acesso às Chaves" if a prompt appears
+      try
+        tell process "Keychain Access"
+          if exists window 1 then
+            if exists button "Abrir Acesso às Chaves" of window 1 then
+              click button "Abrir Acesso às Chaves" of window 1
+              delay 0.2
+            end if
+          end if
+        end tell
+      end try
+      try
+        tell process "SecurityAgent"
+          if exists window 1 then
+            if exists button "Abrir Acesso às Chaves" of window 1 then
+              click button "Abrir Acesso às Chaves" of window 1
+              delay 0.2
+            end if
+          end if
+        end tell
+      end try
       tell process "Keychain Access"
         set frontmost to true
         try
