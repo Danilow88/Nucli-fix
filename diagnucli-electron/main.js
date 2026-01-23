@@ -199,6 +199,24 @@ function openSetupHelpInChrome() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openAskNuInSlack() {
+  const osa = `
+    tell application "Slack" to activate
+    delay 0.3
+    tell application "System Events"
+      tell process "Slack"
+        set frontmost to true
+        keystroke "k" using {command down}
+        delay 0.2
+        keystroke "@AskNu"
+        delay 0.2
+        key code 36
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openKeychainMyCertificates() {
   const osa = `
     tell application "Keychain Access" to activate
@@ -659,6 +677,12 @@ ipcMain.handle("open-setup-help", () => {
   logLine(`[DiagnuCLI] Open Slack Setup Help channel`);
   openSetupHelpInChrome();
   return { ok: true, url: SETUP_HELP_URL };
+});
+
+ipcMain.handle("open-ask-nu", () => {
+  logLine(`[DiagnuCLI] Open Slack @AskNu`);
+  openAskNuInSlack();
+  return { ok: true };
 });
 
 ipcMain.handle("exit-app", () => {

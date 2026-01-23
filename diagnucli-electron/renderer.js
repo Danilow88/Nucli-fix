@@ -5,6 +5,7 @@ const langButtons = document.querySelectorAll(".lang-btn");
 const menuCards = document.querySelectorAll(".menu-card[data-option]");
 const actionCards = document.querySelectorAll("[data-action]");
 const setupHelpButton = document.getElementById("openSetupHelp");
+const askNuButton = document.getElementById("openAskNu");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 let runStarted = false;
@@ -103,9 +104,11 @@ const translations = {
     requestLaptopTip: "Abre o formulário de troca de laptop.",
     oncallTip: "Abre o WhatsApp de on-call.",
     setupHelpTip: "Abre o canal Setup Help no Slack.",
+    askNuTip: "Abre o Slack e busca @AskNu.",
     setupHelpTitle:
       "Enviar dúvida para o canal Setup Help, canal para duvidas de aws e nucli setup.",
     setupHelpButton: "Abrir canal no Slack",
+    askNuButton: "Falar com @AskNu",
     setupHelpHint: "Clique para abrir o canal e pedir ajuda.",
     howTitle: "Como funciona",
     howList: [
@@ -220,8 +223,10 @@ const translations = {
     requestLaptopTip: "Open the laptop replacement form.",
     oncallTip: "Open the on-call WhatsApp.",
     setupHelpTip: "Open the Setup Help Slack channel.",
+    askNuTip: "Open Slack and search for @AskNu.",
     setupHelpTitle: "Send a question to the Setup Help channel",
     setupHelpButton: "Open Slack channel",
+    askNuButton: "Talk to @AskNu",
     setupHelpHint: "Click to open the channel and ask for help.",
     howTitle: "How it works",
     howList: [
@@ -336,8 +341,10 @@ const translations = {
     requestLaptopTip: "Abre el formulario de cambio de laptop.",
     oncallTip: "Abre el WhatsApp de on-call.",
     setupHelpTip: "Abre el canal Setup Help en Slack.",
+    askNuTip: "Abre Slack y busca @AskNu.",
     setupHelpTitle: "Enviar duda al canal Setup Help",
     setupHelpButton: "Abrir canal en Slack",
+    askNuButton: "Hablar con @AskNu",
     setupHelpHint: "Haga clic para abrir el canal y pedir ayuda.",
     howTitle: "Cómo funciona",
     howList: [
@@ -509,6 +516,13 @@ if (setupHelpButton) {
   setupHelpButton.addEventListener("click", async () => {
     await window.diagnucli.openSetupHelp();
     appendLog("\n[DiagnuCLI] Setup Help channel opened.\n");
+  });
+}
+
+if (askNuButton) {
+  askNuButton.addEventListener("click", async () => {
+    await window.diagnucli.openAskNu();
+    appendLog("\n[DiagnuCLI] AskNu opened in Slack.\n");
   });
 }
 
