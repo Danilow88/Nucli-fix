@@ -1084,12 +1084,12 @@ cadastrar_digital() {
         
         echo ""
         print_info "2. Atualizando credenciais AWS compartilhadas para BR e fazendo login no CodeArtifact..."
-        execute_interactive_user_command "nu aws shared-role-credentials refresh --account-alias=br --deps && nu codeartifact login maven" \
+        execute_interactive_user_command "nu aws shared-role-credentials refresh --account-alias=br && nu codeartifact login maven" \
             "Atualiza credenciais AWS para BR e faz login no CodeArtifact Maven"
     else
         print_info "Comandos para executar manualmente:"
         print_info "  nu-ist auth get-refresh-token --env prod"
-        print_info "  nu aws shared-role-credentials refresh --account-alias=br --deps && nu codeartifact login maven"
+        print_info "  nu aws shared-role-credentials refresh --account-alias=br && nu codeartifact login maven"
     fi
     
     echo ""
