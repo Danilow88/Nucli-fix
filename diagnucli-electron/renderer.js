@@ -521,13 +521,15 @@ const sendTerminalCommand = async () => {
   if (!logCommandInput) {
     return;
   }
-  const raw = logCommandInput.value || "";
-  const command = raw.trim();
-  if (!command) {
+  const raw = logCommandInput.value ?? "";
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    await window.diagnucli.sendText("", true);
+    appendLog("\n[DiagnuCLI] Enter sent.\n");
     return;
   }
-  await window.diagnucli.sendText(command, true);
-  appendLog(`\n[DiagnuCLI] Command sent: ${command}\n`);
+  await window.diagnucli.sendText(trimmed, true);
+  appendLog(`\n[DiagnuCLI] Command sent: ${trimmed}\n`);
   logCommandInput.value = "";
 };
 
