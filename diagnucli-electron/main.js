@@ -114,27 +114,48 @@ function openMacSetupInChrome() {
 function openITEngSelfServiceAndClick(targetLabel) {
   const osa = `
     tell application "ITEng Self Service" to activate
-    delay 0.6
+    repeat with i from 1 to 30
+      delay 0.2
+      tell application "System Events"
+        if exists process "ITEng Self Service" then
+          if exists window 1 of process "ITEng Self Service" then exit repeat
+        end if
+      end tell
+    end repeat
     tell application "System Events"
       tell process "ITEng Self Service"
         set frontmost to true
+        set targetField to missing value
         try
-          if exists text field 1 of window 1 then
-            click text field 1 of window 1
-            delay 0.2
-            keystroke "a" using {command down}
-            delay 0.1
-            keystroke "${targetLabel}"
-            delay 0.2
-          else
-            keystroke "f" using {command down}
-            delay 0.2
-            keystroke "${targetLabel}"
-            delay 0.2
-            key code 36
-            delay 0.3
-          end if
+          set targetField to first UI element of window 1 whose role description is "search field"
         end try
+        if targetField is missing value then
+          try
+            set targetField to first text field of window 1 whose description is "Search"
+          end try
+        end if
+        if targetField is missing value then
+          try
+            set targetField to first text field of window 1
+          end try
+        end if
+        if targetField is not missing value then
+          click targetField
+          delay 0.2
+          keystroke "a" using {command down}
+          delay 0.1
+          keystroke "${targetLabel}"
+          delay 0.2
+          key code 36
+          delay 0.3
+        else
+          keystroke "f" using {command down}
+          delay 0.2
+          keystroke "${targetLabel}"
+          delay 0.2
+          key code 36
+          delay 0.3
+        end if
         try
           click button "${targetLabel}" of window 1
         end try
