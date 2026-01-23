@@ -8,8 +8,6 @@ const setupHelpButton = document.getElementById("openSetupHelp");
 const askNuButton = document.getElementById("openAskNu");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
-const terminalInput = document.getElementById("terminalInput");
-const sendTerminalInputButton = document.getElementById("sendTerminalInput");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -22,8 +20,8 @@ const translations = {
     groupMacTitle: "Manutenção do Mac",
     groupSupportTitle: "Suporte e chamados",
     liveTitle: "Execução em tempo real",
-    statusIdle: "Aguardando início. O DiagnuCLI rodará em background.",
-    hint: "Acompanhe aqui os comandos sendo executados em background.",
+    statusIdle: "Aguardando início. O Terminal do macOS abrirá minimizado.",
+    hint: "O Terminal ficará minimizado; acompanhe os comandos aqui.",
     opt1Title: "Verificação completa - setup NuCLI AWS",
     opt1Desc: "Executa todos os checks do NuCLI/AWS e gera relatório.",
     opt7Title: "Testar comandos NuCLI",
@@ -49,11 +47,6 @@ const translations = {
     logTitle: "Logs do Terminal",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
-    terminalInputTitle: "Enviar comando para o terminal em execução",
-    terminalInputPlaceholder: "Digite um comando e pressione Enter",
-    terminalInputButton: "Enviar",
-    terminalInputTip: "Envia a linha para o processo em execução no background.",
-    terminalInputHint: "Use Enter para enviar a linha para o processo atual.",
     macosUpdateTitle: "Atualizar macOS",
     macosUpdateDesc: "Verifica e instala atualizações do macOS.",
     manageDiskTitle: "Gerenciar espaço de HD",
@@ -127,14 +120,14 @@ const translations = {
     ],
     guideTitle: "Orientações rápidas",
     guideList: [
-      "Acompanhe os prompts pelo app enquanto os comandos rodam.",
+      "O Terminal fica minimizado enquanto os comandos rodam.",
       "Se pedir MFA, confirme no Okta ou Touch ID.",
       "Permita acesso de Acessibilidade caso solicitado.",
       "Feche o Google Chrome antes de limpar o cache."
     ],
     noteTitle: "Importante",
     noteList: [
-      "Todos os comandos rodam em background.",
+      "Todos os comandos rodam no Terminal do macOS.",
       "O app principal acompanha os logs."
     ],
     installFinishHint:
@@ -148,8 +141,8 @@ const translations = {
     groupMacTitle: "Mac maintenance",
     groupSupportTitle: "Support and tickets",
     liveTitle: "Live execution",
-    statusIdle: "Waiting to start. DiagnuCLI will run in background.",
-    hint: "Follow the commands running here while DiagnuCLI works in background.",
+    statusIdle: "Waiting to start. macOS Terminal will open minimized.",
+    hint: "Terminal stays minimized; follow the commands here.",
     opt1Title: "Full verification - NuCLI AWS setup",
     opt1Desc: "Runs all NuCLI/AWS checks and generates the report.",
     opt7Title: "Test NuCLI commands",
@@ -175,11 +168,6 @@ const translations = {
     logTitle: "Terminal logs",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
-    terminalInputTitle: "Send input to the running terminal",
-    terminalInputPlaceholder: "Type a command and press Enter",
-    terminalInputButton: "Send",
-    terminalInputTip: "Sends the line to the active background process.",
-    terminalInputHint: "Use Enter to send the line to the current process.",
     macosUpdateTitle: "Update macOS",
     macosUpdateDesc: "Checks and installs macOS updates.",
     manageDiskTitle: "Manage disk space",
@@ -252,14 +240,14 @@ const translations = {
     ],
     guideTitle: "Quick guidance",
     guideList: [
-      "Follow the prompts in the app while commands run.",
+      "Terminal stays minimized while commands run.",
       "If MFA is requested, approve in Okta or Touch ID.",
       "Allow Accessibility access if prompted.",
       "Close Google Chrome before clearing cache."
     ],
     noteTitle: "Important",
     noteList: [
-      "All commands run in background.",
+      "All commands run in macOS Terminal.",
       "The main app mirrors the logs."
     ],
     installFinishHint:
@@ -273,9 +261,8 @@ const translations = {
     groupMacTitle: "Mantenimiento del Mac",
     groupSupportTitle: "Soporte y tickets",
     liveTitle: "Ejecución en tiempo real",
-    statusIdle: "Esperando inicio. DiagnuCLI se ejecutará en segundo plano.",
-    hint:
-      "Siga aquí los comandos en ejecución mientras DiagnuCLI trabaja en segundo plano.",
+    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá minimizado.",
+    hint: "El Terminal quedará minimizado; siga los comandos aquí.",
     opt1Title: "Verificación completa - setup NuCLI AWS",
     opt1Desc: "Ejecuta todos los checks de NuCLI/AWS y genera el informe.",
     opt7Title: "Probar comandos NuCLI",
@@ -301,11 +288,6 @@ const translations = {
     logTitle: "Registros del Terminal",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
-    terminalInputTitle: "Enviar entrada al terminal en ejecución",
-    terminalInputPlaceholder: "Escriba un comando y presione Enter",
-    terminalInputButton: "Enviar",
-    terminalInputTip: "Envía la línea al proceso en ejecución.",
-    terminalInputHint: "Use Enter para enviar la línea al proceso actual.",
     macosUpdateTitle: "Actualizar macOS",
     macosUpdateDesc: "Verifica e instala actualizaciones de macOS.",
     manageDiskTitle: "Administrar espacio en disco",
@@ -378,14 +360,14 @@ const translations = {
     ],
     guideTitle: "Orientaciones rápidas",
     guideList: [
-      "Siga los prompts en la app mientras se ejecutan los comandos.",
+      "El Terminal queda minimizado mientras se ejecutan los comandos.",
       "Si pide MFA, confirme en Okta o Touch ID.",
       "Permita acceso de Accesibilidad si se solicita.",
       "Cierre Google Chrome antes de limpiar la caché."
     ],
     noteTitle: "Importante",
     noteList: [
-      "Todos los comandos se ejecutan en segundo plano.",
+      "Todos los comandos se ejecutan en el Terminal de macOS.",
       "La app principal refleja los logs."
     ],
     installFinishHint:
@@ -449,10 +431,10 @@ window.diagnucli.onStatus((payload) => {
     const existsLabel = payload.exists ? "ok" : "não encontrado";
     const prefix =
       currentLang === "en"
-        ? "Running in background"
+        ? "Running in macOS Terminal"
         : currentLang === "es"
-        ? "Ejecutando en segundo plano"
-        : "Executando em background";
+        ? "Ejecutando en Terminal de macOS"
+        : "Executando no Terminal macOS";
     statusText.textContent =
       `${prefix}: ${payload.scriptPath} (${existsLabel}). ` +
       `Logs: ${payload.logPath}`;
@@ -564,32 +546,6 @@ if (supportButton) {
   supportButton.addEventListener("click", async () => {
     await window.diagnucli.openSupport();
     appendLog("\n[DiagnuCLI] Support portal opened.\n");
-  });
-}
-
-const sendTerminalInput = async () => {
-  if (!terminalInput) {
-    return;
-  }
-  const value = terminalInput.value.trim();
-  if (!value) {
-    return;
-  }
-  await window.diagnucli.sendText(value, true);
-  appendLog(`\n[DiagnuCLI] Input sent: ${value}\n`);
-  terminalInput.value = "";
-};
-
-if (sendTerminalInputButton) {
-  sendTerminalInputButton.addEventListener("click", sendTerminalInput);
-}
-
-if (terminalInput) {
-  terminalInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendTerminalInput();
-    }
   });
 }
 

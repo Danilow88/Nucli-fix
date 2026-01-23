@@ -7,7 +7,6 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
-let activeProcess = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -372,46 +371,8 @@ function startLogTail() {
   });
 }
 
-function attachProcessOutput(proc) {
-  const stream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-  proc.stdout?.pipe(stream);
-  proc.stderr?.pipe(stream);
-  proc.on("exit", (code) => {
-    stream.end();
-    if (activeProcess === proc) {
-      activeProcess = null;
-    }
-    logLine(`[DiagnuCLI] Background process finished (code ${code ?? "unknown"}).`);
-  });
-  proc.on("error", (err) => {
-    stream.end();
-    if (activeProcess === proc) {
-      activeProcess = null;
-    }
-    logLine(`[DiagnuCLI] Background process error: ${err.message}`);
-  });
-}
-
-function runBackgroundCommand(command, options = {}) {
-  ensureLogFile();
-  startLogTail();
-  const proc = spawn("bash", ["-lc", command], {
-    cwd: options.cwd || os.homedir(),
-    env: { ...process.env, ...options.env },
-    stdio: ["pipe", "pipe", "pipe"]
-  });
-  attachProcessOutput(proc);
-  return proc;
-}
-
-function runAdminCommand(command) {
-  ensureLogFile();
-  startLogTail();
-  const escaped = command.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-  const osa = `do shell script "bash -lc \\"${escaped}\\"" with administrator privileges`;
-  const proc = spawn("osascript", ["-e", osa]);
-  attachProcessOutput(proc);
-  return proc;
+function escapeAppleScript(value) {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
 function startRun() {
@@ -432,24 +393,24 @@ function startRun() {
 
   startLogTail();
 
-  if (!exists) {
-    logLine(`[DiagnuCLI] Script not found: ${SCRIPT_PATH}`);
-    return;
-  }
+  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
+  const runCommand = exists
+    ? `TERM=xterm-256color JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED" ` +
+      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"; ${minimizeTerminal}`
+    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`;
 
-  const env = {
-    TERM: "xterm-256color",
-    JAVA_TOOL_OPTIONS: "--enable-native-access=ALL-UNNAMED",
-    DIAGNUCLI_LOG_PATH: LOG_PATH
-  };
-  logLine(`[DiagnuCLI] Background run started: ${SCRIPT_PATH}`);
-  activeProcess = spawn("bash", [SCRIPT_PATH], {
-    cwd: os.homedir(),
-    env: { ...process.env, ...env },
-    stdio: ["pipe", "pipe", "pipe"]
+  const escaped = escapeAppleScript(runCommand);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`,
+    `delay 0.2`,
+    `tell application "Terminal" to set miniaturized of front window to true`
+  ];
+
+  const osaProc = spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
+  osaProc.on("exit", () => {
+    sendStatus({ terminalStarted: true });
   });
-  attachProcessOutput(activeProcess);
-  sendStatus({ terminalStarted: true });
 }
 
 ipcMain.handle("start-run", () => {
@@ -458,12 +419,19 @@ ipcMain.handle("start-run", () => {
 });
 
 function sendTextToTerminal(text, pressEnter = false) {
-  if (!activeProcess || !activeProcess.stdin || activeProcess.killed) {
-    logLine("[DiagnuCLI] No active background process to receive input.");
-    return;
+  const escapedText = escapeAppleScript(String(text));
+  const osa = [
+    'tell application "Terminal" to activate',
+    'tell application "System Events" to tell process "Terminal" to set frontmost to true',
+    "delay 0.2",
+    `tell application "System Events" to tell process "Terminal" to keystroke "${escapedText}"`
+  ];
+  if (pressEnter) {
+    osa.push(
+      'tell application "System Events" to tell process "Terminal" to key code 36'
+    );
   }
-  const payload = String(text);
-  activeProcess.stdin.write(payload + (pressEnter ? "\n" : ""));
+  spawn("osascript", osa.flatMap((line) => ["-e", line]));
 }
 
 ipcMain.handle("send-choice", (_event, choice) => {
@@ -483,12 +451,20 @@ function runNucliInstaller(lang = "pt") {
   openGuideInChrome(lang);
   startLogTail();
 
-  if (!exists) {
-    logLine(`[DiagnuCLI] Installer not found: ${INSTALLER_PATH}`);
-    return;
-  }
-  logLine("[DiagnuCLI] NuCLI installer started in background.");
-  activeProcess = runBackgroundCommand(`LANG_UI="${lang}" bash "${INSTALLER_PATH}"`);
+  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
+  const runCommand = exists
+    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`
+    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`;
+
+  const escaped = escapeAppleScript(runCommand);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`,
+    `delay 0.2`,
+    `tell application "Terminal" to set miniaturized of front window to true`
+  ];
+
+  spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
   sendStatus({ installerStarted: true, installerPath: INSTALLER_PATH, exists });
 }
 
@@ -501,7 +477,6 @@ const MAINTENANCE_ACTIONS = {
   "cache-mac": {
     label: "macOS cache cleanup",
     detail: "Remove caches em ~/Library/Caches e /Library/Caches.",
-    requiresAdmin: true,
     buildCommand: () => {
       const home = os.homedir();
       return [
@@ -573,7 +548,6 @@ const MAINTENANCE_ACTIONS = {
   "update-macos": {
     label: "macOS update",
     detail: "Executa softwareupdate com todas as atualizações.",
-    requiresAdmin: true,
     buildCommand: () => {
       return [
         `echo "[DiagnuCLI] macOS update started"`,
@@ -718,11 +692,16 @@ function runMaintenanceAction(actionId) {
   startLogTail();
 
   logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
-  if (action.requiresAdmin) {
-    runAdminCommand(action.buildCommand());
-  } else {
-    runBackgroundCommand(action.buildCommand());
-  }
+  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
+  const command = `(${action.buildCommand()}; ${minimizeTerminal}) | tee -a "${LOG_PATH}"`;
+  const escaped = escapeAppleScript(command);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`,
+    `delay 0.2`,
+    `tell application "Terminal" to set miniaturized of front window to true`
+  ];
+  spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
   sendStatus({ actionStarted: action.label });
   return { ok: true };
 }
