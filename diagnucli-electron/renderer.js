@@ -4,8 +4,7 @@ const startButton = document.getElementById("startButton");
 const langButtons = document.querySelectorAll(".lang-btn");
 const menuCards = document.querySelectorAll(".menu-card[data-option]");
 const actionCards = document.querySelectorAll("[data-action]");
-const terminalInput = document.getElementById("terminalInput");
-const sendTerminal = document.getElementById("sendTerminal");
+const setupHelpButton = document.getElementById("openSetupHelp");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 let runStarted = false;
@@ -45,11 +44,9 @@ const translations = {
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank no Chrome.",
-    terminalInputLabel: "Enviar comando para o Terminal do macOS",
-    terminalInputPlaceholder: "Ex: 1 ou nu doctor",
-    terminalInputHint:
-      "Pressione Enter para enviar. O texto aparece no Terminal do macOS.",
-    sendButton: "Enviar",
+    setupHelpTitle: "Enviar dúvida para o canal Setup Help",
+    setupHelpButton: "Abrir canal no Slack",
+    setupHelpHint: "Clique para abrir o canal e pedir ajuda.",
     howTitle: "Como funciona",
     howList: [
       "O app abre o Terminal do macOS e executa o diagnucli.",
@@ -102,11 +99,9 @@ const translations = {
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens Nubank support portal in Chrome.",
-    terminalInputLabel: "Send command to macOS Terminal",
-    terminalInputPlaceholder: "Ex: 1 or nu doctor",
-    terminalInputHint:
-      "Press Enter to send. The text appears in macOS Terminal.",
-    sendButton: "Send",
+    setupHelpTitle: "Send a question to the Setup Help channel",
+    setupHelpButton: "Open Slack channel",
+    setupHelpHint: "Click to open the channel and ask for help.",
     howTitle: "How it works",
     howList: [
       "The app opens macOS Terminal and runs diagnucli.",
@@ -159,11 +154,9 @@ const translations = {
     rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank en Chrome.",
-    terminalInputLabel: "Enviar comando al Terminal de macOS",
-    terminalInputPlaceholder: "Ej: 1 o nu doctor",
-    terminalInputHint:
-      "Presione Enter para enviar. El texto aparece en el Terminal de macOS.",
-    sendButton: "Enviar",
+    setupHelpTitle: "Enviar duda al canal Setup Help",
+    setupHelpButton: "Abrir canal en Slack",
+    setupHelpHint: "Haga clic para abrir el canal y pedir ayuda.",
     howTitle: "Cómo funciona",
     howList: [
       "La app abre el Terminal de macOS y ejecuta diagnucli.",
@@ -263,17 +256,6 @@ const sendMenuChoice = async (choice) => {
   }, 1200);
 };
 
-const sendTerminalText = async () => {
-  const value = terminalInput.value.trim();
-  if (!value) {
-    return;
-  }
-  await startRun();
-  await window.diagnucli.sendText(value, true);
-  appendLog(`\n[DiagnuCLI] Sent to Terminal: ${value}\n`);
-  terminalInput.value = "";
-};
-
 const actionLabels = {
   "install-nucli": "NuCLI installer",
   "cache-mac": "macOS cache cleanup",
@@ -309,12 +291,12 @@ actionCards.forEach((card) => {
   });
 });
 
-sendTerminal.addEventListener("click", sendTerminalText);
-terminalInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    sendTerminalText();
-  }
-});
+if (setupHelpButton) {
+  setupHelpButton.addEventListener("click", async () => {
+    await window.diagnucli.openSetupHelp();
+    appendLog("\n[DiagnuCLI] Setup Help channel opened.\n");
+  });
+}
 
 if (rovoButton) {
   rovoButton.addEventListener("click", async () => {

@@ -23,6 +23,7 @@ const ROVO_URL =
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
+const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
@@ -79,6 +80,22 @@ function openSupportInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: supportUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openSetupHelpInChrome() {
+  const osa = `
+    set setupUrl to "${SETUP_HELP_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: setupUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -347,6 +364,11 @@ ipcMain.handle("open-rovo", () => {
 ipcMain.handle("open-support", () => {
   openSupportInChrome();
   return { ok: true, url: SUPPORT_URL };
+});
+
+ipcMain.handle("open-setup-help", () => {
+  openSetupHelpInChrome();
+  return { ok: true, url: SETUP_HELP_URL };
 });
 
 ipcMain.handle("rovo-send-text", (_event, text) => {
