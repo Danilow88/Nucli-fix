@@ -167,7 +167,7 @@ ipcMain.handle("send-text", (_event, text, pressEnter = false) => {
   return { ok: true };
 });
 
-function runNucliInstaller() {
+function runNucliInstaller(lang = "pt") {
   const exists = fs.existsSync(INSTALLER_PATH);
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
   if (!fs.existsSync(LOG_PATH)) {
@@ -178,7 +178,7 @@ function runNucliInstaller() {
 
   const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
   const runCommand = exists
-    ? `bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`
+    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`
     : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
 
   const escaped = escapeAppleScript(runCommand);
@@ -191,8 +191,8 @@ function runNucliInstaller() {
   sendStatus({ installerStarted: true, installerPath: INSTALLER_PATH, exists });
 }
 
-ipcMain.handle("install-nucli", () => {
-  runNucliInstaller();
+ipcMain.handle("install-nucli", (_event, lang) => {
+  runNucliInstaller(lang);
   return { ok: true };
 });
 

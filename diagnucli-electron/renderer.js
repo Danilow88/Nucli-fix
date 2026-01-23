@@ -125,6 +125,63 @@ const translations = {
       "All commands run in macOS Terminal.",
       "The main app is visual-only and mirrors logs."
     ]
+  },
+  es: {
+    subtitle: "Diagnóstico interactivo NuCLI + AWS + Soporte general",
+    startButton: "Iniciar diagnóstico",
+    liveTitle: "Ejecución en tiempo real",
+    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá en segundo plano.",
+    hint:
+      "Escriba y responda en el Terminal de macOS. Aquí seguirá los comandos en ejecución.",
+    opt1Title: "Verificación completa",
+    opt1Desc: "Ejecuta todas las verificaciones y genera el informe final.",
+    opt7Title: "Probar comandos NuCLI",
+    opt7Desc: "Ejecuta nu doctor, versiones y comandos clave.",
+    installNucliTitle: "Instalar NuCLI",
+    installNucliDesc: "Guía completa de acceso, SSH, brew y configuración AWS.",
+    opt10Title: "Roles, alcances y países",
+    opt10Desc: "Valida permisos por cuenta.",
+    opt12Title: "Informe consolidado",
+    opt12Desc: "Genera el informe final con detalles completos.",
+    opt19Title: "Error br prod / Missing Groups",
+    opt19Desc: "Diagnóstico guiado para grupos y roles BR.",
+    opt22Title: "Registrar biometría",
+    opt22Desc: "Configura IAM user, Okta y FIDO/Touch ID.",
+    cacheMacTitle: "Limpiar caché de macOS",
+    cacheMacDesc: "Elimina cachés de usuario y sistema (puede pedir contraseña).",
+    cacheChromeTitle: "Limpiar caché de Chrome",
+    cacheChromeDesc: "Cierra Chrome y elimina cachés locales.",
+    updateTitle: "Actualizar app",
+    updateDesc: "Descarga la última versión de Git y reinstala.",
+    macosUpdateTitle: "Actualizar macOS",
+    macosUpdateDesc: "Verifica e instala actualizaciones del sistema.",
+    rovoTitle: "Abrir Rovo (Soporte)",
+    rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
+    supportTitle: "Abrir ticket (Soporte)",
+    supportDesc: "Abre el portal de soporte de Nubank en Chrome.",
+    terminalInputLabel: "Enviar comando al Terminal de macOS",
+    terminalInputPlaceholder: "Ej: 1 o nu doctor",
+    terminalInputHint:
+      "Presione Enter para enviar. El texto aparece en el Terminal de macOS.",
+    sendButton: "Enviar",
+    howTitle: "Cómo funciona",
+    howList: [
+      "La app abre el Terminal de macOS y ejecuta diagnucli.",
+      "Los logs en vivo se muestran aquí mientras corren los comandos.",
+      "Para cambiar el script: DIAGNUCLI_PATH=/ruta/al/diagnucli."
+    ],
+    guideTitle: "Orientaciones rápidas",
+    guideList: [
+      "Mantenga el Terminal abierto para responder a los prompts.",
+      "Si pide MFA, confirme en Okta o Touch ID.",
+      "Permita acceso de Accesibilidad si se solicita.",
+      "Cierre Google Chrome antes de limpiar la caché."
+    ],
+    noteTitle: "Importante",
+    noteList: [
+      "Todos los comandos se ejecutan en el Terminal de macOS.",
+      "La app principal es solo visual y refleja los logs."
+    ]
   }
 };
 
@@ -231,7 +288,7 @@ const sendAction = async (actionId) => {
     return;
   }
   if (actionId === "install-nucli") {
-    await window.diagnucli.installNucli();
+    await window.diagnucli.installNucli(currentLang);
   } else {
     await window.diagnucli.runAction(actionId);
   }
