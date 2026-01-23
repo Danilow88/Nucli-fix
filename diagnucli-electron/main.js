@@ -276,7 +276,7 @@ function openTouchIdAndAddFingerprint() {
     tell application "System Events"
       key code 49 using {command down}
       delay 0.3
-      keystroke "Touch ID e Senha"
+      keystroke "touch ID & Password"
       delay 0.2
       key code 36
     end tell
