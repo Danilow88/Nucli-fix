@@ -547,6 +547,22 @@ const MAINTENANCE_ACTIONS = {
       openKeychainMyCertificates();
     }
   },
+  "open-touch-id": {
+    label: "Open Touch ID & Password",
+    detail: "Abre Touch ID & Password via Spotlight.",
+    runDirect: () => {
+      const osa = `
+        tell application "System Events"
+          key code 49 using {command down}
+          delay 0.3
+          keystroke "Touch ID & Password"
+          delay 0.2
+          key code 36
+        end tell
+      `;
+      spawn("osascript", ["-e", osa]);
+    }
+  },
   "open-mac-setup": {
     label: "Open Mac setup guide",
     detail: "Abre o guia de configuração do Mac no Chrome.",
