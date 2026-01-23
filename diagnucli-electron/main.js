@@ -275,11 +275,31 @@ function openTouchIdAndAddFingerprint() {
   const osa = `
     tell application "System Settings" to activate
     delay 0.4
-    do shell script "open 'x-apple.systempreferences:com.apple.preference.security?TouchID'"
-    delay 0.8
     tell application "System Events"
       tell process "System Settings"
         set frontmost to true
+        repeat with i from 1 to 20
+          delay 0.2
+          try
+            if exists row "Touch ID e Senha" of outline 1 of scroll area 1 of splitter group 1 of window 1 then
+              select row "Touch ID e Senha" of outline 1 of scroll area 1 of splitter group 1 of window 1
+              exit repeat
+            end if
+          end try
+          try
+            if exists row "Touch ID & Password" of outline 1 of scroll area 1 of splitter group 1 of window 1 then
+              select row "Touch ID & Password" of outline 1 of scroll area 1 of splitter group 1 of window 1
+              exit repeat
+            end if
+          end try
+          try
+            if exists row "Touch ID y contraseña" of outline 1 of scroll area 1 of splitter group 1 of window 1 then
+              select row "Touch ID y contraseña" of outline 1 of scroll area 1 of splitter group 1 of window 1
+              exit repeat
+            end if
+          end try
+        end repeat
+        delay 0.6
         repeat with i from 1 to 20
           delay 0.2
           try
