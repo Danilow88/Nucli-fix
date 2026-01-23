@@ -460,7 +460,7 @@ const sendMenuChoice = async (choice, title) => {
     await window.diagnucli.sendChoice(choice);
     const detail = title ? ` (${title})` : "";
     appendLog(`\n[DiagnuCLI] Menu option sent: ${choice}${detail}\n`);
-  }, 1200);
+  }, 2500);
 };
 
 const actionLabels = {

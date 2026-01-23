@@ -424,6 +424,10 @@ function sendTextToTerminal(text, pressEnter = false) {
     'tell application "Terminal" to activate',
     'tell application "Terminal" to set miniaturized of front window to false',
     'tell application "System Events" to tell process "Terminal" to set frontmost to true',
+    "delay 0.4",
+    'tell application "System Events" to tell process "Terminal" to try',
+    'tell application "System Events" to tell process "Terminal" to click window 1',
+    'tell application "System Events" to tell process "Terminal" to end try',
     "delay 0.2",
     `tell application "System Events" to tell process "Terminal" to keystroke "${escapedText}"`
   ];
@@ -432,7 +436,7 @@ function sendTextToTerminal(text, pressEnter = false) {
       'tell application "System Events" to tell process "Terminal" to key code 36'
     );
   }
-  osa.push('delay 0.2');
+  osa.push('delay 0.3');
   osa.push('tell application "Terminal" to set miniaturized of front window to true');
   spawn("osascript", osa.flatMap((line) => ["-e", line]));
 }
