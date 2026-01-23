@@ -87,19 +87,7 @@ function openSupportInChrome() {
 }
 
 function openSetupHelpInChrome() {
-  const osa = `
-    set setupUrl to "${SETUP_HELP_URL}"
-    tell application "Google Chrome" to activate
-    tell application "Google Chrome"
-      if (count of windows) = 0 then
-        make new window
-      end if
-      set targetWindow to front window
-      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: setupUrl}
-      set active tab index of targetWindow to (index of targetTab)
-    end tell
-  `;
-  spawn("osascript", ["-e", osa]);
+  spawn("open", ["-a", "Slack", SETUP_HELP_URL]);
 }
 
 function openGuideInChrome(lang) {
