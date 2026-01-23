@@ -119,6 +119,14 @@ function openITEngSelfServiceAndClick(targetLabel) {
       tell process "ITEng Self Service"
         set frontmost to true
         try
+          keystroke "f" using {command down}
+          delay 0.2
+          keystroke "${targetLabel}"
+          delay 0.2
+          key code 36
+          delay 0.3
+        end try
+        try
           click button "${targetLabel}" of window 1
         end try
       end tell
