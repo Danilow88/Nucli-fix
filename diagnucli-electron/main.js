@@ -554,10 +554,22 @@ const MAINTENANCE_ACTIONS = {
     label: "Restart VPN (Zscaler)",
     detail: "Fecha e reabre o Zscaler.app.",
     runDirect: () => {
-      spawn("osascript", ["-e", 'tell application "Zscaler" to quit']);
+      const osa = `
+        tell application "Zscaler" to quit
+        repeat with i from 1 to 20
+          delay 0.2
+          tell application "System Events"
+            if not (exists process "Zscaler") then exit repeat
+          end tell
+        end repeat
+      `;
+      spawn("osascript", ["-e", osa]);
       setTimeout(() => {
-        spawn("open", ["-a", "Zscaler"]);
-      }, 800);
+        spawn("pkill", ["-x", "Zscaler"]);
+        setTimeout(() => {
+          spawn("open", ["-a", "Zscaler"]);
+        }, 600);
+      }, 900);
     }
   },
   "open-oncall": {
