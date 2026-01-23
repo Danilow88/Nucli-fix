@@ -341,10 +341,11 @@ body {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .log-command input {
-  flex: 1;
+  flex: 1 1 240px;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);

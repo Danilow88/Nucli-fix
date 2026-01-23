@@ -10,6 +10,7 @@ const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 const logCommandInput = document.getElementById("logCommandInput");
 const logCommandSend = document.getElementById("logCommandSend");
+const logCommandContinue = document.getElementById("logCommandContinue");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -23,7 +24,7 @@ const translations = {
     groupSupportTitle: "Suporte e chamados",
     liveTitle: "Execução em tempo real",
     statusIdle: "Aguardando início. O DiagnuCLI rodará em background.",
-    hint: "Acompanhe aqui os comandos sendo executados em background.",
+    hint: "Acompanhe aqui os passos e o progresso das ações em execução.",
     opt1Title: "Verificação completa - setup NuCLI AWS",
     opt1Desc: "Executa todos os checks do NuCLI/AWS e gera relatório.",
     opt7Title: "Testar comandos NuCLI",
@@ -46,10 +47,12 @@ const translations = {
     updateDesc: "Atualiza via Git e reinstala o app.",
     updateHeader: "Atualizar app",
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
-    logTitle: "Logs do Terminal",
+    logTitle: "Acompanhamento em tempo real",
     logCommandPlaceholder: "Digite um comando para enviar ao processo",
     logCommandSend: "Enviar comando",
     logCommandSendTip: "Envia o comando para o processo em execução.",
+    logCommandContinue: "Continuar",
+    logCommandContinueTip: "Envia Enter para continuar o instalador.",
     logCommandHint:
       "Se o instalador pedir \"Pressione Enter\", deixe o campo vazio e pressione Enter.",
     clearLogButton: "Limpar logs",
@@ -149,7 +152,7 @@ const translations = {
     groupSupportTitle: "Support and tickets",
     liveTitle: "Live execution",
     statusIdle: "Waiting to start. DiagnuCLI will run in background.",
-    hint: "Follow the commands running here while DiagnuCLI works in background.",
+    hint: "Follow the steps and progress of actions running in background.",
     opt1Title: "Full verification - NuCLI AWS setup",
     opt1Desc: "Runs all NuCLI/AWS checks and generates the report.",
     opt7Title: "Test NuCLI commands",
@@ -172,10 +175,12 @@ const translations = {
     updateDesc: "Pulls the latest Git version and reinstalls.",
     updateHeader: "Update app",
     updateHeaderTip: "Update DiagnuCLI from Git.",
-    logTitle: "Terminal logs",
+    logTitle: "Live progress",
     logCommandPlaceholder: "Type a command to send to the process",
     logCommandSend: "Send command",
     logCommandSendTip: "Sends the command to the running process.",
+    logCommandContinue: "Continue",
+    logCommandContinueTip: "Sends Enter to continue the installer.",
     logCommandHint:
       "If the installer asks for \"Press Enter\", leave the field empty and press Enter.",
     clearLogButton: "Clear logs",
@@ -275,7 +280,7 @@ const translations = {
     liveTitle: "Ejecución en tiempo real",
     statusIdle: "Esperando inicio. DiagnuCLI se ejecutará en segundo plano.",
     hint:
-      "Siga aquí los comandos en ejecución mientras DiagnuCLI trabaja en segundo plano.",
+      "Siga aquí los pasos y el progreso de las acciones en ejecución.",
     opt1Title: "Verificación completa - setup NuCLI AWS",
     opt1Desc: "Ejecuta todos los checks de NuCLI/AWS y genera el informe.",
     opt7Title: "Probar comandos NuCLI",
@@ -298,10 +303,12 @@ const translations = {
     updateDesc: "Actualiza desde Git y reinstala.",
     updateHeader: "Actualizar app",
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
-    logTitle: "Registros del Terminal",
+    logTitle: "Seguimiento en tiempo real",
     logCommandPlaceholder: "Escriba un comando para enviar al proceso",
     logCommandSend: "Enviar comando",
     logCommandSendTip: "Envía el comando al proceso en ejecución.",
+    logCommandContinue: "Continuar",
+    logCommandContinueTip: "Envía Enter para continuar el instalador.",
     logCommandHint:
       "Si el instalador pide \"Presione Enter\", deje el campo vacío y presione Enter.",
     clearLogButton: "Limpiar logs",
@@ -539,6 +546,11 @@ const sendTerminalCommand = async () => {
   logCommandInput.value = "";
 };
 
+const sendTerminalContinue = async () => {
+  await window.diagnucli.sendText("", true);
+  appendLog("\n[DiagnuCLI] Continue (Enter) sent.\n");
+};
+
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
@@ -591,6 +603,10 @@ if (logCommandSend && logCommandInput) {
       sendTerminalCommand();
     }
   });
+}
+
+if (logCommandContinue) {
+  logCommandContinue.addEventListener("click", sendTerminalContinue);
 }
 
 langButtons.forEach((btn) => {
