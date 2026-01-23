@@ -20,7 +20,7 @@
             <p data-i18n="subtitle">Diagnóstico interativo NuCLI + AWS</p>
           </div>
         </div>
-          <div class="controls">
+        <div class="controls">
           <div class="lang-toggle">
             <button class="lang-btn" data-lang="pt">PT-BR</button>
             <button class="lang-btn" data-lang="en">EN</button>
@@ -51,62 +51,62 @@
           <div class="menu-group">
             <div class="menu-group-title" data-i18n="groupDiagTitle">
               Diagnóstico NuCLI/AWS
-            </div>
-            <div class="menu-grid">
+          </div>
+          <div class="menu-grid">
               <button class="menu-card" data-option="1" data-tooltip="opt1Tip">
-                <span class="menu-title" data-i18n="opt1Title">
+              <span class="menu-title" data-i18n="opt1Title">
                   <span class="menu-icon" aria-hidden="true">✅</span>
-                  Verificação completa
-                </span>
-                <span class="menu-desc" data-i18n="opt1Desc">
-                  Roda todas as verificações e gera relatório final.
-                </span>
-              </button>
+                Verificação completa
+              </span>
+              <span class="menu-desc" data-i18n="opt1Desc">
+                Roda todas as verificações e gera relatório final.
+              </span>
+            </button>
               <button class="menu-card" data-option="7" data-tooltip="opt7Tip">
-                <span class="menu-title" data-i18n="opt7Title">
+              <span class="menu-title" data-i18n="opt7Title">
                   <span class="menu-icon" aria-hidden="true">🧪</span>
-                  Testar comandos NuCLI
-                </span>
-                <span class="menu-desc" data-i18n="opt7Desc">
-                  Checa nu doctor, versões e comandos essenciais.
-                </span>
-              </button>
+                Testar comandos NuCLI
+              </span>
+              <span class="menu-desc" data-i18n="opt7Desc">
+                Checa nu doctor, versões e comandos essenciais.
+              </span>
+            </button>
               <button class="menu-card" data-option="10" data-tooltip="opt10Tip">
-                <span class="menu-title" data-i18n="opt10Title">
+              <span class="menu-title" data-i18n="opt10Title">
                   <span class="menu-icon" aria-hidden="true">🧩</span>
-                  Roles, escopos e países
-                </span>
-                <span class="menu-desc" data-i18n="opt10Desc">
-                  Valida permissões e acessos por conta.
-                </span>
-              </button>
+                Roles, escopos e países
+              </span>
+              <span class="menu-desc" data-i18n="opt10Desc">
+                Valida permissões e acessos por conta.
+              </span>
+            </button>
               <button class="menu-card" data-option="12" data-tooltip="opt12Tip">
-                <span class="menu-title" data-i18n="opt12Title">
+              <span class="menu-title" data-i18n="opt12Title">
                   <span class="menu-icon" aria-hidden="true">📄</span>
-                  Relatório consolidado
-                </span>
-                <span class="menu-desc" data-i18n="opt12Desc">
-                  Gera relatório final com detalhes completos.
-                </span>
-              </button>
+                Relatório consolidado
+              </span>
+              <span class="menu-desc" data-i18n="opt12Desc">
+                Gera relatório final com detalhes completos.
+              </span>
+            </button>
               <button class="menu-card" data-option="19" data-tooltip="opt19Tip">
-                <span class="menu-title" data-i18n="opt19Title">
+              <span class="menu-title" data-i18n="opt19Title">
                   <span class="menu-icon" aria-hidden="true">🧯</span>
-                  Erro br prod / Missing Groups
-                </span>
-                <span class="menu-desc" data-i18n="opt19Desc">
-                  Diagnóstico guiado para grupos e roles BR.
-                </span>
-              </button>
+                Erro br prod / Missing Groups
+              </span>
+              <span class="menu-desc" data-i18n="opt19Desc">
+                Diagnóstico guiado para grupos e roles BR.
+              </span>
+            </button>
               <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
-                <span class="menu-title" data-i18n="opt22Title">
+              <span class="menu-title" data-i18n="opt22Title">
                   <span class="menu-icon" aria-hidden="true">🔐</span>
-                  Cadastrar digital
-                </span>
-                <span class="menu-desc" data-i18n="opt22Desc">
-                  Configura IAM user, Okta e FIDO/Touch ID.
-                </span>
-              </button>
+                Cadastrar digital
+              </span>
+              <span class="menu-desc" data-i18n="opt22Desc">
+                Configura IAM user, Okta e FIDO/Touch ID.
+              </span>
+            </button>
             </div>
           </div>
           <div class="menu-group">
@@ -317,20 +317,25 @@
               Limpar logs
             </button>
           </div>
-          <div class="log-command">
-            <input
-              id="logCommandInput"
-              type="text"
-              data-i18n-placeholder="logCommandPlaceholder"
-              placeholder="Digite um comando para enviar ao processo"
-            />
-            <button id="logCommandSend" data-i18n="logCommandSend" data-tooltip="logCommandSendTip">
-              <span class="menu-icon" aria-hidden="true">⌨️</span>
-              Enviar comando
-            </button>
-          </div>
-          <div class="log-command-hint" data-i18n="logCommandHint">
-            Se o instalador pedir "Pressione Enter", deixe o campo vazio e pressione Enter.
+          <div class="terminal-input terminal-interactive">
+            <div class="terminal-label" data-i18n="terminalInputTitle">
+              Enviar comando para o terminal em execução
+            </div>
+            <div class="terminal-row">
+              <input
+                id="terminalInput"
+                type="text"
+                data-i18n-placeholder="terminalInputPlaceholder"
+                placeholder="Digite um comando e pressione Enter"
+              />
+              <button id="sendTerminalInput" data-i18n="terminalInputButton" data-tooltip="terminalInputTip">
+                <span class="menu-icon" aria-hidden="true">⌨️</span>
+                Enviar
+              </button>
+            </div>
+            <div class="terminal-hint" data-i18n="terminalInputHint">
+              Use Enter para enviar a linha para o processo atual.
+            </div>
           </div>
           <div class="log" id="logOutput"></div>
           <div class="hint" data-i18n="hint">

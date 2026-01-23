@@ -8,8 +8,8 @@ const setupHelpButton = document.getElementById("openSetupHelp");
 const askNuButton = document.getElementById("openAskNu");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
-const logCommandInput = document.getElementById("logCommandInput");
-const logCommandSend = document.getElementById("logCommandSend");
+const terminalInput = document.getElementById("terminalInput");
+const sendTerminalInputButton = document.getElementById("sendTerminalInput");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -47,13 +47,13 @@ const translations = {
     updateHeader: "Atualizar app",
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
     logTitle: "Logs do Terminal",
-    logCommandPlaceholder: "Digite um comando para enviar ao processo",
-    logCommandSend: "Enviar comando",
-    logCommandSendTip: "Envia o comando para o processo em execução.",
-    logCommandHint:
-      "Se o instalador pedir \"Pressione Enter\", deixe o campo vazio e pressione Enter.",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
+    terminalInputTitle: "Enviar comando para o terminal em execução",
+    terminalInputPlaceholder: "Digite um comando e pressione Enter",
+    terminalInputButton: "Enviar",
+    terminalInputTip: "Envia a linha para o processo em execução no background.",
+    terminalInputHint: "Use Enter para enviar a linha para o processo atual.",
     macosUpdateTitle: "Atualizar macOS",
     macosUpdateDesc: "Verifica e instala atualizações do macOS.",
     manageDiskTitle: "Gerenciar espaço de HD",
@@ -173,13 +173,13 @@ const translations = {
     updateHeader: "Update app",
     updateHeaderTip: "Update DiagnuCLI from Git.",
     logTitle: "Terminal logs",
-    logCommandPlaceholder: "Type a command to send to the process",
-    logCommandSend: "Send command",
-    logCommandSendTip: "Sends the command to the running process.",
-    logCommandHint:
-      "If the installer asks for \"Press Enter\", leave the field empty and press Enter.",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
+    terminalInputTitle: "Send input to the running terminal",
+    terminalInputPlaceholder: "Type a command and press Enter",
+    terminalInputButton: "Send",
+    terminalInputTip: "Sends the line to the active background process.",
+    terminalInputHint: "Use Enter to send the line to the current process.",
     macosUpdateTitle: "Update macOS",
     macosUpdateDesc: "Checks and installs macOS updates.",
     manageDiskTitle: "Manage disk space",
@@ -299,13 +299,13 @@ const translations = {
     updateHeader: "Actualizar app",
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
     logTitle: "Registros del Terminal",
-    logCommandPlaceholder: "Escriba un comando para enviar al proceso",
-    logCommandSend: "Enviar comando",
-    logCommandSendTip: "Envía el comando al proceso en ejecución.",
-    logCommandHint:
-      "Si el instalador pide \"Presione Enter\", deje el campo vacío y presione Enter.",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
+    terminalInputTitle: "Enviar entrada al terminal en ejecución",
+    terminalInputPlaceholder: "Escriba un comando y presione Enter",
+    terminalInputButton: "Enviar",
+    terminalInputTip: "Envía la línea al proceso en ejecución.",
+    terminalInputHint: "Use Enter para enviar la línea al proceso actual.",
     macosUpdateTitle: "Actualizar macOS",
     macosUpdateDesc: "Verifica e instala actualizaciones de macOS.",
     manageDiskTitle: "Administrar espacio en disco",
@@ -523,22 +523,6 @@ const sendAction = async (actionId) => {
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 
-const sendTerminalCommand = async () => {
-  if (!logCommandInput) {
-    return;
-  }
-  const raw = logCommandInput.value ?? "";
-  const trimmed = raw.trim();
-  if (!trimmed) {
-    await window.diagnucli.sendText("", true);
-    appendLog("\n[DiagnuCLI] Enter sent.\n");
-    return;
-  }
-  await window.diagnucli.sendText(trimmed, true);
-  appendLog(`\n[DiagnuCLI] Command sent: ${trimmed}\n`);
-  logCommandInput.value = "";
-};
-
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
@@ -583,12 +567,28 @@ if (supportButton) {
   });
 }
 
-if (logCommandSend && logCommandInput) {
-  logCommandSend.addEventListener("click", sendTerminalCommand);
-  logCommandInput.addEventListener("keydown", (event) => {
+const sendTerminalInput = async () => {
+  if (!terminalInput) {
+    return;
+  }
+  const value = terminalInput.value.trim();
+  if (!value) {
+    return;
+  }
+  await window.diagnucli.sendText(value, true);
+  appendLog(`\n[DiagnuCLI] Input sent: ${value}\n`);
+  terminalInput.value = "";
+};
+
+if (sendTerminalInputButton) {
+  sendTerminalInputButton.addEventListener("click", sendTerminalInput);
+}
+
+if (terminalInput) {
+  terminalInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      sendTerminalCommand();
+      sendTerminalInput();
     }
   });
 }
