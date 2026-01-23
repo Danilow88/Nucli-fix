@@ -29,6 +29,8 @@ const LAPTOP_REQUEST_URL =
 const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
+const MAC_SETUP_URL =
+  "https://itops-mdm.s3.amazonaws.com/ZTD/guide/pt-macbook-onboarding.html";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
 const APP_NAME = "DiagnuCLI";
@@ -87,6 +89,22 @@ function openSupportInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: supportUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openMacSetupInChrome() {
+  const osa = `
+    set macSetupUrl to "${MAC_SETUP_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: macSetupUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -467,6 +485,13 @@ const MAINTENANCE_ACTIONS = {
           "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=TransferOrReset"
         ]);
       }, 600);
+    }
+  },
+  "open-mac-setup": {
+    label: "Open Mac setup guide",
+    detail: "Abre o guia de configuração do Mac no Chrome.",
+    runDirect: () => {
+      openMacSetupInChrome();
     }
   },
   "open-oncall": {
