@@ -20,8 +20,9 @@ const translations = {
     groupMacTitle: "Manutenção do Mac",
     groupSupportTitle: "Suporte e chamados",
     liveTitle: "Execução em tempo real",
-    statusIdle: "Aguardando início. O Terminal do macOS abrirá.",
-    hint: "O Terminal ficará aberto; acompanhe os comandos aqui.",
+    statusIdle: "Aguardando início. O Terminal do macOS abrirá em segundo plano.",
+    hint:
+      "Digite e responda no Terminal do macOS. Aqui você acompanha os comandos sendo executados.",
     opt1Title: "Verificação completa - setup NuCLI AWS",
     opt1Desc: "Executa todos os checks do NuCLI/AWS e gera relatório.",
     opt7Title: "Testar comandos NuCLI",
@@ -59,8 +60,6 @@ const translations = {
     emptyTrashDesc: "Esvazia a Lixeira do Finder.",
     openKeychainTitle: "Abrir Keychain",
     openKeychainDesc: "Abre login e Meus Certificados. Clique em Acesso às Chaves.",
-    touchIdTitle: "Configurar Digital no Mac",
-    touchIdDesc: "Abre Touch ID e Senha nas Configurações.",
     macSetupTitle: "Como configurar o Mac",
     macSetupDesc: "Abre o guia oficial de configuração do Mac.",
     mfaResetTitle: "Resetar MFA (Okta)",
@@ -95,7 +94,6 @@ const translations = {
     activityMonitorTip: "Abre o Activity Monitor.",
     emptyTrashTip: "Esvazia a Lixeira.",
     openKeychainTip: "Abre o Keychain na área correta.",
-    touchIdTip: "Abre Touch ID e Senha nas Configurações do macOS.",
     macSetupTip: "Abre o guia de configuração do Mac.",
     mfaResetTip: "Abre o fluxo de Reset my MFA.",
     passwordChangeTip: "Abre o fluxo de Change my password.",
@@ -120,7 +118,7 @@ const translations = {
     ],
     guideTitle: "Orientações rápidas",
     guideList: [
-      "O Terminal fica aberto enquanto os comandos rodam.",
+      "Mantenha o Terminal aberto para responder aos prompts.",
       "Se pedir MFA, confirme no Okta ou Touch ID.",
       "Permita acesso de Acessibilidade caso solicitado.",
       "Feche o Google Chrome antes de limpar o cache."
@@ -128,7 +126,7 @@ const translations = {
     noteTitle: "Importante",
     noteList: [
       "Todos os comandos rodam no Terminal do macOS.",
-      "O app principal acompanha os logs."
+      "O app principal é apenas visual e acompanha os logs."
     ],
     installFinishHint:
       "Ao finalizar a instalação do NuCLI, clique no botão Cadastrar digital."
@@ -141,8 +139,9 @@ const translations = {
     groupMacTitle: "Mac maintenance",
     groupSupportTitle: "Support and tickets",
     liveTitle: "Live execution",
-    statusIdle: "Waiting to start. macOS Terminal will open.",
-    hint: "Terminal stays open; follow the commands here.",
+    statusIdle: "Waiting to start. macOS Terminal will open in background.",
+    hint:
+      "Type and answer in macOS Terminal. Here you follow commands as they run.",
     opt1Title: "Full verification - NuCLI AWS setup",
     opt1Desc: "Runs all NuCLI/AWS checks and generates the report.",
     opt7Title: "Test NuCLI commands",
@@ -180,8 +179,6 @@ const translations = {
     emptyTrashDesc: "Empties the Finder Trash.",
     openKeychainTitle: "Open Keychain",
     openKeychainDesc: "Opens Login and My Certificates. Click Keychain Access.",
-    touchIdTitle: "Set up Touch ID on Mac",
-    touchIdDesc: "Opens Touch ID & Password in Settings.",
     macSetupTitle: "How to set up the Mac",
     macSetupDesc: "Opens the official Mac setup guide.",
     mfaResetTitle: "Reset MFA (Okta)",
@@ -216,7 +213,6 @@ const translations = {
     activityMonitorTip: "Opens Activity Monitor.",
     emptyTrashTip: "Empties Trash.",
     openKeychainTip: "Opens Keychain in the right section.",
-    touchIdTip: "Opens Touch ID & Password in macOS Settings.",
     macSetupTip: "Opens the Mac setup guide.",
     mfaResetTip: "Opens the Reset my MFA flow.",
     passwordChangeTip: "Opens the Change my password flow.",
@@ -240,7 +236,7 @@ const translations = {
     ],
     guideTitle: "Quick guidance",
     guideList: [
-      "Terminal stays open while commands run.",
+      "Keep Terminal open to answer prompts.",
       "If MFA is requested, approve in Okta or Touch ID.",
       "Allow Accessibility access if prompted.",
       "Close Google Chrome before clearing cache."
@@ -248,7 +244,7 @@ const translations = {
     noteTitle: "Important",
     noteList: [
       "All commands run in macOS Terminal.",
-      "The main app mirrors the logs."
+      "The main app is visual-only and mirrors logs."
     ],
     installFinishHint:
       "After finishing the NuCLI setup, click the Cadastrar digital button."
@@ -261,8 +257,9 @@ const translations = {
     groupMacTitle: "Mantenimiento del Mac",
     groupSupportTitle: "Soporte y tickets",
     liveTitle: "Ejecución en tiempo real",
-    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá.",
-    hint: "El Terminal quedará abierto; siga los comandos aquí.",
+    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá en segundo plano.",
+    hint:
+      "Escriba y responda en el Terminal de macOS. Aquí seguirá los comandos en ejecución.",
     opt1Title: "Verificación completa - setup NuCLI AWS",
     opt1Desc: "Ejecuta todos los checks de NuCLI/AWS y genera el informe.",
     opt7Title: "Probar comandos NuCLI",
@@ -300,8 +297,6 @@ const translations = {
     emptyTrashDesc: "Vacía la Papelera del Finder.",
     openKeychainTitle: "Abrir Keychain",
     openKeychainDesc: "Abre login y Mis Certificados. Haz clic en Acceso a Llaveros.",
-    touchIdTitle: "Configurar Touch ID en Mac",
-    touchIdDesc: "Abre Touch ID y Contraseña en Configuración.",
     macSetupTitle: "Cómo configurar el Mac",
     macSetupDesc: "Abre la guía oficial de configuración del Mac.",
     mfaResetTitle: "Restablecer MFA (Okta)",
@@ -336,7 +331,6 @@ const translations = {
     activityMonitorTip: "Abre el Monitor de Actividad.",
     emptyTrashTip: "Vacía la Papelera.",
     openKeychainTip: "Abre Keychain en la sección correcta.",
-    touchIdTip: "Abre Touch ID y Contraseña en Configuración de macOS.",
     macSetupTip: "Abre la guía de configuración del Mac.",
     mfaResetTip: "Abre el flujo Reset my MFA.",
     passwordChangeTip: "Abre el flujo Change my password.",
@@ -360,7 +354,7 @@ const translations = {
     ],
     guideTitle: "Orientaciones rápidas",
     guideList: [
-      "El Terminal queda abierto mientras se ejecutan los comandos.",
+      "Mantenga el Terminal abierto para responder a los prompts.",
       "Si pide MFA, confirme en Okta o Touch ID.",
       "Permita acceso de Accesibilidad si se solicita.",
       "Cierre Google Chrome antes de limpiar la caché."
@@ -368,7 +362,7 @@ const translations = {
     noteTitle: "Importante",
     noteList: [
       "Todos los comandos se ejecutan en el Terminal de macOS.",
-      "La app principal refleja los logs."
+      "La app principal es solo visual y refleja los logs."
     ],
     installFinishHint:
       "Al finalizar la instalación de NuCLI, haga clic en el botón Cadastrar digital."
@@ -432,8 +426,6 @@ window.diagnucli.onStatus((payload) => {
     const prefix =
       currentLang === "en"
         ? "Running in macOS Terminal"
-        : currentLang === "es"
-        ? "Ejecutando en Terminal de macOS"
         : "Executando no Terminal macOS";
     statusText.textContent =
       `${prefix}: ${payload.scriptPath} (${existsLabel}). ` +
@@ -460,7 +452,7 @@ const sendMenuChoice = async (choice, title) => {
     await window.diagnucli.sendChoice(choice);
     const detail = title ? ` (${title})` : "";
     appendLog(`\n[DiagnuCLI] Menu option sent: ${choice}${detail}\n`);
-  }, 2500);
+  }, 1200);
 };
 
 const actionLabels = {
@@ -474,7 +466,6 @@ const actionLabels = {
   "activity-monitor": "Open Activity Monitor",
   "empty-trash": "Empty Trash",
   "open-keychain": "Open Keychain",
-  "open-touch-id": "Open Touch ID & Password",
   "open-mac-setup": "Open Mac setup guide",
   "open-itenge-mfa-reset": "Open ITEng MFA reset",
   "open-itenge-password-change": "Open ITEng password change",

@@ -7,8 +7,6 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
-let pendingChoice = null;
-let pendingChoiceSent = false;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -272,48 +270,6 @@ function openKeychainMyCertificates() {
   spawn("osascript", ["-e", osa]);
 }
 
-function openTouchIdAndAddFingerprint() {
-  const osa = `
-    tell application "System Events"
-      key code 49 using {command down}
-      delay 0.3
-      keystroke "Touch ID"
-      delay 0.2
-      key code 36
-    end tell
-    delay 1.0
-    tell application "System Settings" to activate
-    delay 0.4
-    tell application "System Events"
-      tell process "System Settings"
-        set frontmost to true
-        repeat with i from 1 to 20
-          delay 0.2
-          try
-            if exists button "Adicionar Impressão Digital" of window 1 then
-              click button "Adicionar Impressão Digital" of window 1
-              exit repeat
-            end if
-          end try
-          try
-            if exists button "Add Fingerprint" of window 1 then
-              click button "Add Fingerprint" of window 1
-              exit repeat
-            end if
-          end try
-          try
-            if exists button "Agregar huella" of window 1 then
-              click button "Agregar huella" of window 1
-              exit repeat
-            end if
-          end try
-        end repeat
-      end tell
-    end tell
-  `;
-  spawn("osascript", ["-e", osa]);
-}
-
 function openGuideInChrome(lang) {
   const guideUrl = getGuideUrl(lang);
   const osa = `
@@ -353,6 +309,10 @@ function logLine(message) {
   }
 }
 
+function escapeAppleScript(value) {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
 function startLogTail() {
   if (tailProcess) {
     return;
@@ -363,22 +323,8 @@ function startLogTail() {
   });
 
   tailProcess.stdout.on("data", (data) => {
-    const text = data.toString();
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send("run-log", text);
-    }
-    if (pendingChoice && !pendingChoiceSent) {
-      const promptMatches = [
-        "Escolha uma opção",
-        "Choose an option",
-        "Select an option",
-        "Enter your choice"
-      ];
-      if (promptMatches.some((match) => text.includes(match))) {
-        sendTextToTerminal(pendingChoice, true);
-        pendingChoiceSent = true;
-        logLine(`[DiagnuCLI] Menu option auto-sent on prompt: ${pendingChoice}`);
-      }
+      mainWindow.webContents.send("run-log", data.toString());
     }
   });
 
@@ -387,17 +333,11 @@ function startLogTail() {
   });
 }
 
-function escapeAppleScript(value) {
-  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
-}
-
 function startRun() {
   if (runStarted) {
     return;
   }
   runStarted = true;
-  pendingChoice = null;
-  pendingChoiceSent = false;
 
   const exists = fs.existsSync(SCRIPT_PATH);
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
@@ -411,10 +351,11 @@ function startRun() {
 
   startLogTail();
 
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
   const runCommand = exists
     ? `TERM=xterm-256color JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED" ` +
-      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"`
-    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"`;
+      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"; ${closeTerminal}`
+    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
 
   const escaped = escapeAppleScript(runCommand);
   const osa = [
@@ -438,10 +379,6 @@ function sendTextToTerminal(text, pressEnter = false) {
   const osa = [
     'tell application "Terminal" to activate',
     'tell application "System Events" to tell process "Terminal" to set frontmost to true',
-    "delay 0.4",
-    'tell application "System Events" to tell process "Terminal" to try',
-    'tell application "System Events" to tell process "Terminal" to click window 1',
-    'tell application "System Events" to tell process "Terminal" to end try',
     "delay 0.2",
     `tell application "System Events" to tell process "Terminal" to keystroke "${escapedText}"`
   ];
@@ -454,16 +391,7 @@ function sendTextToTerminal(text, pressEnter = false) {
 }
 
 ipcMain.handle("send-choice", (_event, choice) => {
-  pendingChoice = `${choice}`;
-  pendingChoiceSent = false;
-  setTimeout(() => {
-    if (!pendingChoice || pendingChoiceSent) {
-      return;
-    }
-    sendTextToTerminal(pendingChoice, true);
-    pendingChoiceSent = true;
-    logLine(`[DiagnuCLI] Menu option sent (delayed): ${pendingChoice}`);
-  }, 2000);
+  sendTextToTerminal(`${choice}`, true);
   return { ok: true };
 });
 
@@ -479,9 +407,10 @@ function runNucliInstaller(lang = "pt") {
   openGuideInChrome(lang);
   startLogTail();
 
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
   const runCommand = exists
-    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"`
-    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"`;
+    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`
+    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
 
   const escaped = escapeAppleScript(runCommand);
   const osa = [
@@ -618,13 +547,6 @@ const MAINTENANCE_ACTIONS = {
       openKeychainMyCertificates();
     }
   },
-  "open-touch-id": {
-    label: "Open Touch ID & Password",
-    detail: "Abre Touch ID e Senha nas Configurações do macOS.",
-    runDirect: () => {
-      openTouchIdAndAddFingerprint();
-    }
-  },
   "open-mac-setup": {
     label: "Open Mac setup guide",
     detail: "Abre o guia de configuração do Mac no Chrome.",
@@ -716,8 +638,9 @@ function runMaintenanceAction(actionId) {
 
   startLogTail();
 
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
+  const command = `(${action.buildCommand()}; ${closeTerminal}) | tee -a "${LOG_PATH}"`;
   logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
-  const command = `${action.buildCommand()} | tee -a "${LOG_PATH}"`;
   const escaped = escapeAppleScript(command);
   const osa = [
     'tell application "Terminal" to activate',
@@ -757,7 +680,7 @@ ipcMain.handle("open-setup-help", () => {
 });
 
 ipcMain.handle("open-ask-nu", () => {
-  logLine(`[DiagnuCLI] Open Slack @AskNu`);
+  logLine(`[DiagnuCLI] Open Slack AskNu`);
   openAskNuInSlack();
   return { ok: true };
 });
