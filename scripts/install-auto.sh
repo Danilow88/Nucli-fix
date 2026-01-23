@@ -41,5 +41,15 @@ LOG_PATH="${DIAGNUCLI_NPM_LOG:-/tmp/diagnucli-npm-start.log}"
 (cd "$APP_REPO_PATH/diagnucli-electron" && nohup npm start >"$LOG_PATH" 2>&1 & disown)
 say "DiagnuCLI started. Logs: $LOG_PATH"
 
-# Close the Terminal window that ran the curl|bash command
+# Close the Terminal window that ran the curl|bash command (no prompt)
 osascript -e 'tell application "Terminal" to close front window' >/dev/null 2>&1 || true
+sleep 0.2
+osascript -e 'tell application "System Events" to tell process "Terminal"' \
+  -e 'if exists sheet 1 of window 1 then' \
+  -e 'try' \
+  -e 'click button "Close" of sheet 1 of window 1' \
+  -e 'end try' \
+  -e 'try' \
+  -e 'click button "Fechar" of sheet 1 of window 1' \
+  -e 'end try' \
+  -e 'end if' >/dev/null 2>&1 || true
