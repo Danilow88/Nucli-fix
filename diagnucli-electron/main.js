@@ -24,6 +24,8 @@ const PERFORMANCE_SCRIPT_PATH = app.isPackaged
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
+const LAPTOP_REQUEST_URL =
+  "https://nubank.atlassian.net/servicedesk/customer/portal/131/group/552/create/2364";
 const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
@@ -85,6 +87,22 @@ function openSupportInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: supportUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openLaptopRequestInChrome() {
+  const osa = `
+    set laptopUrl to "${LAPTOP_REQUEST_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: laptopUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -461,6 +479,13 @@ const MAINTENANCE_ACTIONS = {
       }, 500);
     }
   },
+  "request-laptop": {
+    label: "Request laptop replacement",
+    detail: "Abre o formulário de troca de laptop no Chrome.",
+    runDirect: () => {
+      openLaptopRequestInChrome();
+    }
+  },
   "optimize-performance": {
     label: "Optimize macOS performance",
     detail: "Executa o script optimize-performance.sh.",
@@ -519,6 +544,12 @@ ipcMain.handle("open-support", () => {
   logLine(`[DiagnuCLI] Open support portal: ${SUPPORT_URL}`);
   openSupportInChrome();
   return { ok: true, url: SUPPORT_URL };
+});
+
+ipcMain.handle("open-laptop-request", () => {
+  logLine(`[DiagnuCLI] Open laptop request: ${LAPTOP_REQUEST_URL}`);
+  openLaptopRequestInChrome();
+  return { ok: true, url: LAPTOP_REQUEST_URL };
 });
 
 ipcMain.handle("open-setup-help", () => {

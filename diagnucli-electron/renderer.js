@@ -58,6 +58,8 @@ const translations = {
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank no Chrome.",
+    requestLaptopTitle: "Pedir troca de laptop",
+    requestLaptopDesc: "Abre o formulário no Google Chrome.",
     oncallTitle: "Acionar on-call 24h (home office)",
     oncallDesc: "Abre o WhatsApp para o número (11) 95185-7554.",
     setupHelpTitle:
@@ -132,6 +134,8 @@ const translations = {
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens Nubank support portal in Chrome.",
+    requestLaptopTitle: "Request laptop replacement",
+    requestLaptopDesc: "Opens the form in Google Chrome.",
     oncallTitle: "Call on-call 24h (remote work)",
     oncallDesc: "Opens WhatsApp for the number +55 11 95185-7554.",
     setupHelpTitle: "Send a question to the Setup Help channel",
@@ -205,6 +209,8 @@ const translations = {
     rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank en Chrome.",
+    requestLaptopTitle: "Solicitar cambio de laptop",
+    requestLaptopDesc: "Abre el formulario en Google Chrome.",
     oncallTitle: "Activar on-call 24h (home office)",
     oncallDesc: "Abre WhatsApp para el número +55 11 95185-7554.",
     setupHelpTitle: "Enviar duda al canal Setup Help",
@@ -325,6 +331,7 @@ const actionLabels = {
   "open-keychain": "Open Keychain",
   "reset-general": "Reset general settings",
   "exit-app": "Exit app",
+  "request-laptop": "Request laptop replacement",
   "open-oncall": "Open WhatsApp on-call"
 };
 
