@@ -276,11 +276,13 @@ function openTouchIdAndAddFingerprint() {
     tell application "System Events"
       key code 49 using {command down}
       delay 0.3
-      keystroke "touch ID & Password"
+      keystroke "Touch ID"
       delay 0.2
       key code 36
     end tell
-    delay 0.8
+    delay 1.0
+    tell application "System Settings" to activate
+    delay 0.4
     tell application "System Events"
       tell process "System Settings"
         set frontmost to true
@@ -372,27 +374,8 @@ function startLogTail() {
 
 function attachProcessOutput(proc) {
   const stream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-  const handlePrompt = (data) => {
-    const text = data.toString();
-    if (
-      text.includes("Select where you want to refresh your credentials") &&
-      !proc.__autoRespondedCredentials
-    ) {
-      proc.__autoRespondedCredentials = true;
-      proc.stdin?.write("1\n");
-      logLine(
-        "[DiagnuCLI] Auto-continued credentials selection with default option."
-      );
-    }
-  };
-  if (proc.stdout) {
-    proc.stdout.pipe(stream);
-    proc.stdout.on("data", handlePrompt);
-  }
-  if (proc.stderr) {
-    proc.stderr.pipe(stream);
-    proc.stderr.on("data", handlePrompt);
-  }
+  proc.stdout?.pipe(stream);
+  proc.stderr?.pipe(stream);
   proc.on("exit", (code) => {
     stream.end();
     if (activeProcess === proc) {
@@ -460,7 +443,12 @@ function startRun() {
     DIAGNUCLI_LOG_PATH: LOG_PATH
   };
   logLine(`[DiagnuCLI] Background run started: ${SCRIPT_PATH}`);
-  activeProcess = runBackgroundCommand(`"${SCRIPT_PATH}"`, { env });
+  activeProcess = spawn("bash", [SCRIPT_PATH], {
+    cwd: os.homedir(),
+    env: { ...process.env, ...env },
+    stdio: ["pipe", "pipe", "pipe"]
+  });
+  attachProcessOutput(activeProcess);
   sendStatus({ terminalStarted: true });
 }
 
