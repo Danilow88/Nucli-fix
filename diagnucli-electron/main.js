@@ -383,7 +383,9 @@ function attachProcessOutput(proc) {
       ) {
         proc.__autoRespondedCredentials = true;
         proc.stdin?.write("\n");
-        logLine("[DiagnuCLI] Auto-continued credentials selection with default option.");
+        logLine(
+          "[DiagnuCLI] Auto-continued credentials selection with default option."
+        );
       }
     });
   }
@@ -408,12 +410,7 @@ function runBackgroundCommand(command, options = {}) {
   startLogTail();
   const proc = spawn("bash", ["-lc", command], {
     cwd: options.cwd || os.homedir(),
-    env: {
-      ...process.env,
-      JLINE_TERMINAL: "dumb",
-      JLINE_TTY: "false",
-      ...options.env
-    },
+    env: { ...process.env, ...options.env },
     stdio: ["pipe", "pipe", "pipe"]
   });
   attachProcessOutput(proc);
@@ -456,9 +453,7 @@ function startRun() {
   const env = {
     TERM: "xterm-256color",
     JAVA_TOOL_OPTIONS: "--enable-native-access=ALL-UNNAMED",
-    DIAGNUCLI_LOG_PATH: LOG_PATH,
-    JLINE_TERMINAL: "dumb",
-    JLINE_TTY: "false"
+    DIAGNUCLI_LOG_PATH: LOG_PATH
   };
   logLine(`[DiagnuCLI] Background run started: ${SCRIPT_PATH}`);
   activeProcess = spawn("bash", [SCRIPT_PATH], {
@@ -467,7 +462,7 @@ function startRun() {
     stdio: ["pipe", "pipe", "pipe"]
   });
   attachProcessOutput(activeProcess);
-  sendStatus({ terminalStarted: true });
+    sendStatus({ terminalStarted: true });
 }
 
 ipcMain.handle("start-run", () => {
