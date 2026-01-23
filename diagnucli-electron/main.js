@@ -550,6 +550,16 @@ const MAINTENANCE_ACTIONS = {
       openITEngSelfServiceAndClick("Change my password");
     }
   },
+  "restart-vpn": {
+    label: "Restart VPN (Zscaler)",
+    detail: "Fecha e reabre o Zscaler.app.",
+    runDirect: () => {
+      spawn("osascript", ["-e", 'tell application "Zscaler" to quit']);
+      setTimeout(() => {
+        spawn("open", ["-a", "Zscaler"]);
+      }, 800);
+    }
+  },
   "open-oncall": {
     label: "Open WhatsApp on-call",
     detail: "Abre o WhatsApp para +55 11 95185-7554.",
