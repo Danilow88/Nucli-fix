@@ -23,6 +23,8 @@ const ROVO_URL =
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
+const APP_NAME = "DiagnuCLI";
+const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
 function getGuideUrl(lang) {
   const localeMap = {
@@ -39,7 +41,8 @@ function createWindow() {
     width: 1200,
     height: 760,
     backgroundColor: "#1B0B2E",
-    title: "DiagnuCLI",
+    title: APP_NAME,
+    icon: DEV_ICON_PATH,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -392,7 +395,13 @@ ipcMain.handle("open-mic-permissions", () => {
   return { ok: true };
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  app.setName(APP_NAME);
+  if (process.platform === "darwin" && !app.isPackaged) {
+    app.dock.setIcon(DEV_ICON_PATH);
+  }
+  createWindow();
+});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
