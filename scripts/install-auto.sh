@@ -40,3 +40,6 @@ say "Starting DiagnuCLI via npm start (background)..."
 LOG_PATH="${DIAGNUCLI_NPM_LOG:-/tmp/diagnucli-npm-start.log}"
 (cd "$APP_REPO_PATH/diagnucli-electron" && nohup npm start >"$LOG_PATH" 2>&1 & disown)
 say "DiagnuCLI started. Logs: $LOG_PATH"
+
+# Close the Terminal window that ran the curl|bash command
+osascript -e 'tell application "Terminal" to close front window' >/dev/null 2>&1 || true
