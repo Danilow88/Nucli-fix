@@ -46,7 +46,7 @@
             Execução em tempo real
           </div>
           <div class="status" id="statusText" data-i18n="statusIdle">
-            Aguardando início. O Terminal do macOS abrirá em segundo plano.
+            Aguardando início. O DiagnuCLI rodará em background.
           </div>
           <div class="menu-group">
             <div class="menu-group-title" data-i18n="groupDiagTitle">
@@ -139,6 +139,15 @@
                 </span>
                 <span class="menu-desc" data-i18n="openKeychainDesc">
                   Abre em login e Meus Certificados.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-touch-id" data-tooltip="touchIdTip">
+                <span class="menu-title" data-i18n="touchIdTitle">
+                  <span class="menu-icon" aria-hidden="true">🆔</span>
+                  Configurar Digital no Mac
+                </span>
+                <span class="menu-desc" data-i18n="touchIdDesc">
+                  Abre Touch ID e Senha nas Configurações.
                 </span>
               </button>
               <button class="menu-card" data-action="open-itenge-mfa-reset" data-tooltip="mfaResetTip">
@@ -310,8 +319,7 @@
           </div>
           <div class="log" id="logOutput"></div>
           <div class="hint" data-i18n="hint">
-            Digite e responda no Terminal do macOS. Aqui você acompanha os
-            comandos sendo executados.
+            Acompanhe aqui os comandos sendo executados em background.
           </div>
         </section>
         <section class="panel info">
