@@ -52,4 +52,10 @@ osascript -e 'tell application "System Events" to tell process "Terminal"' \
   -e 'try' \
   -e 'click button "Fechar" of sheet 1 of window 1' \
   -e 'end try' \
+  -e 'try' \
+  -e 'click button "Finalizar" of sheet 1 of window 1' \
+  -e 'end try' \
+  -e 'try' \
+  -e 'click button "Terminate" of sheet 1 of window 1' \
+  -e 'end try' \
   -e 'end if' >/dev/null 2>&1 || true
