@@ -21,6 +21,18 @@ const INSTALLER_PATH = app.isPackaged
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
+const GUIDE_URL_BASE =
+  "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
+
+function getGuideUrl(lang) {
+  const localeMap = {
+    pt: "pt_BR",
+    en: "en_US",
+    es: "es_ES"
+  };
+  const locale = localeMap[lang] || "pt_BR";
+  return `${GUIDE_URL_BASE}?locale=${locale}`;
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -64,6 +76,23 @@ function openSupportInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: supportUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openGuideInChrome(lang) {
+  const guideUrl = getGuideUrl(lang);
+  const osa = `
+    set guideUrl to "${guideUrl}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: guideUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -174,6 +203,7 @@ function runNucliInstaller(lang = "pt") {
     fs.writeFileSync(LOG_PATH, "");
   }
 
+  openGuideInChrome(lang);
   startLogTail();
 
   const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
