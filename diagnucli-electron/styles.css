@@ -134,6 +134,9 @@ body {
   font-weight: 700;
   letter-spacing: 0.2px;
   box-shadow: 0 10px 20px rgba(138, 43, 226, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .main {
@@ -266,6 +269,9 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .terminal-row button:hover {
