@@ -372,22 +372,26 @@ function startLogTail() {
 
 function attachProcessOutput(proc) {
   const stream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-  proc.stdout?.pipe(stream);
-  proc.stderr?.pipe(stream);
+  const handlePrompt = (data) => {
+    const text = data.toString();
+    if (
+      text.includes("Select where you want to refresh your credentials") &&
+      !proc.__autoRespondedCredentials
+    ) {
+      proc.__autoRespondedCredentials = true;
+      proc.stdin?.write("1\n");
+      logLine(
+        "[DiagnuCLI] Auto-continued credentials selection with default option."
+      );
+    }
+  };
   if (proc.stdout) {
-    proc.stdout.on("data", (data) => {
-      const text = data.toString();
-      if (
-        text.includes("Select where you want to refresh your credentials") &&
-        !proc.__autoRespondedCredentials
-      ) {
-        proc.__autoRespondedCredentials = true;
-        proc.stdin?.write("\n");
-        logLine(
-          "[DiagnuCLI] Auto-continued credentials selection with default option."
-        );
-      }
-    });
+    proc.stdout.pipe(stream);
+    proc.stdout.on("data", handlePrompt);
+  }
+  if (proc.stderr) {
+    proc.stderr.pipe(stream);
+    proc.stderr.on("data", handlePrompt);
   }
   proc.on("exit", (code) => {
     stream.end();
@@ -408,7 +412,7 @@ function attachProcessOutput(proc) {
 function runBackgroundCommand(command, options = {}) {
   ensureLogFile();
   startLogTail();
-  const proc = spawn("bash", ["-lc", command], {
+  const proc = spawn("script", ["-q", "/dev/null", "bash", "-lc", command], {
     cwd: options.cwd || os.homedir(),
     env: { ...process.env, ...options.env },
     stdio: ["pipe", "pipe", "pipe"]
@@ -456,12 +460,9 @@ function startRun() {
     DIAGNUCLI_LOG_PATH: LOG_PATH
   };
   logLine(`[DiagnuCLI] Background run started: ${SCRIPT_PATH}`);
-  activeProcess = spawn("bash", [SCRIPT_PATH], {
-    cwd: os.homedir(),
-    env: { ...process.env, ...env },
-    stdio: ["pipe", "pipe", "pipe"]
+  activeProcess = runBackgroundCommand(`"${SCRIPT_PATH}"`, {
+    env
   });
-  attachProcessOutput(activeProcess);
     sendStatus({ terminalStarted: true });
 }
 
