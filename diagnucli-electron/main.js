@@ -113,6 +113,12 @@ function openKeychainMyCertificates() {
       tell process "Keychain Access"
         set frontmost to true
         try
+          click row "Acesso às Chaves" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+        try
+          click row "Keychains" of outline 1 of scroll area 1 of splitter group 1 of window 1
+        end try
+        try
           click row "login" of outline 1 of scroll area 1 of splitter group 1 of window 1
         end try
         delay 0.2
