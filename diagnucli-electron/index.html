@@ -317,6 +317,18 @@
               Limpar logs
             </button>
           </div>
+          <div class="log-command">
+            <input
+              id="logCommandInput"
+              type="text"
+              data-i18n-placeholder="logCommandPlaceholder"
+              placeholder="Digite um comando para enviar ao processo"
+            />
+            <button id="logCommandSend" data-i18n="logCommandSend" data-tooltip="logCommandSendTip">
+              <span class="menu-icon" aria-hidden="true">⌨️</span>
+              Enviar comando
+            </button>
+          </div>
           <div class="log" id="logOutput"></div>
           <div class="hint" data-i18n="hint">
             Acompanhe aqui os comandos sendo executados em background.

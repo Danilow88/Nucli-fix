@@ -8,6 +8,8 @@ const setupHelpButton = document.getElementById("openSetupHelp");
 const askNuButton = document.getElementById("openAskNu");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
+const logCommandInput = document.getElementById("logCommandInput");
+const logCommandSend = document.getElementById("logCommandSend");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -45,6 +47,9 @@ const translations = {
     updateHeader: "Atualizar app",
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
     logTitle: "Logs do Terminal",
+    logCommandPlaceholder: "Digite um comando para enviar ao processo",
+    logCommandSend: "Enviar comando",
+    logCommandSendTip: "Envia o comando para o processo em execução.",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
     macosUpdateTitle: "Atualizar macOS",
@@ -166,6 +171,9 @@ const translations = {
     updateHeader: "Update app",
     updateHeaderTip: "Update DiagnuCLI from Git.",
     logTitle: "Terminal logs",
+    logCommandPlaceholder: "Type a command to send to the process",
+    logCommandSend: "Send command",
+    logCommandSendTip: "Sends the command to the running process.",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
     macosUpdateTitle: "Update macOS",
@@ -287,6 +295,9 @@ const translations = {
     updateHeader: "Actualizar app",
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
     logTitle: "Registros del Terminal",
+    logCommandPlaceholder: "Escriba un comando para enviar al proceso",
+    logCommandSend: "Enviar comando",
+    logCommandSendTip: "Envía el comando al proceso en ejecución.",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
     macosUpdateTitle: "Actualizar macOS",
@@ -506,6 +517,20 @@ const sendAction = async (actionId) => {
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 
+const sendTerminalCommand = async () => {
+  if (!logCommandInput) {
+    return;
+  }
+  const raw = logCommandInput.value || "";
+  const command = raw.trim();
+  if (!command) {
+    return;
+  }
+  await window.diagnucli.sendText(command, true);
+  appendLog(`\n[DiagnuCLI] Command sent: ${command}\n`);
+  logCommandInput.value = "";
+};
+
 startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
@@ -547,6 +572,16 @@ if (supportButton) {
   supportButton.addEventListener("click", async () => {
     await window.diagnucli.openSupport();
     appendLog("\n[DiagnuCLI] Support portal opened.\n");
+  });
+}
+
+if (logCommandSend && logCommandInput) {
+  logCommandSend.addEventListener("click", sendTerminalCommand);
+  logCommandInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendTerminalCommand();
+    }
   });
 }
 

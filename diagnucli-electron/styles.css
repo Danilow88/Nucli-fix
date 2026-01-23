@@ -337,6 +337,47 @@ body {
   margin: 10px 0 12px;
 }
 
+.log-command {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.log-command input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0b0715;
+  color: #efe7ff;
+  font-size: 13px;
+}
+
+.log-command input:focus {
+  outline: none;
+  border-color: rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.18);
+}
+
+.log-command button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #8a2be2, #6d28d9);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.log-command button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(138, 43, 226, 0.35);
+}
+
 .log-title {
   font-weight: 600;
   font-size: 13px;
