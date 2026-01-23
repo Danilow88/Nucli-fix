@@ -374,6 +374,19 @@ function attachProcessOutput(proc) {
   const stream = fs.createWriteStream(LOG_PATH, { flags: "a" });
   proc.stdout?.pipe(stream);
   proc.stderr?.pipe(stream);
+  if (proc.stdout) {
+    proc.stdout.on("data", (data) => {
+      const text = data.toString();
+      if (
+        text.includes("Select where you want to refresh your credentials") &&
+        !proc.__autoRespondedCredentials
+      ) {
+        proc.__autoRespondedCredentials = true;
+        proc.stdin?.write("\n");
+        logLine("[DiagnuCLI] Auto-continued credentials selection with default option.");
+      }
+    });
+  }
   proc.on("exit", (code) => {
     stream.end();
     if (activeProcess === proc) {
