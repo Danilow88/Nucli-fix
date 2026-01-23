@@ -31,6 +31,10 @@
       {
         "from": "../scripts/nucli-setup.sh",
         "to": "install-nucli.sh"
+      },
+      {
+        "from": "../scripts/optimize-performance.sh",
+        "to": "optimize-performance.sh"
       }
     ],
     "mac": {

@@ -18,6 +18,9 @@ const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
 const INSTALLER_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "install-nucli.sh")
   : path.join(__dirname, "..", "scripts", "nucli-setup.sh");
+const PERFORMANCE_SCRIPT_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "optimize-performance.sh")
+  : path.join(__dirname, "..", "scripts", "optimize-performance.sh");
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
@@ -385,12 +388,16 @@ const MAINTENANCE_ACTIONS = {
   "manage-disk": {
     label: "Manage disk space",
     runDirect: () => {
-      spawn("open", ["x-apple.systempreferences:com.apple.SystemSettings?pane=General"]);
-      setTimeout(() => {
-        spawn("open", [
-          "x-apple.systempreferences:com.apple.SystemSettings?pane=General&section=Storage"
-        ]);
-      }, 600);
+      const osa = `
+        tell application "System Events"
+          key code 49 using {command down}
+          delay 0.3
+          keystroke "Armazenamento"
+          delay 0.2
+          key code 36
+        end tell
+      `;
+      spawn("osascript", ["-e", osa]);
     }
   },
   "activity-monitor": {
@@ -429,6 +436,17 @@ const MAINTENANCE_ACTIONS = {
       setTimeout(() => {
         spawn("open", [ONCALL_WHATSAPP_URL]);
       }, 500);
+    }
+  },
+  "optimize-performance": {
+    label: "Optimize macOS performance",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Performance tune started"`,
+        `if [ ! -f "${PERFORMANCE_SCRIPT_PATH}" ]; then echo "[DiagnuCLI] Script not found: ${PERFORMANCE_SCRIPT_PATH}"; exit 1; fi`,
+        `bash "${PERFORMANCE_SCRIPT_PATH}"`,
+        `echo "[DiagnuCLI] Performance tune finished"`
+      ].join("; ");
     }
   }
 };
