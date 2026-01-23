@@ -88,11 +88,21 @@ function openSupportInChrome() {
 }
 
 function openSetupHelpInChrome() {
-  const slackDeepLink = `slack://channel?id=${SETUP_HELP_CHANNEL_ID}`;
-  spawn("open", ["-a", "Slack", slackDeepLink]);
-  setTimeout(() => {
-    spawn("open", [SETUP_HELP_URL]);
-  }, 1000);
+  const osa = `
+    tell application "Slack" to activate
+    delay 0.3
+    tell application "System Events"
+      tell process "Slack"
+        set frontmost to true
+        keystroke "k" using {command down}
+        delay 0.2
+        keystroke "#setup-help"
+        delay 0.2
+        key code 36
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
 }
 
 function openGuideInChrome(lang) {
