@@ -26,11 +26,11 @@
             <button class="lang-btn" data-lang="en">EN</button>
             <button class="lang-btn" data-lang="es">ES</button>
           </div>
-            <button class="control-action" data-action="update-app" data-i18n="updateHeader">
+            <button class="control-action" data-action="update-app" data-i18n="updateHeader" data-tooltip="updateHeaderTip">
               <span class="menu-icon" aria-hidden="true">🔄</span>
               Atualizar app
             </button>
-          <button id="startButton" data-i18n="startButton">
+          <button id="startButton" data-i18n="startButton" data-tooltip="startButtonTip">
             <span class="menu-icon" aria-hidden="true">🚀</span>
             Iniciar diagnóstico
           </button>
@@ -46,7 +46,7 @@
             Aguardando início. O Terminal do macOS abrirá em segundo plano.
           </div>
           <div class="menu-grid">
-            <button class="menu-card" data-option="1">
+            <button class="menu-card" data-option="1" data-tooltip="opt1Tip">
               <span class="menu-title" data-i18n="opt1Title">
                 <span class="menu-icon" aria-hidden="true">✅</span>
                 Verificação completa
@@ -55,7 +55,7 @@
                 Roda todas as verificações e gera relatório final.
               </span>
             </button>
-            <button class="menu-card" data-option="7">
+            <button class="menu-card" data-option="7" data-tooltip="opt7Tip">
               <span class="menu-title" data-i18n="opt7Title">
                 <span class="menu-icon" aria-hidden="true">🧪</span>
                 Testar comandos NuCLI
@@ -64,7 +64,7 @@
                 Checa nu doctor, versões e comandos essenciais.
               </span>
             </button>
-            <button class="menu-card" data-action="install-nucli">
+            <button class="menu-card" data-action="install-nucli" data-tooltip="installNucliTip">
               <span class="menu-title" data-i18n="installNucliTitle">
                 <span class="menu-icon" aria-hidden="true">🧭</span>
                 Instalar NuCLI
@@ -73,7 +73,7 @@
                 Guia completo de acesso, SSH, brew e setup AWS.
               </span>
             </button>
-            <button class="menu-card" data-option="10">
+            <button class="menu-card" data-option="10" data-tooltip="opt10Tip">
               <span class="menu-title" data-i18n="opt10Title">
                 <span class="menu-icon" aria-hidden="true">🧩</span>
                 Roles, escopos e países
@@ -82,7 +82,7 @@
                 Valida permissões e acessos por conta.
               </span>
             </button>
-            <button class="menu-card" data-option="12">
+            <button class="menu-card" data-option="12" data-tooltip="opt12Tip">
               <span class="menu-title" data-i18n="opt12Title">
                 <span class="menu-icon" aria-hidden="true">📄</span>
                 Relatório consolidado
@@ -91,7 +91,7 @@
                 Gera relatório final com detalhes completos.
               </span>
             </button>
-            <button class="menu-card" data-option="19">
+            <button class="menu-card" data-option="19" data-tooltip="opt19Tip">
               <span class="menu-title" data-i18n="opt19Title">
                 <span class="menu-icon" aria-hidden="true">🧯</span>
                 Erro br prod / Missing Groups
@@ -100,7 +100,7 @@
                 Diagnóstico guiado para grupos e roles BR.
               </span>
             </button>
-            <button class="menu-card" data-option="22">
+            <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
               <span class="menu-title" data-i18n="opt22Title">
                 <span class="menu-icon" aria-hidden="true">🔐</span>
                 Cadastrar digital
@@ -109,7 +109,7 @@
                 Configura IAM user, Okta e FIDO/Touch ID.
               </span>
             </button>
-            <button class="menu-card" data-action="cache-mac">
+            <button class="menu-card" data-action="cache-mac" data-tooltip="cacheMacTip">
               <span class="menu-title" data-i18n="cacheMacTitle">
                 <span class="menu-icon" aria-hidden="true">🧹</span>
                 Limpar cache do macOS
@@ -118,7 +118,7 @@
                 Remove caches do usuario e do sistema (pode pedir senha).
               </span>
             </button>
-            <button class="menu-card" data-action="cache-chrome">
+            <button class="menu-card" data-action="cache-chrome" data-tooltip="cacheChromeTip">
               <span class="menu-title" data-i18n="cacheChromeTitle">
                 <span class="menu-icon" aria-hidden="true">🌐</span>
                 Limpar cache do Chrome
@@ -127,7 +127,7 @@
                 Fecha o Chrome e remove caches locais.
               </span>
             </button>
-            <button class="menu-card" data-action="update-macos">
+            <button class="menu-card" data-action="update-macos" data-tooltip="macosUpdateTip">
               <span class="menu-title" data-i18n="macosUpdateTitle">
                 <span class="menu-icon" aria-hidden="true">🍎</span>
                 Atualizar macOS
@@ -136,7 +136,7 @@
                 Verifica e instala atualizacoes do sistema.
               </span>
             </button>
-            <button class="menu-card" data-action="manage-disk">
+            <button class="menu-card" data-action="manage-disk" data-tooltip="manageDiskTip">
               <span class="menu-title" data-i18n="manageDiskTitle">
                 <span class="menu-icon" aria-hidden="true">💾</span>
                 Gerenciar espaço de HD
@@ -145,7 +145,7 @@
                 Abre o gerenciamento de armazenamento do macOS.
               </span>
             </button>
-            <button class="menu-card" data-action="optimize-performance">
+            <button class="menu-card" data-action="optimize-performance" data-tooltip="optimizePerfTip">
               <span class="menu-title" data-i18n="optimizePerfTitle">
                 <span class="menu-icon" aria-hidden="true">⚡️</span>
                 Melhorar performance do Mac
@@ -154,7 +154,7 @@
                 Executa ajustes e limpezas para melhorar o desempenho.
               </span>
             </button>
-            <button class="menu-card" data-action="activity-monitor">
+            <button class="menu-card" data-action="activity-monitor" data-tooltip="activityMonitorTip">
               <span class="menu-title" data-i18n="activityMonitorTitle">
                 <span class="menu-icon" aria-hidden="true">📊</span>
                 Abrir Monitor de Atividades
@@ -163,7 +163,7 @@
                 Abre o monitor de processos do macOS.
               </span>
             </button>
-            <button class="menu-card" data-action="empty-trash">
+            <button class="menu-card" data-action="empty-trash" data-tooltip="emptyTrashTip">
               <span class="menu-title" data-i18n="emptyTrashTitle">
                 <span class="menu-icon" aria-hidden="true">🗑️</span>
                 Esvaziar Lixeira
@@ -172,7 +172,7 @@
                 Esvazia a lixeira do Finder.
               </span>
             </button>
-            <button class="menu-card" data-action="open-keychain">
+            <button class="menu-card" data-action="open-keychain" data-tooltip="openKeychainTip">
               <span class="menu-title" data-i18n="openKeychainTitle">
                 <span class="menu-icon" aria-hidden="true">🔑</span>
                 Abrir Keychain
@@ -181,7 +181,7 @@
                 Abre em login e Meus Certificados.
               </span>
             </button>
-            <button class="menu-card" data-action="open-mac-setup">
+            <button class="menu-card" data-action="open-mac-setup" data-tooltip="macSetupTip">
               <span class="menu-title" data-i18n="macSetupTitle">
                 <span class="menu-icon" aria-hidden="true">🧑‍💻</span>
                 Como configurar o Mac
@@ -190,7 +190,7 @@
                 Abre o guia no Google Chrome.
               </span>
             </button>
-            <button class="menu-card" data-action="open-itenge-mfa-reset">
+            <button class="menu-card" data-action="open-itenge-mfa-reset" data-tooltip="mfaResetTip">
               <span class="menu-title" data-i18n="mfaResetTitle">
                 <span class="menu-icon" aria-hidden="true">🛡️</span>
                 Resetar MFA (Okta)
@@ -199,7 +199,7 @@
                 Abre o ITEng Self Service em Reset my MFA.
               </span>
             </button>
-            <button class="menu-card" data-action="open-itenge-password-change">
+            <button class="menu-card" data-action="open-itenge-password-change" data-tooltip="passwordChangeTip">
               <span class="menu-title" data-i18n="passwordChangeTitle">
                 <span class="menu-icon" aria-hidden="true">🔑</span>
                 Trocar senha (Okta)
@@ -208,7 +208,7 @@
                 Abre o ITEng Self Service em Change my password.
               </span>
             </button>
-            <button class="menu-card" data-action="restart-vpn">
+            <button class="menu-card" data-action="restart-vpn" data-tooltip="restartVpnTip">
               <span class="menu-title" data-i18n="restartVpnTitle">
                 <span class="menu-icon" aria-hidden="true">🛡️</span>
                 Reiniciar VPN (Zscaler)
@@ -217,7 +217,7 @@
                 Fecha e reabre o Zscaler.app.
               </span>
             </button>
-            <button class="menu-card" data-action="exit-app">
+            <button class="menu-card" data-action="exit-app" data-tooltip="exitAppTip">
               <span class="menu-title" data-i18n="exitAppTitle">
                 <span class="menu-icon" aria-hidden="true">🚪</span>
                 Sair do app
@@ -226,7 +226,7 @@
                 Fecha o DiagnuCLI imediatamente.
               </span>
             </button>
-            <button class="menu-card" id="openRovo">
+            <button class="menu-card" id="openRovo" data-tooltip="rovoTip">
               <span class="menu-title" data-i18n="rovoTitle">
                 <span class="menu-icon" aria-hidden="true">💬</span>
                 Abrir Rovo (Suporte)
@@ -235,7 +235,7 @@
                 Abre o chat no Google Chrome (usa login do navegador).
               </span>
             </button>
-            <button class="menu-card" id="openSupport">
+            <button class="menu-card" id="openSupport" data-tooltip="supportTip">
               <span class="menu-title" data-i18n="supportTitle">
                 <span class="menu-icon" aria-hidden="true">🎫</span>
                 Abrir chamado (Suporte)
@@ -244,7 +244,7 @@
                 Abre o portal de chamados da Nubank no Chrome.
               </span>
             </button>
-            <button class="menu-card" data-action="request-laptop">
+            <button class="menu-card" data-action="request-laptop" data-tooltip="requestLaptopTip">
               <span class="menu-title" data-i18n="requestLaptopTitle">
                 <span class="menu-icon" aria-hidden="true">💻</span>
                 Pedir troca de laptop
@@ -253,7 +253,7 @@
                 Abre o formulário no Google Chrome.
               </span>
             </button>
-            <button class="menu-card" data-action="open-oncall">
+            <button class="menu-card" data-action="open-oncall" data-tooltip="oncallTip">
               <span class="menu-title" data-i18n="oncallTitle">
                 <span class="menu-icon" aria-hidden="true">📞</span>
                 Acionar on-call 24h (home office)
@@ -268,7 +268,7 @@
               Enviar dúvida para o canal Setup Help
             </div>
             <div class="terminal-row">
-              <button id="openSetupHelp" data-i18n="setupHelpButton">
+              <button id="openSetupHelp" data-i18n="setupHelpButton" data-tooltip="setupHelpTip">
                 <span class="menu-icon" aria-hidden="true">💬</span>
                 Abrir canal no Slack
               </button>
@@ -279,7 +279,7 @@
           </div>
           <div class="log-toolbar">
             <div class="log-title" data-i18n="logTitle">Logs do Terminal</div>
-            <button class="log-clear" data-action="clear-log" data-i18n="clearLogButton">
+            <button class="log-clear" data-action="clear-log" data-i18n="clearLogButton" data-tooltip="clearLogTip">
               <span class="menu-icon" aria-hidden="true">🧽</span>
               Limpar logs
             </button>
