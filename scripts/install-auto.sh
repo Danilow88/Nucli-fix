@@ -19,10 +19,22 @@ else
   git -C "$APP_REPO_PATH" pull
 fi
 
-if [[ -x "$APP_REPO_PATH/diagnucli-electron/install.sh" ]]; then
-  say "Installing DiagnuCLI app..."
-  (cd "$APP_REPO_PATH/diagnucli-electron" && ./install.sh)
-  open -a "/Applications/DiagnuCLI.app" || true
-else
-  say "DiagnuCLI installer not found at $APP_REPO_PATH/diagnucli-electron/install.sh"
+if [[ ! -d "$APP_REPO_PATH/diagnucli-electron" ]]; then
+  say "DiagnuCLI Electron folder not found at $APP_REPO_PATH/diagnucli-electron"
+  exit 1
 fi
+
+if ! command -v node >/dev/null 2>&1; then
+  say "Node.js not found. Install Node 18+ and rerun this script."
+  exit 1
+fi
+
+say "Installing dependencies..."
+if [[ -f "$APP_REPO_PATH/diagnucli-electron/package-lock.json" ]]; then
+  (cd "$APP_REPO_PATH/diagnucli-electron" && npm ci)
+else
+  (cd "$APP_REPO_PATH/diagnucli-electron" && npm install)
+fi
+
+say "Starting DiagnuCLI via npm start..."
+(cd "$APP_REPO_PATH/diagnucli-electron" && npm start)
