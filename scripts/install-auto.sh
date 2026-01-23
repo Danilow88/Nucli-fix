@@ -95,7 +95,7 @@ else
   say "NU_HOME already configured in $profile."
 fi
 
-section "Step 6/6: Clone repositories"
+section "Step 6/7: Clone repositories"
 NU_HOME="${NU_HOME:-$HOME/dev/nu}"
 mkdir -p "$NU_HOME"
 
@@ -119,3 +119,21 @@ say "  nu aws credentials refresh"
 say "  nu aws credentials setup"
 say ""
 say "Installer finished."
+
+section "Step 7/7: DiagnuCLI app"
+APP_REPO_PATH="${DIAGNUCLI_REPO_PATH:-$HOME/Nucli-fix}"
+if [[ ! -d "$APP_REPO_PATH/.git" ]]; then
+  say "Cloning DiagnuCLI app repository..."
+  git clone https://github.com/Danilow88/Nucli-fix.git "$APP_REPO_PATH"
+else
+  say "Updating DiagnuCLI app repository..."
+  git -C "$APP_REPO_PATH" pull
+fi
+
+if [[ -x "$APP_REPO_PATH/diagnucli-electron/install.sh" ]]; then
+  say "Installing DiagnuCLI app..."
+  (cd "$APP_REPO_PATH/diagnucli-electron" && ./install.sh)
+  open -a "/Applications/DiagnuCLI.app" || true
+else
+  say "DiagnuCLI installer not found at $APP_REPO_PATH/diagnucli-electron/install.sh"
+fi
