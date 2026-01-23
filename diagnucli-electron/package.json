@@ -29,7 +29,7 @@
         "to": "diagnucli"
       },
       {
-        "from": "../scripts/install-auto.sh",
+        "from": "../scripts/nucli-setup.sh",
         "to": "install-nucli.sh"
       }
     ],
