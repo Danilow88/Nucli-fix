@@ -14,6 +14,10 @@ const translations = {
   pt: {
     subtitle: "Diagnóstico interativo NuCLI + AWS + Suporte em geral",
     startButton: "Iniciar diagnóstico",
+    groupDiagTitle: "Diagnóstico NuCLI/AWS",
+    groupSetupTitle: "Setup e acessos",
+    groupMacTitle: "Manutenção do Mac",
+    groupSupportTitle: "Suporte e chamados",
     liveTitle: "Execução em tempo real",
     statusIdle: "Aguardando início. O Terminal do macOS abrirá em segundo plano.",
     hint:
@@ -127,6 +131,10 @@ const translations = {
   en: {
     subtitle: "Interactive NuCLI + AWS + General support",
     startButton: "Start diagnostics",
+    groupDiagTitle: "NuCLI/AWS diagnostics",
+    groupSetupTitle: "Setup and access",
+    groupMacTitle: "Mac maintenance",
+    groupSupportTitle: "Support and tickets",
     liveTitle: "Live execution",
     statusIdle: "Waiting to start. macOS Terminal will open in background.",
     hint:
@@ -239,6 +247,10 @@ const translations = {
   es: {
     subtitle: "Diagnóstico interactivo NuCLI + AWS + Soporte general",
     startButton: "Iniciar diagnóstico",
+    groupDiagTitle: "Diagnóstico NuCLI/AWS",
+    groupSetupTitle: "Configuración y accesos",
+    groupMacTitle: "Mantenimiento del Mac",
+    groupSupportTitle: "Soporte y tickets",
     liveTitle: "Ejecución en tiempo real",
     statusIdle: "Esperando inicio. El Terminal de macOS se abrirá en segundo plano.",
     hint:

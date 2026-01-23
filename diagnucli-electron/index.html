@@ -48,214 +48,240 @@
           <div class="status" id="statusText" data-i18n="statusIdle">
             Aguardando início. O Terminal do macOS abrirá em segundo plano.
           </div>
-          <div class="menu-grid">
-            <button class="menu-card" data-option="1" data-tooltip="opt1Tip">
-              <span class="menu-title" data-i18n="opt1Title">
-                <span class="menu-icon" aria-hidden="true">✅</span>
-                Verificação completa
-              </span>
-              <span class="menu-desc" data-i18n="opt1Desc">
-                Roda todas as verificações e gera relatório final.
-              </span>
-            </button>
-            <button class="menu-card" data-option="7" data-tooltip="opt7Tip">
-              <span class="menu-title" data-i18n="opt7Title">
-                <span class="menu-icon" aria-hidden="true">🧪</span>
-                Testar comandos NuCLI
-              </span>
-              <span class="menu-desc" data-i18n="opt7Desc">
-                Checa nu doctor, versões e comandos essenciais.
-              </span>
-            </button>
-            <button class="menu-card" data-action="install-nucli" data-tooltip="installNucliTip">
-              <span class="menu-title" data-i18n="installNucliTitle">
-                <span class="menu-icon" aria-hidden="true">🧭</span>
-                Instalar NuCLI
-              </span>
-              <span class="menu-desc" data-i18n="installNucliDesc">
-                Guia completo de acesso, SSH, brew e setup AWS.
-              </span>
-            </button>
-            <button class="menu-card" data-option="10" data-tooltip="opt10Tip">
-              <span class="menu-title" data-i18n="opt10Title">
-                <span class="menu-icon" aria-hidden="true">🧩</span>
-                Roles, escopos e países
-              </span>
-              <span class="menu-desc" data-i18n="opt10Desc">
-                Valida permissões e acessos por conta.
-              </span>
-            </button>
-            <button class="menu-card" data-option="12" data-tooltip="opt12Tip">
-              <span class="menu-title" data-i18n="opt12Title">
-                <span class="menu-icon" aria-hidden="true">📄</span>
-                Relatório consolidado
-              </span>
-              <span class="menu-desc" data-i18n="opt12Desc">
-                Gera relatório final com detalhes completos.
-              </span>
-            </button>
-            <button class="menu-card" data-option="19" data-tooltip="opt19Tip">
-              <span class="menu-title" data-i18n="opt19Title">
-                <span class="menu-icon" aria-hidden="true">🧯</span>
-                Erro br prod / Missing Groups
-              </span>
-              <span class="menu-desc" data-i18n="opt19Desc">
-                Diagnóstico guiado para grupos e roles BR.
-              </span>
-            </button>
-            <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
-              <span class="menu-title" data-i18n="opt22Title">
-                <span class="menu-icon" aria-hidden="true">🔐</span>
-                Cadastrar digital
-              </span>
-              <span class="menu-desc" data-i18n="opt22Desc">
-                Configura IAM user, Okta e FIDO/Touch ID.
-              </span>
-            </button>
-            <button class="menu-card" data-action="cache-mac" data-tooltip="cacheMacTip">
-              <span class="menu-title" data-i18n="cacheMacTitle">
-                <span class="menu-icon" aria-hidden="true">🧹</span>
-                Limpar cache do macOS
-              </span>
-              <span class="menu-desc" data-i18n="cacheMacDesc">
-                Remove caches do usuario e do sistema (pode pedir senha).
-              </span>
-            </button>
-            <button class="menu-card" data-action="cache-chrome" data-tooltip="cacheChromeTip">
-              <span class="menu-title" data-i18n="cacheChromeTitle">
-                <span class="menu-icon" aria-hidden="true">🌐</span>
-                Limpar cache do Chrome
-              </span>
-              <span class="menu-desc" data-i18n="cacheChromeDesc">
-                Fecha o Chrome e remove caches locais.
-              </span>
-            </button>
-            <button class="menu-card" data-action="update-macos" data-tooltip="macosUpdateTip">
-              <span class="menu-title" data-i18n="macosUpdateTitle">
-                <span class="menu-icon" aria-hidden="true">🍎</span>
-                Atualizar macOS
-              </span>
-              <span class="menu-desc" data-i18n="macosUpdateDesc">
-                Verifica e instala atualizacoes do sistema.
-              </span>
-            </button>
-            <button class="menu-card" data-action="manage-disk" data-tooltip="manageDiskTip">
-              <span class="menu-title" data-i18n="manageDiskTitle">
-                <span class="menu-icon" aria-hidden="true">💾</span>
-                Gerenciar espaço de HD
-              </span>
-              <span class="menu-desc" data-i18n="manageDiskDesc">
-                Abre o gerenciamento de armazenamento do macOS.
-              </span>
-            </button>
-            <button class="menu-card" data-action="optimize-performance" data-tooltip="optimizePerfTip">
-              <span class="menu-title" data-i18n="optimizePerfTitle">
-                <span class="menu-icon" aria-hidden="true">⚡️</span>
-                Melhorar performance do Mac
-              </span>
-              <span class="menu-desc" data-i18n="optimizePerfDesc">
-                Executa ajustes e limpezas para melhorar o desempenho.
-              </span>
-            </button>
-            <button class="menu-card" data-action="activity-monitor" data-tooltip="activityMonitorTip">
-              <span class="menu-title" data-i18n="activityMonitorTitle">
-                <span class="menu-icon" aria-hidden="true">📊</span>
-                Abrir Monitor de Atividades
-              </span>
-              <span class="menu-desc" data-i18n="activityMonitorDesc">
-                Abre o monitor de processos do macOS.
-              </span>
-            </button>
-            <button class="menu-card" data-action="empty-trash" data-tooltip="emptyTrashTip">
-              <span class="menu-title" data-i18n="emptyTrashTitle">
-                <span class="menu-icon" aria-hidden="true">🗑️</span>
-                Esvaziar Lixeira
-              </span>
-              <span class="menu-desc" data-i18n="emptyTrashDesc">
-                Esvazia a lixeira do Finder.
-              </span>
-            </button>
-            <button class="menu-card" data-action="open-keychain" data-tooltip="openKeychainTip">
-              <span class="menu-title" data-i18n="openKeychainTitle">
-                <span class="menu-icon" aria-hidden="true">🔑</span>
-                Abrir Keychain
-              </span>
-              <span class="menu-desc" data-i18n="openKeychainDesc">
-                Abre em login e Meus Certificados.
-              </span>
-            </button>
-            <button class="menu-card" data-action="open-mac-setup" data-tooltip="macSetupTip">
-              <span class="menu-title" data-i18n="macSetupTitle">
-                <span class="menu-icon" aria-hidden="true">🧑‍💻</span>
-                Como configurar o Mac
-              </span>
-              <span class="menu-desc" data-i18n="macSetupDesc">
-                Abre o guia no Google Chrome.
-              </span>
-            </button>
-            <button class="menu-card" data-action="open-itenge-mfa-reset" data-tooltip="mfaResetTip">
-              <span class="menu-title" data-i18n="mfaResetTitle">
-                <span class="menu-icon" aria-hidden="true">🛡️</span>
-                Resetar MFA (Okta)
-              </span>
-              <span class="menu-desc" data-i18n="mfaResetDesc">
-                Abre o ITEng Self Service em Reset my MFA.
-              </span>
-            </button>
-            <button class="menu-card" data-action="open-itenge-password-change" data-tooltip="passwordChangeTip">
-              <span class="menu-title" data-i18n="passwordChangeTitle">
-                <span class="menu-icon" aria-hidden="true">🔑</span>
-                Trocar senha (Okta)
-              </span>
-              <span class="menu-desc" data-i18n="passwordChangeDesc">
-                Abre o ITEng Self Service em Change my password.
-              </span>
-            </button>
-            <button class="menu-card" data-action="restart-vpn" data-tooltip="restartVpnTip">
-              <span class="menu-title" data-i18n="restartVpnTitle">
-                <span class="menu-icon" aria-hidden="true">🛡️</span>
-                Reiniciar VPN (Zscaler)
-              </span>
-              <span class="menu-desc" data-i18n="restartVpnDesc">
-                Fecha e reabre o Zscaler.app.
-              </span>
-            </button>
-            <button class="menu-card" id="openRovo" data-tooltip="rovoTip">
-              <span class="menu-title" data-i18n="rovoTitle">
-                <span class="menu-icon" aria-hidden="true">💬</span>
-                Abrir Rovo (Suporte)
-              </span>
-              <span class="menu-desc" data-i18n="rovoDesc">
-                Abre o chat no Google Chrome (usa login do navegador).
-              </span>
-            </button>
-            <button class="menu-card" id="openSupport" data-tooltip="supportTip">
-              <span class="menu-title" data-i18n="supportTitle">
-                <span class="menu-icon" aria-hidden="true">🎫</span>
-                Abrir chamado (Suporte)
-              </span>
-              <span class="menu-desc" data-i18n="supportDesc">
-                Abre o portal de chamados da Nubank no Chrome.
-              </span>
-            </button>
-            <button class="menu-card" data-action="request-laptop" data-tooltip="requestLaptopTip">
-              <span class="menu-title" data-i18n="requestLaptopTitle">
-                <span class="menu-icon" aria-hidden="true">💻</span>
-                Pedir troca de laptop
-              </span>
-              <span class="menu-desc" data-i18n="requestLaptopDesc">
-                Abre o formulário no Google Chrome.
-              </span>
-            </button>
-            <button class="menu-card" data-action="open-oncall" data-tooltip="oncallTip">
-              <span class="menu-title" data-i18n="oncallTitle">
-                <span class="menu-icon" aria-hidden="true">📞</span>
-                Acionar on-call 24h (home office)
-              </span>
-              <span class="menu-desc" data-i18n="oncallDesc">
-                Abre o WhatsApp para o número (11) 95185-7554.
-              </span>
-            </button>
+          <div class="menu-group">
+            <div class="menu-group-title" data-i18n="groupDiagTitle">
+              Diagnóstico NuCLI/AWS
+            </div>
+            <div class="menu-grid">
+              <button class="menu-card" data-option="1" data-tooltip="opt1Tip">
+                <span class="menu-title" data-i18n="opt1Title">
+                  <span class="menu-icon" aria-hidden="true">✅</span>
+                  Verificação completa
+                </span>
+                <span class="menu-desc" data-i18n="opt1Desc">
+                  Roda todas as verificações e gera relatório final.
+                </span>
+              </button>
+              <button class="menu-card" data-option="7" data-tooltip="opt7Tip">
+                <span class="menu-title" data-i18n="opt7Title">
+                  <span class="menu-icon" aria-hidden="true">🧪</span>
+                  Testar comandos NuCLI
+                </span>
+                <span class="menu-desc" data-i18n="opt7Desc">
+                  Checa nu doctor, versões e comandos essenciais.
+                </span>
+              </button>
+              <button class="menu-card" data-option="10" data-tooltip="opt10Tip">
+                <span class="menu-title" data-i18n="opt10Title">
+                  <span class="menu-icon" aria-hidden="true">🧩</span>
+                  Roles, escopos e países
+                </span>
+                <span class="menu-desc" data-i18n="opt10Desc">
+                  Valida permissões e acessos por conta.
+                </span>
+              </button>
+              <button class="menu-card" data-option="12" data-tooltip="opt12Tip">
+                <span class="menu-title" data-i18n="opt12Title">
+                  <span class="menu-icon" aria-hidden="true">📄</span>
+                  Relatório consolidado
+                </span>
+                <span class="menu-desc" data-i18n="opt12Desc">
+                  Gera relatório final com detalhes completos.
+                </span>
+              </button>
+              <button class="menu-card" data-option="19" data-tooltip="opt19Tip">
+                <span class="menu-title" data-i18n="opt19Title">
+                  <span class="menu-icon" aria-hidden="true">🧯</span>
+                  Erro br prod / Missing Groups
+                </span>
+                <span class="menu-desc" data-i18n="opt19Desc">
+                  Diagnóstico guiado para grupos e roles BR.
+                </span>
+              </button>
+              <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
+                <span class="menu-title" data-i18n="opt22Title">
+                  <span class="menu-icon" aria-hidden="true">🔐</span>
+                  Cadastrar digital
+                </span>
+                <span class="menu-desc" data-i18n="opt22Desc">
+                  Configura IAM user, Okta e FIDO/Touch ID.
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="menu-group">
+            <div class="menu-group-title" data-i18n="groupSetupTitle">
+              Setup e acessos
+            </div>
+            <div class="menu-grid">
+              <button class="menu-card" data-action="install-nucli" data-tooltip="installNucliTip">
+                <span class="menu-title" data-i18n="installNucliTitle">
+                  <span class="menu-icon" aria-hidden="true">🧭</span>
+                  Instalar NuCLI
+                </span>
+                <span class="menu-desc" data-i18n="installNucliDesc">
+                  Guia completo de acesso, SSH, brew e setup AWS.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-mac-setup" data-tooltip="macSetupTip">
+                <span class="menu-title" data-i18n="macSetupTitle">
+                  <span class="menu-icon" aria-hidden="true">🧑‍💻</span>
+                  Como configurar o Mac
+                </span>
+                <span class="menu-desc" data-i18n="macSetupDesc">
+                  Abre o guia no Google Chrome.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-keychain" data-tooltip="openKeychainTip">
+                <span class="menu-title" data-i18n="openKeychainTitle">
+                  <span class="menu-icon" aria-hidden="true">🔑</span>
+                  Abrir Keychain
+                </span>
+                <span class="menu-desc" data-i18n="openKeychainDesc">
+                  Abre em login e Meus Certificados.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-itenge-mfa-reset" data-tooltip="mfaResetTip">
+                <span class="menu-title" data-i18n="mfaResetTitle">
+                  <span class="menu-icon" aria-hidden="true">🛡️</span>
+                  Resetar MFA (Okta)
+                </span>
+                <span class="menu-desc" data-i18n="mfaResetDesc">
+                  Abre o ITEng Self Service em Reset my MFA.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-itenge-password-change" data-tooltip="passwordChangeTip">
+                <span class="menu-title" data-i18n="passwordChangeTitle">
+                  <span class="menu-icon" aria-hidden="true">🔑</span>
+                  Trocar senha (Okta)
+                </span>
+                <span class="menu-desc" data-i18n="passwordChangeDesc">
+                  Abre o ITEng Self Service em Change my password.
+                </span>
+              </button>
+              <button class="menu-card" data-action="restart-vpn" data-tooltip="restartVpnTip">
+                <span class="menu-title" data-i18n="restartVpnTitle">
+                  <span class="menu-icon" aria-hidden="true">🛡️</span>
+                  Reiniciar VPN (Zscaler)
+                </span>
+                <span class="menu-desc" data-i18n="restartVpnDesc">
+                  Fecha e reabre o Zscaler.app.
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="menu-group">
+            <div class="menu-group-title" data-i18n="groupMacTitle">
+              Manutenção do Mac
+            </div>
+            <div class="menu-grid">
+              <button class="menu-card" data-action="cache-mac" data-tooltip="cacheMacTip">
+                <span class="menu-title" data-i18n="cacheMacTitle">
+                  <span class="menu-icon" aria-hidden="true">🧹</span>
+                  Limpar cache do macOS
+                </span>
+                <span class="menu-desc" data-i18n="cacheMacDesc">
+                  Remove caches do usuario e do sistema (pode pedir senha).
+                </span>
+              </button>
+              <button class="menu-card" data-action="cache-chrome" data-tooltip="cacheChromeTip">
+                <span class="menu-title" data-i18n="cacheChromeTitle">
+                  <span class="menu-icon" aria-hidden="true">🌐</span>
+                  Limpar cache do Chrome
+                </span>
+                <span class="menu-desc" data-i18n="cacheChromeDesc">
+                  Fecha o Chrome e remove caches locais.
+                </span>
+              </button>
+              <button class="menu-card" data-action="update-macos" data-tooltip="macosUpdateTip">
+                <span class="menu-title" data-i18n="macosUpdateTitle">
+                  <span class="menu-icon" aria-hidden="true">🍎</span>
+                  Atualizar macOS
+                </span>
+                <span class="menu-desc" data-i18n="macosUpdateDesc">
+                  Verifica e instala atualizacoes do sistema.
+                </span>
+              </button>
+              <button class="menu-card" data-action="manage-disk" data-tooltip="manageDiskTip">
+                <span class="menu-title" data-i18n="manageDiskTitle">
+                  <span class="menu-icon" aria-hidden="true">💾</span>
+                  Gerenciar espaço de HD
+                </span>
+                <span class="menu-desc" data-i18n="manageDiskDesc">
+                  Abre o gerenciamento de armazenamento do macOS.
+                </span>
+              </button>
+              <button class="menu-card" data-action="optimize-performance" data-tooltip="optimizePerfTip">
+                <span class="menu-title" data-i18n="optimizePerfTitle">
+                  <span class="menu-icon" aria-hidden="true">⚡️</span>
+                  Melhorar performance do Mac
+                </span>
+                <span class="menu-desc" data-i18n="optimizePerfDesc">
+                  Executa ajustes e limpezas para melhorar o desempenho.
+                </span>
+              </button>
+              <button class="menu-card" data-action="activity-monitor" data-tooltip="activityMonitorTip">
+                <span class="menu-title" data-i18n="activityMonitorTitle">
+                  <span class="menu-icon" aria-hidden="true">📊</span>
+                  Abrir Monitor de Atividades
+                </span>
+                <span class="menu-desc" data-i18n="activityMonitorDesc">
+                  Abre o monitor de processos do macOS.
+                </span>
+              </button>
+              <button class="menu-card" data-action="empty-trash" data-tooltip="emptyTrashTip">
+                <span class="menu-title" data-i18n="emptyTrashTitle">
+                  <span class="menu-icon" aria-hidden="true">🗑️</span>
+                  Esvaziar Lixeira
+                </span>
+                <span class="menu-desc" data-i18n="emptyTrashDesc">
+                  Esvazia a lixeira do Finder.
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="menu-group">
+            <div class="menu-group-title" data-i18n="groupSupportTitle">
+              Suporte e chamados
+            </div>
+            <div class="menu-grid">
+              <button class="menu-card" id="openRovo" data-tooltip="rovoTip">
+                <span class="menu-title" data-i18n="rovoTitle">
+                  <span class="menu-icon" aria-hidden="true">💬</span>
+                  Abrir Rovo (Suporte)
+                </span>
+                <span class="menu-desc" data-i18n="rovoDesc">
+                  Abre o chat no Google Chrome (usa login do navegador).
+                </span>
+              </button>
+              <button class="menu-card" id="openSupport" data-tooltip="supportTip">
+                <span class="menu-title" data-i18n="supportTitle">
+                  <span class="menu-icon" aria-hidden="true">🎫</span>
+                  Abrir chamado (Suporte)
+                </span>
+                <span class="menu-desc" data-i18n="supportDesc">
+                  Abre o portal de chamados da Nubank no Chrome.
+                </span>
+              </button>
+              <button class="menu-card" data-action="request-laptop" data-tooltip="requestLaptopTip">
+                <span class="menu-title" data-i18n="requestLaptopTitle">
+                  <span class="menu-icon" aria-hidden="true">💻</span>
+                  Pedir troca de laptop
+                </span>
+                <span class="menu-desc" data-i18n="requestLaptopDesc">
+                  Abre o formulário no Google Chrome.
+                </span>
+              </button>
+              <button class="menu-card" data-action="open-oncall" data-tooltip="oncallTip">
+                <span class="menu-title" data-i18n="oncallTitle">
+                  <span class="menu-icon" aria-hidden="true">📞</span>
+                  Acionar on-call 24h (home office)
+                </span>
+                <span class="menu-desc" data-i18n="oncallDesc">
+                  Abre o WhatsApp para o número (11) 95185-7554.
+                </span>
+              </button>
+            </div>
           </div>
           <div class="terminal-input">
             <div class="terminal-label" data-i18n="setupHelpTitle">
