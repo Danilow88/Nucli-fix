@@ -27,6 +27,10 @@
       {
         "from": "../diagnucli",
         "to": "diagnucli"
+      },
+      {
+        "from": "../scripts/install-auto.sh",
+        "to": "install-nucli.sh"
       }
     ],
     "mac": {

@@ -23,6 +23,8 @@ const translations = {
     opt1Desc: "Roda todas as verificações e gera relatório final.",
     opt7Title: "Testar comandos NuCLI",
     opt7Desc: "Checa nu doctor, versões e comandos essenciais.",
+    installNucliTitle: "Instalar NuCLI",
+    installNucliDesc: "Guia automático para SSH, brew e setup inicial.",
     opt10Title: "Roles, escopos e países",
     opt10Desc: "Valida permissões e acessos por conta.",
     opt12Title: "Relatório consolidado",
@@ -78,6 +80,8 @@ const translations = {
     opt1Desc: "Runs all checks and generates the final report.",
     opt7Title: "Test NuCLI commands",
     opt7Desc: "Runs nu doctor, versions and key commands.",
+    installNucliTitle: "Install NuCLI",
+    installNucliDesc: "Guided setup for SSH, brew, and initial config.",
     opt10Title: "Roles, scopes and countries",
     opt10Desc: "Validates permissions per account.",
     opt12Title: "Consolidated report",
@@ -214,6 +218,7 @@ const sendTerminalText = async () => {
 };
 
 const actionLabels = {
+  "install-nucli": "NuCLI installer",
   "cache-mac": "macOS cache cleanup",
   "cache-chrome": "Chrome cache cleanup",
   "update-app": "DiagnuCLI app update",
@@ -225,7 +230,11 @@ const sendAction = async (actionId) => {
   if (!label) {
     return;
   }
-  await window.diagnucli.runAction(actionId);
+  if (actionId === "install-nucli") {
+    await window.diagnucli.installNucli();
+  } else {
+    await window.diagnucli.runAction(actionId);
+  }
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
 

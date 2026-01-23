@@ -15,6 +15,9 @@ const SCRIPT_PATH = process.env.DIAGNUCLI_PATH || DEFAULT_SCRIPT_PATH;
 const DEFAULT_REPO_PATH = path.join(os.homedir(), "Nucli-fix");
 const REPO_PATH = process.env.DIAGNUCLI_REPO_PATH || DEFAULT_REPO_PATH;
 const LOG_PATH = path.join(app.getPath("userData"), "diagnucli.log");
+const INSTALLER_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, "install-nucli.sh")
+  : path.join(__dirname, "..", "scripts", "install-auto.sh");
 const ROVO_URL =
   "https://home.atlassian.com/o/2c2ebb29-8407-4659-a7d0-69bbf5b745ce/chat?rovoChatPathway=chat&rovoChatCloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9&rovoChatAgentId=01c47565-9fcc-4e41-8db8-2706b4631f9f&cloudId=c43390d3-e5f8-43ca-9eec-c382a5220bd9";
 const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/131";
@@ -161,6 +164,35 @@ ipcMain.handle("send-choice", (_event, choice) => {
 
 ipcMain.handle("send-text", (_event, text, pressEnter = false) => {
   sendTextToTerminal(text, pressEnter);
+  return { ok: true };
+});
+
+function runNucliInstaller() {
+  const exists = fs.existsSync(INSTALLER_PATH);
+  fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
+  if (!fs.existsSync(LOG_PATH)) {
+    fs.writeFileSync(LOG_PATH, "");
+  }
+
+  startLogTail();
+
+  const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
+  const runCommand = exists
+    ? `bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`
+    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${closeTerminal}`;
+
+  const escaped = escapeAppleScript(runCommand);
+  const osa = [
+    'tell application "Terminal" to activate',
+    `tell application "Terminal" to do script "${escaped}"`
+  ];
+
+  spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
+  sendStatus({ installerStarted: true, installerPath: INSTALLER_PATH, exists });
+}
+
+ipcMain.handle("install-nucli", () => {
+  runNucliInstaller();
   return { ok: true };
 });
 
