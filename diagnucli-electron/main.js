@@ -412,7 +412,7 @@ function attachProcessOutput(proc) {
 function runBackgroundCommand(command, options = {}) {
   ensureLogFile();
   startLogTail();
-  const proc = spawn("script", ["-q", "/dev/null", "bash", "-lc", command], {
+  const proc = spawn("bash", ["-lc", command], {
     cwd: options.cwd || os.homedir(),
     env: { ...process.env, ...options.env },
     stdio: ["pipe", "pipe", "pipe"]
@@ -460,10 +460,8 @@ function startRun() {
     DIAGNUCLI_LOG_PATH: LOG_PATH
   };
   logLine(`[DiagnuCLI] Background run started: ${SCRIPT_PATH}`);
-  activeProcess = runBackgroundCommand(`"${SCRIPT_PATH}"`, {
-    env
-  });
-    sendStatus({ terminalStarted: true });
+  activeProcess = runBackgroundCommand(`"${SCRIPT_PATH}"`, { env });
+  sendStatus({ terminalStarted: true });
 }
 
 ipcMain.handle("start-run", () => {
