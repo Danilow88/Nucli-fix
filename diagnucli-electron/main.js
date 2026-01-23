@@ -411,21 +411,18 @@ function startRun() {
 
   startLogTail();
 
-  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
   const runCommand = exists
     ? `TERM=xterm-256color JAVA_TOOL_OPTIONS="--enable-native-access=ALL-UNNAMED" ` +
-      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"; ${minimizeTerminal}`
-    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`;
+      `DIAGNUCLI_LOG_PATH="${LOG_PATH}" /usr/bin/script -q -a "${LOG_PATH}" bash "${SCRIPT_PATH}"`
+    : `echo "Script not found: ${SCRIPT_PATH}" | tee -a "${LOG_PATH}"`;
 
   const escaped = escapeAppleScript(runCommand);
   const osa = [
     'tell application "Terminal" to activate',
-    `tell application "Terminal" to do script "${escaped}"`,
-    `delay 0.2`,
-    `tell application "Terminal" to set miniaturized of front window to true`
+    `tell application "Terminal" to do script "${escaped}"`
   ];
 
-  const osaProc = spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
+  const osaProc = spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
   osaProc.on("exit", () => {
     sendStatus({ terminalStarted: true });
   });
@@ -440,7 +437,6 @@ function sendTextToTerminal(text, pressEnter = false) {
   const escapedText = escapeAppleScript(String(text));
   const osa = [
     'tell application "Terminal" to activate',
-    'tell application "Terminal" to set miniaturized of front window to false',
     'tell application "System Events" to tell process "Terminal" to set frontmost to true',
     "delay 0.4",
     'tell application "System Events" to tell process "Terminal" to try',
@@ -454,8 +450,6 @@ function sendTextToTerminal(text, pressEnter = false) {
       'tell application "System Events" to tell process "Terminal" to key code 36'
     );
   }
-  osa.push('delay 0.3');
-  osa.push('tell application "Terminal" to set miniaturized of front window to true');
   spawn("osascript", osa.flatMap((line) => ["-e", line]));
 }
 
@@ -485,20 +479,17 @@ function runNucliInstaller(lang = "pt") {
   openGuideInChrome(lang);
   startLogTail();
 
-  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
   const runCommand = exists
-    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`
-    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"; ${minimizeTerminal}`;
+    ? `LANG_UI="${lang}" bash "${INSTALLER_PATH}" | tee -a "${LOG_PATH}"`
+    : `echo "Installer not found: ${INSTALLER_PATH}" | tee -a "${LOG_PATH}"`;
 
   const escaped = escapeAppleScript(runCommand);
   const osa = [
     'tell application "Terminal" to activate',
-    `tell application "Terminal" to do script "${escaped}"`,
-    `delay 0.2`,
-    `tell application "Terminal" to set miniaturized of front window to true`
+    `tell application "Terminal" to do script "${escaped}"`
   ];
 
-  spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
+  spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
   sendStatus({ installerStarted: true, installerPath: INSTALLER_PATH, exists });
 }
 
@@ -726,16 +717,13 @@ function runMaintenanceAction(actionId) {
   startLogTail();
 
   logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
-  const minimizeTerminal = `osascript -e 'tell application "Terminal" to set miniaturized of front window to true'`;
-  const command = `(${action.buildCommand()}; ${minimizeTerminal}) | tee -a "${LOG_PATH}"`;
+  const command = `${action.buildCommand()} | tee -a "${LOG_PATH}"`;
   const escaped = escapeAppleScript(command);
   const osa = [
     'tell application "Terminal" to activate',
-    `tell application "Terminal" to do script "${escaped}"`,
-    `delay 0.2`,
-    `tell application "Terminal" to set miniaturized of front window to true`
+    `tell application "Terminal" to do script "${escaped}"`
   ];
-  spawn("osascript", ["-e", osa[0], "-e", osa[1], "-e", osa[2], "-e", osa[3]]);
+  spawn("osascript", ["-e", osa[0], "-e", osa[1]]);
   sendStatus({ actionStarted: action.label });
   return { ok: true };
 }

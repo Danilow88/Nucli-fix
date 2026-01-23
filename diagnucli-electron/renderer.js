@@ -20,8 +20,8 @@ const translations = {
     groupMacTitle: "Manutenção do Mac",
     groupSupportTitle: "Suporte e chamados",
     liveTitle: "Execução em tempo real",
-    statusIdle: "Aguardando início. O Terminal do macOS abrirá minimizado.",
-    hint: "O Terminal ficará minimizado; acompanhe os comandos aqui.",
+    statusIdle: "Aguardando início. O Terminal do macOS abrirá.",
+    hint: "O Terminal ficará aberto; acompanhe os comandos aqui.",
     opt1Title: "Verificação completa - setup NuCLI AWS",
     opt1Desc: "Executa todos os checks do NuCLI/AWS e gera relatório.",
     opt7Title: "Testar comandos NuCLI",
@@ -120,7 +120,7 @@ const translations = {
     ],
     guideTitle: "Orientações rápidas",
     guideList: [
-      "O Terminal fica minimizado enquanto os comandos rodam.",
+      "O Terminal fica aberto enquanto os comandos rodam.",
       "Se pedir MFA, confirme no Okta ou Touch ID.",
       "Permita acesso de Acessibilidade caso solicitado.",
       "Feche o Google Chrome antes de limpar o cache."
@@ -141,8 +141,8 @@ const translations = {
     groupMacTitle: "Mac maintenance",
     groupSupportTitle: "Support and tickets",
     liveTitle: "Live execution",
-    statusIdle: "Waiting to start. macOS Terminal will open minimized.",
-    hint: "Terminal stays minimized; follow the commands here.",
+    statusIdle: "Waiting to start. macOS Terminal will open.",
+    hint: "Terminal stays open; follow the commands here.",
     opt1Title: "Full verification - NuCLI AWS setup",
     opt1Desc: "Runs all NuCLI/AWS checks and generates the report.",
     opt7Title: "Test NuCLI commands",
@@ -240,7 +240,7 @@ const translations = {
     ],
     guideTitle: "Quick guidance",
     guideList: [
-      "Terminal stays minimized while commands run.",
+      "Terminal stays open while commands run.",
       "If MFA is requested, approve in Okta or Touch ID.",
       "Allow Accessibility access if prompted.",
       "Close Google Chrome before clearing cache."
@@ -261,8 +261,8 @@ const translations = {
     groupMacTitle: "Mantenimiento del Mac",
     groupSupportTitle: "Soporte y tickets",
     liveTitle: "Ejecución en tiempo real",
-    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá minimizado.",
-    hint: "El Terminal quedará minimizado; siga los comandos aquí.",
+    statusIdle: "Esperando inicio. El Terminal de macOS se abrirá.",
+    hint: "El Terminal quedará abierto; siga los comandos aquí.",
     opt1Title: "Verificación completa - setup NuCLI AWS",
     opt1Desc: "Ejecuta todos los checks de NuCLI/AWS y genera el informe.",
     opt7Title: "Probar comandos NuCLI",
@@ -360,7 +360,7 @@ const translations = {
     ],
     guideTitle: "Orientaciones rápidas",
     guideList: [
-      "El Terminal queda minimizado mientras se ejecutan los comandos.",
+      "El Terminal queda abierto mientras se ejecutan los comandos.",
       "Si pide MFA, confirme en Okta o Touch ID.",
       "Permita acceso de Accesibilidad si se solicita.",
       "Cierre Google Chrome antes de limpiar la caché."
