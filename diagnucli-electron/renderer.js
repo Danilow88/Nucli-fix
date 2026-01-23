@@ -38,6 +38,9 @@ const translations = {
     cacheChromeDesc: "Fecha o Chrome e remove caches locais.",
     updateTitle: "Atualizar o app",
     updateDesc: "Baixa a ultima versao do Git e reinstala.",
+    updateHeader: "Atualizar app",
+    logTitle: "Logs do Terminal",
+    clearLogButton: "Limpar logs",
     macosUpdateTitle: "Atualizar macOS",
     macosUpdateDesc: "Verifica e instala atualizacoes do sistema.",
     manageDiskTitle: "Gerenciar espaço de HD",
@@ -114,6 +117,9 @@ const translations = {
     cacheChromeDesc: "Quits Chrome and removes local caches.",
     updateTitle: "Update app",
     updateDesc: "Pulls latest Git version and reinstalls.",
+    updateHeader: "Update app",
+    logTitle: "Terminal logs",
+    clearLogButton: "Clear logs",
     macosUpdateTitle: "Update macOS",
     macosUpdateDesc: "Checks and installs system updates.",
     manageDiskTitle: "Manage disk space",
@@ -189,6 +195,9 @@ const translations = {
     cacheChromeDesc: "Cierra Chrome y elimina cachés locales.",
     updateTitle: "Actualizar app",
     updateDesc: "Descarga la última versión de Git y reinstala.",
+    updateHeader: "Actualizar app",
+    logTitle: "Registros del Terminal",
+    clearLogButton: "Limpiar logs",
     macosUpdateTitle: "Actualizar macOS",
     macosUpdateDesc: "Verifica e instala actualizaciones del sistema.",
     manageDiskTitle: "Administrar espacio en disco",
@@ -332,7 +341,8 @@ const actionLabels = {
   "open-mac-setup": "Open Mac setup guide",
   "exit-app": "Exit app",
   "request-laptop": "Request laptop replacement",
-  "open-oncall": "Open WhatsApp on-call"
+  "open-oncall": "Open WhatsApp on-call",
+  "clear-log": "Clear logs"
 };
 
 const sendAction = async (actionId) => {
@@ -344,6 +354,10 @@ const sendAction = async (actionId) => {
     await window.diagnucli.installNucli(currentLang);
   } else if (actionId === "exit-app") {
     await window.diagnucli.exitApp();
+    return;
+  } else if (actionId === "clear-log") {
+    logOutput.textContent = "";
+    await window.diagnucli.clearLog();
     return;
   } else {
     await window.diagnucli.runAction(actionId);

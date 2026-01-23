@@ -20,12 +20,16 @@
             <p data-i18n="subtitle">Diagnóstico interativo NuCLI + AWS</p>
           </div>
         </div>
-        <div class="controls">
+          <div class="controls">
           <div class="lang-toggle">
             <button class="lang-btn" data-lang="pt">PT-BR</button>
             <button class="lang-btn" data-lang="en">EN</button>
             <button class="lang-btn" data-lang="es">ES</button>
           </div>
+            <button class="control-action" data-action="update-app" data-i18n="updateHeader">
+              <span class="menu-icon" aria-hidden="true">🔄</span>
+              Atualizar app
+            </button>
           <button id="startButton" data-i18n="startButton">
             <span class="menu-icon" aria-hidden="true">🚀</span>
             Iniciar diagnóstico
@@ -121,15 +125,6 @@
               </span>
               <span class="menu-desc" data-i18n="cacheChromeDesc">
                 Fecha o Chrome e remove caches locais.
-              </span>
-            </button>
-            <button class="menu-card" data-action="update-app">
-              <span class="menu-title" data-i18n="updateTitle">
-                <span class="menu-icon" aria-hidden="true">⬇️</span>
-                Atualizar o app
-              </span>
-              <span class="menu-desc" data-i18n="updateDesc">
-                Baixa a ultima versao do Git e reinstala.
               </span>
             </button>
             <button class="menu-card" data-action="update-macos">
@@ -254,6 +249,13 @@
             <div class="terminal-hint" data-i18n="setupHelpHint">
               Clique para abrir o canal e pedir ajuda.
             </div>
+          </div>
+          <div class="log-toolbar">
+            <div class="log-title" data-i18n="logTitle">Logs do Terminal</div>
+            <button class="log-clear" data-action="clear-log" data-i18n="clearLogButton">
+              <span class="menu-icon" aria-hidden="true">🧽</span>
+              Limpar logs
+            </button>
           </div>
           <div class="log" id="logOutput"></div>
           <div class="hint" data-i18n="hint">

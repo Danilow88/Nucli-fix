@@ -576,6 +576,15 @@ ipcMain.handle("exit-app", () => {
   return { ok: true };
 });
 
+ipcMain.handle("clear-log", () => {
+  ensureLogFile();
+  fs.writeFileSync(LOG_PATH, "");
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("run-log", "");
+  }
+  return { ok: true };
+});
+
 ipcMain.handle("rovo-send-text", (_event, text) => {
   if (!text) {
     return { ok: false, reason: "empty" };
