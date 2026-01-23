@@ -50,6 +50,8 @@ const translations = {
     openKeychainDesc: "Abre em login e Meus Certificados. Clique em Acesso às Chaves.",
     resetGeneralTitle: "Resetar configurações gerais",
     resetGeneralDesc: "Abre a área de redefinições do macOS.",
+    exitAppTitle: "Sair do app",
+    exitAppDesc: "Fecha o DiagnuCLI imediatamente.",
     rovoTitle: "Abrir Rovo (Suporte)",
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
@@ -118,6 +120,8 @@ const translations = {
     openKeychainDesc: "Opens Login and My Certificates. Click Keychain Access.",
     resetGeneralTitle: "Reset general settings",
     resetGeneralDesc: "Opens the macOS reset area.",
+    exitAppTitle: "Exit app",
+    exitAppDesc: "Closes DiagnuCLI immediately.",
     rovoTitle: "Open Rovo (Support)",
     rovoDesc: "Opens chat in Google Chrome (uses browser login).",
     supportTitle: "Open ticket (Support)",
@@ -185,6 +189,8 @@ const translations = {
     openKeychainDesc: "Abre en login y Mis Certificados. Haz clic en Acceso a Llaveros.",
     resetGeneralTitle: "Restablecer ajustes generales",
     resetGeneralDesc: "Abre el área de restablecimiento de macOS.",
+    exitAppTitle: "Salir de la app",
+    exitAppDesc: "Cierra DiagnuCLI inmediatamente.",
     rovoTitle: "Abrir Rovo (Soporte)",
     rovoDesc: "Abre el chat en Google Chrome (usa login del navegador).",
     supportTitle: "Abrir ticket (Soporte)",
@@ -303,7 +309,8 @@ const actionLabels = {
   "activity-monitor": "Open Activity Monitor",
   "empty-trash": "Empty Trash",
   "open-keychain": "Open Keychain",
-  "reset-general": "Reset general settings"
+  "reset-general": "Reset general settings",
+  "exit-app": "Exit app"
 };
 
 const sendAction = async (actionId) => {
@@ -313,6 +320,9 @@ const sendAction = async (actionId) => {
   }
   if (actionId === "install-nucli") {
     await window.diagnucli.installNucli(currentLang);
+  } else if (actionId === "exit-app") {
+    await window.diagnucli.exitApp();
+    return;
   } else {
     await window.diagnucli.runAction(actionId);
   }

@@ -473,6 +473,11 @@ ipcMain.handle("open-setup-help", () => {
   return { ok: true, url: SETUP_HELP_URL };
 });
 
+ipcMain.handle("exit-app", () => {
+  app.quit();
+  return { ok: true };
+});
+
 ipcMain.handle("rovo-send-text", (_event, text) => {
   if (!text) {
     return { ok: false, reason: "empty" };

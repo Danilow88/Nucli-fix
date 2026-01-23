@@ -14,5 +14,6 @@ contextBridge.exposeInMainWorld("diagnucli", {
   openSupport: () => ipcRenderer.invoke("open-support"),
   openSetupHelp: () => ipcRenderer.invoke("open-setup-help"),
   sendToRovo: (text) => ipcRenderer.invoke("rovo-send-text", text),
-  openMicPermissions: () => ipcRenderer.invoke("open-mic-permissions")
+  openMicPermissions: () => ipcRenderer.invoke("open-mic-permissions"),
+  exitApp: () => ipcRenderer.invoke("exit-app")
 });
