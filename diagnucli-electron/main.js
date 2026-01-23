@@ -111,6 +111,22 @@ function openMacSetupInChrome() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openITEngSelfServiceAndClick(targetLabel) {
+  const osa = `
+    tell application "ITEng Self Service" to activate
+    delay 0.6
+    tell application "System Events"
+      tell process "ITEng Self Service"
+        set frontmost to true
+        try
+          click button "${targetLabel}" of window 1
+        end try
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openLaptopRequestInChrome() {
   const osa = `
     set laptopUrl to "${LAPTOP_REQUEST_URL}"
@@ -480,6 +496,20 @@ const MAINTENANCE_ACTIONS = {
     detail: "Abre o guia de configuração do Mac no Chrome.",
     runDirect: () => {
       openMacSetupInChrome();
+    }
+  },
+  "open-itenge-mfa-reset": {
+    label: "Open ITEng MFA reset",
+    detail: "Abre ITEng Self Service e seleciona Reset my MFA.",
+    runDirect: () => {
+      openITEngSelfServiceAndClick("Reset my MFA");
+    }
+  },
+  "open-itenge-password-change": {
+    label: "Open ITEng password change",
+    detail: "Abre ITEng Self Service e seleciona Change my password.",
+    runDirect: () => {
+      openITEngSelfServiceAndClick("Change my password");
     }
   },
   "open-oncall": {
