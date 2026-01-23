@@ -7,6 +7,8 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
+let pendingChoice = null;
+let pendingChoiceSent = false;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -361,8 +363,22 @@ function startLogTail() {
   });
 
   tailProcess.stdout.on("data", (data) => {
+    const text = data.toString();
     if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.webContents.send("run-log", data.toString());
+      mainWindow.webContents.send("run-log", text);
+    }
+    if (pendingChoice && !pendingChoiceSent) {
+      const promptMatches = [
+        "Escolha uma opção",
+        "Choose an option",
+        "Select an option",
+        "Enter your choice"
+      ];
+      if (promptMatches.some((match) => text.includes(match))) {
+        sendTextToTerminal(pendingChoice, true);
+        pendingChoiceSent = true;
+        logLine(`[DiagnuCLI] Menu option auto-sent on prompt: ${pendingChoice}`);
+      }
     }
   });
 
@@ -380,6 +396,8 @@ function startRun() {
     return;
   }
   runStarted = true;
+  pendingChoice = null;
+  pendingChoiceSent = false;
 
   const exists = fs.existsSync(SCRIPT_PATH);
   fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
@@ -442,7 +460,16 @@ function sendTextToTerminal(text, pressEnter = false) {
 }
 
 ipcMain.handle("send-choice", (_event, choice) => {
-  sendTextToTerminal(`${choice}`, true);
+  pendingChoice = `${choice}`;
+  pendingChoiceSent = false;
+  setTimeout(() => {
+    if (!pendingChoice || pendingChoiceSent) {
+      return;
+    }
+    sendTextToTerminal(pendingChoice, true);
+    pendingChoiceSent = true;
+    logLine(`[DiagnuCLI] Menu option sent (delayed): ${pendingChoice}`);
+  }, 2000);
   return { ok: true };
 });
 
