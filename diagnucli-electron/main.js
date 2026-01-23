@@ -24,6 +24,7 @@ const SUPPORT_URL = "https://nubank.atlassian.net/servicedesk/customer/portal/13
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
+const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
@@ -87,7 +88,11 @@ function openSupportInChrome() {
 }
 
 function openSetupHelpInChrome() {
-  spawn("open", ["-a", "Slack", SETUP_HELP_URL]);
+  const slackDeepLink = `slack://channel?id=${SETUP_HELP_CHANNEL_ID}`;
+  spawn("open", ["-a", "Slack", slackDeepLink]);
+  setTimeout(() => {
+    spawn("open", [SETUP_HELP_URL]);
+  }, 1000);
 }
 
 function openGuideInChrome(lang) {
