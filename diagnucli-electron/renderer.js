@@ -18,7 +18,7 @@ const translations = {
     statusIdle: "Aguardando início. O Terminal do macOS abrirá em segundo plano.",
     hint:
       "Digite e responda no Terminal do macOS. Aqui você acompanha os comandos sendo executados.",
-    opt1Title: "Verificação completa",
+    opt1Title: "Verificação completa - setup NuCLI AWS",
     opt1Desc: "Roda todas as verificações e gera relatório final.",
     opt7Title: "Testar comandos NuCLI",
     opt7Desc: "Checa nu doctor, versões e comandos essenciais.",
@@ -96,7 +96,7 @@ const translations = {
     statusIdle: "Waiting to start. macOS Terminal will open in background.",
     hint:
       "Type and answer in macOS Terminal. Here you follow commands as they run.",
-    opt1Title: "Full verification",
+    opt1Title: "Full verification - NuCLI AWS setup",
     opt1Desc: "Runs all checks and generates the final report.",
     opt7Title: "Test NuCLI commands",
     opt7Desc: "Runs nu doctor, versions and key commands.",
@@ -173,7 +173,7 @@ const translations = {
     statusIdle: "Esperando inicio. El Terminal de macOS se abrirá en segundo plano.",
     hint:
       "Escriba y responda en el Terminal de macOS. Aquí seguirá los comandos en ejecución.",
-    opt1Title: "Verificación completa",
+    opt1Title: "Verificación completa - setup NuCLI AWS",
     opt1Desc: "Ejecuta todas las verificaciones y genera el informe final.",
     opt7Title: "Probar comandos NuCLI",
     opt7Desc: "Ejecuta nu doctor, versiones y comandos clave.",
