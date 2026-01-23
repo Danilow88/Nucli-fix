@@ -185,6 +185,22 @@ function sendStatus(payload) {
   }
 }
 
+function ensureLogFile() {
+  fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
+  if (!fs.existsSync(LOG_PATH)) {
+    fs.writeFileSync(LOG_PATH, "");
+  }
+}
+
+function logLine(message) {
+  ensureLogFile();
+  const line = `${message}\n`;
+  fs.appendFileSync(LOG_PATH, line);
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.webContents.send("run-log", line);
+  }
+}
+
 function escapeAppleScript(value) {
   return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
@@ -278,10 +294,7 @@ ipcMain.handle("send-text", (_event, text, pressEnter = false) => {
 
 function runNucliInstaller(lang = "pt") {
   const exists = fs.existsSync(INSTALLER_PATH);
-  fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
-  if (!fs.existsSync(LOG_PATH)) {
-    fs.writeFileSync(LOG_PATH, "");
-  }
+  ensureLogFile();
 
   openGuideInChrome(lang);
   startLogTail();
@@ -309,6 +322,7 @@ ipcMain.handle("install-nucli", (_event, lang) => {
 const MAINTENANCE_ACTIONS = {
   "cache-mac": {
     label: "macOS cache cleanup",
+    detail: "Remove caches em ~/Library/Caches e /Library/Caches.",
     buildCommand: () => {
       const home = os.homedir();
       return [
@@ -321,6 +335,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "cache-chrome": {
     label: "Chrome cache cleanup",
+    detail: "Fecha o Chrome e remove cache e cookies locais.",
     buildCommand: () => {
       const home = os.homedir();
       const chromeBase = path.join(
@@ -355,6 +370,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "update-app": {
     label: "DiagnuCLI app update",
+    detail: "Atualiza repo, roda install.sh e reinicia o app.",
     buildCommand: () => {
       const repo = REPO_PATH;
       const electronDir = path.join(repo, "diagnucli-electron");
@@ -377,6 +393,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "update-macos": {
     label: "macOS update",
+    detail: "Executa softwareupdate com todas as atualizações.",
     buildCommand: () => {
       return [
         `echo "[DiagnuCLI] macOS update started"`,
@@ -387,6 +404,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "manage-disk": {
     label: "Manage disk space",
+    detail: "Abre o Spotlight e pesquisa por Armazenamento.",
     runDirect: () => {
       const osa = `
         tell application "System Events"
@@ -402,24 +420,28 @@ const MAINTENANCE_ACTIONS = {
   },
   "activity-monitor": {
     label: "Open Activity Monitor",
+    detail: "Abre o Activity Monitor.",
     runDirect: () => {
       spawn("open", ["-a", "Activity Monitor"]);
     }
   },
   "empty-trash": {
     label: "Empty Trash",
+    detail: "Esvazia a Lixeira do Finder.",
     runDirect: () => {
       spawn("osascript", ["-e", 'tell application "Finder" to empty the trash']);
     }
   },
   "open-keychain": {
     label: "Open Keychain",
+    detail: "Abre Keychain e seleciona login/Meus Certificados.",
     runDirect: () => {
       openKeychainMyCertificates();
     }
   },
   "reset-general": {
     label: "Reset general settings",
+    detail: "Abre Configurações > Geral > Transferir ou Redefinir.",
     runDirect: () => {
       spawn("open", ["x-apple.systempreferences:com.apple.SystemSettings?pane=General"]);
       setTimeout(() => {
@@ -431,6 +453,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "open-oncall": {
     label: "Open WhatsApp on-call",
+    detail: "Abre o WhatsApp para +55 11 95185-7554.",
     runDirect: () => {
       spawn("open", ["-a", "WhatsApp", ONCALL_WHATSAPP_URL]);
       setTimeout(() => {
@@ -440,6 +463,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "optimize-performance": {
     label: "Optimize macOS performance",
+    detail: "Executa o script optimize-performance.sh.",
     buildCommand: () => {
       return [
         `echo "[DiagnuCLI] Performance tune started"`,
@@ -458,20 +482,19 @@ function runMaintenanceAction(actionId) {
   }
 
   if (action.runDirect) {
+    logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
     action.runDirect();
     sendStatus({ actionStarted: action.label });
     return { ok: true };
   }
 
-  fs.mkdirSync(path.dirname(LOG_PATH), { recursive: true });
-  if (!fs.existsSync(LOG_PATH)) {
-    fs.writeFileSync(LOG_PATH, "");
-  }
+  ensureLogFile();
 
   startLogTail();
 
   const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
   const command = `(${action.buildCommand()}; ${closeTerminal}) | tee -a "${LOG_PATH}"`;
+  logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
   const escaped = escapeAppleScript(command);
   const osa = [
     'tell application "Terminal" to activate',
@@ -487,16 +510,19 @@ ipcMain.handle("run-action", (_event, actionId) => {
 });
 
 ipcMain.handle("open-rovo", () => {
+  logLine(`[DiagnuCLI] Open Rovo support: ${ROVO_URL}`);
   openRovoInChrome();
   return { ok: true, url: ROVO_URL };
 });
 
 ipcMain.handle("open-support", () => {
+  logLine(`[DiagnuCLI] Open support portal: ${SUPPORT_URL}`);
   openSupportInChrome();
   return { ok: true, url: SUPPORT_URL };
 });
 
 ipcMain.handle("open-setup-help", () => {
+  logLine(`[DiagnuCLI] Open Slack Setup Help channel`);
   openSetupHelpInChrome();
   return { ok: true, url: SETUP_HELP_URL };
 });

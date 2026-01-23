@@ -300,14 +300,15 @@ const startRun = async () => {
   appendLog(`\n[DiagnuCLI] Start requested for: ${scriptPath}\n`);
 };
 
-const sendMenuChoice = async (choice) => {
+const sendMenuChoice = async (choice, title) => {
   if (!choice) {
     return;
   }
   await startRun();
   setTimeout(async () => {
     await window.diagnucli.sendChoice(choice);
-    appendLog(`\n[DiagnuCLI] Menu option sent: ${choice}\n`);
+    const detail = title ? ` (${title})` : "";
+    appendLog(`\n[DiagnuCLI] Menu option sent: ${choice}${detail}\n`);
   }, 1200);
 };
 
@@ -347,7 +348,9 @@ startButton.addEventListener("click", startRun);
 
 menuCards.forEach((card) => {
   card.addEventListener("click", () => {
-    sendMenuChoice(card.dataset.option);
+    const titleEl = card.querySelector(".menu-title");
+    const title = titleEl ? titleEl.textContent.trim() : "";
+    sendMenuChoice(card.dataset.option, title);
   });
 });
 
