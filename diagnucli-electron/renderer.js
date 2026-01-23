@@ -65,7 +65,9 @@ const translations = {
     noteList: [
       "Todos os comandos rodam no Terminal do macOS.",
       "O app principal é apenas visual e acompanha os logs."
-    ]
+    ],
+    installFinishHint:
+      "Ao finalizar a instalação do NuCLI, clique no botão Cadastrar digital."
   },
   en: {
     subtitle: "Interactive NuCLI + AWS + General support",
@@ -120,7 +122,9 @@ const translations = {
     noteList: [
       "All commands run in macOS Terminal.",
       "The main app is visual-only and mirrors logs."
-    ]
+    ],
+    installFinishHint:
+      "After finishing the NuCLI setup, click the Cadastrar digital button."
   },
   es: {
     subtitle: "Diagnóstico interactivo NuCLI + AWS + Soporte general",
@@ -175,7 +179,9 @@ const translations = {
     noteList: [
       "Todos los comandos se ejecutan en el Terminal de macOS.",
       "La app principal es solo visual y refleja los logs."
-    ]
+    ],
+    installFinishHint:
+      "Al finalizar la instalación de NuCLI, haga clic en el botón Cadastrar digital."
   }
 };
 
