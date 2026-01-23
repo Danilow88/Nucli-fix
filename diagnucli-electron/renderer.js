@@ -44,7 +44,8 @@ const translations = {
     rovoDesc: "Abre o chat no Google Chrome (usa login do navegador).",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank no Chrome.",
-    setupHelpTitle: "Enviar dúvida para o canal Setup Help",
+    setupHelpTitle:
+      "Enviar dúvida para o canal Setup Help, canal para duvidas de aws e nucli setup.",
     setupHelpButton: "Abrir canal no Slack",
     setupHelpHint: "Clique para abrir o canal e pedir ajuda.",
     howTitle: "Como funciona",
