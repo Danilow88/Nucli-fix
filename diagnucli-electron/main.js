@@ -422,6 +422,7 @@ function sendTextToTerminal(text, pressEnter = false) {
   const escapedText = escapeAppleScript(String(text));
   const osa = [
     'tell application "Terminal" to activate',
+    'tell application "Terminal" to set miniaturized of front window to false',
     'tell application "System Events" to tell process "Terminal" to set frontmost to true',
     "delay 0.2",
     `tell application "System Events" to tell process "Terminal" to keystroke "${escapedText}"`
@@ -431,6 +432,8 @@ function sendTextToTerminal(text, pressEnter = false) {
       'tell application "System Events" to tell process "Terminal" to key code 36'
     );
   }
+  osa.push('delay 0.2');
+  osa.push('tell application "Terminal" to set miniaturized of front window to true');
   spawn("osascript", osa.flatMap((line) => ["-e", line]));
 }
 
