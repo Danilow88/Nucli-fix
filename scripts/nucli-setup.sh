@@ -258,6 +258,12 @@ else
   say "$(tr step8_exists) $profile."
 fi
 
+section "8.1) Exportar variaveis antes do clone"
+echo "$SHELL"
+echo "export NU_HOME='\${HOME}/dev/nu'" >> "$HOME/.zshrc"
+echo "export NUCLI_HOME='\${NU_HOME}/nucli'" >> "$HOME/.zshrc"
+echo "export PATH='\${NUCLI_HOME}:\${PATH}'" >> "$HOME/.zshrc"
+
 section "$(tr step9)"
 NU_HOME="${NU_HOME:-$HOME/dev/nu}"
 mkdir -p "$NU_HOME"
