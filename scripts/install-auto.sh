@@ -9,7 +9,47 @@ section() {
 section "DiagnuCLI app installer"
 say "This script updates and installs the DiagnuCLI app."
 
-section "Step 1/1: DiagnuCLI app"
+section "Step 0/2: simdjson"
+ensure_brew() {
+  if command -v brew >/dev/null 2>&1; then
+    return 0
+  fi
+  say "Homebrew not found. Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+}
+
+ensure_brew
+say "Reinstalling simdjson..."
+brew reinstall simdjson || brew install simdjson
+
+section "Step 1/2: Node.js 18+"
+needs_node_update() {
+  if ! command -v node >/dev/null 2>&1; then
+    return 0
+  fi
+  local major
+  major="$(node -v | sed 's/^v//' | cut -d. -f1)"
+  [[ "${major:-0}" -lt 18 ]]
+}
+
+if needs_node_update; then
+  ensure_brew
+  say "Installing/Updating Node.js 18+..."
+  brew install node@18 || brew upgrade node@18
+  brew link --force --overwrite node@18 >/dev/null 2>&1 || true
+fi
+
+if ! command -v node >/dev/null 2>&1; then
+  say "Node.js not found after installation attempt. Install Node 18+ and rerun this script."
+  exit 1
+fi
+
+section "Step 2/2: DiagnuCLI app"
 APP_REPO_PATH="${DIAGNUCLI_REPO_PATH:-$HOME/Nucli-fix}"
 if [[ ! -d "$APP_REPO_PATH/.git" ]]; then
   say "Cloning DiagnuCLI app repository..."
@@ -21,11 +61,6 @@ fi
 
 if [[ ! -d "$APP_REPO_PATH/diagnucli-electron" ]]; then
   say "DiagnuCLI Electron folder not found at $APP_REPO_PATH/diagnucli-electron"
-  exit 1
-fi
-
-if ! command -v node >/dev/null 2>&1; then
-  say "Node.js not found. Install Node 18+ and rerun this script."
   exit 1
 fi
 
