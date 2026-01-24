@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, systemPreferences } = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -61,6 +61,22 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, "index.html"));
+}
+
+function ensureAccessibilityAccess() {
+  if (process.platform !== "darwin") {
+    return;
+  }
+  try {
+    const trusted = systemPreferences.isTrustedAccessibilityClient(true);
+    if (!trusted) {
+      spawn("open", [
+        "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"
+      ]);
+    }
+  } catch (error) {
+    logLine(`[DiagnuCLI] Accessibility permission check failed: ${error}`);
+  }
 }
 
 function openRovoInChrome() {
@@ -785,6 +801,7 @@ app.whenReady().then(() => {
     app.dock.setIcon(DEV_ICON_PATH);
   }
   createWindow();
+  ensureAccessibilityAccess();
 });
 
 app.on("window-all-closed", () => {
