@@ -286,6 +286,47 @@ function openZscalerFeedbackInSlack() {
   spawn("osascript", ["-e", osa]);
 }
 
+function closeAllTerminalWindows() {
+  if (process.platform !== "darwin") {
+    return;
+  }
+  const osa = `
+    tell application "Terminal"
+      if (count of windows) > 0 then
+        repeat with w from (count of windows) to 1 by -1
+          try
+            close window w
+          end try
+        end repeat
+      end if
+    end tell
+    delay 0.2
+    tell application "System Events"
+      if exists process "Terminal" then
+        tell process "Terminal"
+          repeat with w from (count of windows) to 1 by -1
+            if exists sheet 1 of window w then
+              try
+                click button "Close" of sheet 1 of window w
+              end try
+              try
+                click button "Fechar" of sheet 1 of window w
+              end try
+              try
+                click button "Finalizar" of sheet 1 of window w
+              end try
+              try
+                click button "Terminate" of sheet 1 of window w
+              end try
+            end if
+          end repeat
+        end tell
+      end if
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openKeychainMyCertificates() {
   const osa = `
     tell application "Keychain Access" to activate
@@ -1051,6 +1092,7 @@ app.whenReady().then(() => {
   if (process.platform === "darwin" && !app.isPackaged) {
     app.dock.setIcon(DEV_ICON_PATH);
   }
+  closeAllTerminalWindows();
   createWindow();
   ensureAccessibilityAccess();
 });
