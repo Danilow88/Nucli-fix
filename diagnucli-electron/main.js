@@ -47,6 +47,63 @@ const WORKSTATION_IDENTITY_URL =
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
+const SHUFFLE_FIX_I18N = {
+  pt: {
+    step1: "Shuffle Fix: passo 1 - abrir chamado do toolio.",
+    step2: "Shuffle Fix: passo 2 - abrindo @AskNu e enviando pedido de escopo.",
+    step3: "Shuffle Fix: passo 3 - abrir workstation-identity no Okta.",
+    step4: "Shuffle Fix: passo 4 - fechar Chrome e limpar cache/cookies.",
+    askNuPrompt:
+      "eu quero o escopo lift e cs para a conta {country} para acessar o shuffle.",
+    waitApproval:
+      "Shuffle Fix: aguarde aprovacao do escopo e do actor toolio antes de acessar o Shuffle.",
+    oktaHint:
+      "Shuffle Fix: esteja logado no Okta. Se pedir senha 3x, use a senha de desbloqueio da maquina.",
+    done: "Shuffle Fix: finalizado.",
+    stop: "Shuffle Fix: encerrado pelo usuario.",
+    qStep1: "Pode seguir para o proximo passo? (sim/nao): ",
+    qCountry: "Qual pais precisa do escopo? (br/mex/co): ",
+    qStep2: "Pode prosseguir para o proximo passo? (sim/nao): ",
+    qStep3: "Pode prosseguir para o passo 4? (sim/nao): "
+  },
+  en: {
+    step1: "Shuffle Fix: step 1 - open the toolio request ticket.",
+    step2: "Shuffle Fix: step 2 - open @AskNu and request scopes.",
+    step3: "Shuffle Fix: step 3 - open workstation-identity in Okta.",
+    step4: "Shuffle Fix: step 4 - quit Chrome and clear cache/cookies.",
+    askNuPrompt:
+      "I want lift and cs scope for the {country} account to access Shuffle.",
+    waitApproval:
+      "Shuffle Fix: wait for scope and toolio approval before accessing Shuffle.",
+    oktaHint:
+      "Shuffle Fix: make sure you are logged into Okta. If it asks for password 3x, use your machine unlock password.",
+    done: "Shuffle Fix: finished.",
+    stop: "Shuffle Fix: canceled by user.",
+    qStep1: "Can I proceed to the next step? (yes/no): ",
+    qCountry: "Which country needs the scope? (br/mex/co): ",
+    qStep2: "Can I proceed to the next step? (yes/no): ",
+    qStep3: "Can I proceed to step 4? (yes/no): "
+  },
+  es: {
+    step1: "Shuffle Fix: paso 1 - abrir el ticket de toolio.",
+    step2: "Shuffle Fix: paso 2 - abrir @AskNu y solicitar scopes.",
+    step3: "Shuffle Fix: paso 3 - abrir workstation-identity en Okta.",
+    step4: "Shuffle Fix: paso 4 - cerrar Chrome y limpiar caché/cookies.",
+    askNuPrompt:
+      "Quiero los scopes lift y cs para la cuenta {country} para acceder a Shuffle.",
+    waitApproval:
+      "Shuffle Fix: espere la aprobación del scope y del toolio antes de acceder a Shuffle.",
+    oktaHint:
+      "Shuffle Fix: asegúrese de iniciar sesión en Okta. Si pide la contraseña 3 veces, use la contraseña de desbloqueo de la máquina.",
+    done: "Shuffle Fix: finalizado.",
+    stop: "Shuffle Fix: cancelado por el usuario.",
+    qStep1: "¿Puedo continuar al siguiente paso? (si/no): ",
+    qCountry: "¿Qué país necesita el scope? (br/mex/co): ",
+    qStep2: "¿Puedo continuar al siguiente paso? (si/no): ",
+    qStep3: "¿Puedo continuar al paso 4? (si/no): "
+  }
+};
+
 function getGuideUrl(lang) {
   const localeMap = {
     pt: "pt_BR",
@@ -639,7 +696,8 @@ const MAINTENANCE_ACTIONS = {
     label: "Shuffle fix",
     detail:
       "Cria chamado do toolio, pede scopes no AskNu, abre Okta e limpa cache do Chrome.",
-    buildCommand: () => {
+    buildCommand: (lang = "pt") => {
+      const texts = SHUFFLE_FIX_I18N[lang] || SHUFFLE_FIX_I18N.pt;
       const chromeCacheBase = path.join(
         os.homedir(),
         "Library",
@@ -678,35 +736,42 @@ tell application "System Events"
 end tell`
       );
       const openWorkstation = `open -a "Google Chrome" "${WORKSTATION_IDENTITY_URL}"`;
+      const yesRegex = "^(sim|si|yes|y)$";
       return [
-        `echo "[DiagnuCLI] Shuffle Fix: passo 1 - abrir chamado do toolio."`,
+        `echo "[DiagnuCLI] ${texts.step1}"`,
         `${openToolio}`,
-        `printf "Pode seguir para o proximo passo? (sim/nao): "`,
+        `printf "${texts.qStep1}"`,
         `read -r shuffle_step1`,
-        `if [[ ! "$shuffle_step1" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
-        `printf "Qual pais precisa do escopo? (br/mex/co): "`,
+        `shuffle_step1=$(echo "$shuffle_step1" | tr '[:upper:]' '[:lower:]')`,
+        `if [[ ! "$shuffle_step1" =~ ${yesRegex} ]]; then echo "[DiagnuCLI] ${texts.stop}"; exit 0; fi`,
+        `printf "${texts.qCountry}"`,
         `read -r scope_country`,
         `scope_country=$(echo "$scope_country" | tr '[:upper:]' '[:lower:]')`,
-        `echo "[DiagnuCLI] Shuffle Fix: passo 2 - abrindo @AskNu e enviando pedido de escopo."`,
+        `echo "[DiagnuCLI] ${texts.step2}"`,
         `osascript -e "${openAskNu}"`,
         `sleep 1`,
-        `message="eu quero o escopo lift e cs para a conta ${"${"}scope_country${"}"} para acessar o shuffle."`,
+        `message="${texts.askNuPrompt.replace(
+          "{country}",
+          "${scope_country}"
+        )}"`,
         `osascript -e 'on run argv' -e 'set theMessage to item 1 of argv' -e 'tell application "System Events" to tell process "Slack" to keystroke theMessage' -e 'tell application "System Events" to tell process "Slack" to key code 36' -e 'end run' -- "$message"`,
-        `echo "[DiagnuCLI] Shuffle Fix: aguarde aprovacao do escopo e do actor toolio antes de acessar o Shuffle."`,
-        `printf "Pode prosseguir para o proximo passo? (sim/nao): "`,
+        `echo "[DiagnuCLI] ${texts.waitApproval}"`,
+        `printf "${texts.qStep2}"`,
         `read -r shuffle_step2`,
-        `if [[ ! "$shuffle_step2" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
-        `echo "[DiagnuCLI] Shuffle Fix: passo 3 - abrir workstation-identity no Okta."`,
+        `shuffle_step2=$(echo "$shuffle_step2" | tr '[:upper:]' '[:lower:]')`,
+        `if [[ ! "$shuffle_step2" =~ ${yesRegex} ]]; then echo "[DiagnuCLI] ${texts.stop}"; exit 0; fi`,
+        `echo "[DiagnuCLI] ${texts.step3}"`,
         `${openWorkstation}`,
-        `echo "[DiagnuCLI] Shuffle Fix: esteja logado no Okta. Se pedir senha 3x, use a senha de desbloqueio da maquina."`,
-        `printf "Pode prosseguir para o passo 4? (sim/nao): "`,
+        `echo "[DiagnuCLI] ${texts.oktaHint}"`,
+        `printf "${texts.qStep3}"`,
         `read -r shuffle_step3`,
-        `if [[ ! "$shuffle_step3" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
-        `echo "[DiagnuCLI] Shuffle Fix: passo 4 - fechar Chrome e limpar cache/cookies."`,
+        `shuffle_step3=$(echo "$shuffle_step3" | tr '[:upper:]' '[:lower:]')`,
+        `if [[ ! "$shuffle_step3" =~ ${yesRegex} ]]; then echo "[DiagnuCLI] ${texts.stop}"; exit 0; fi`,
+        `echo "[DiagnuCLI] ${texts.step4}"`,
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
         `rm -rf ${rmTargets}`,
         `rm -f ${rmCookies}`,
-        `echo "[DiagnuCLI] Shuffle Fix: finalizado."`
+        `echo "[DiagnuCLI] ${texts.done}"`
       ].join("; ");
     }
   },
@@ -1104,7 +1169,7 @@ end tell`
   }
 };
 
-function runMaintenanceAction(actionId) {
+function runMaintenanceAction(actionId, lang) {
   const action = MAINTENANCE_ACTIONS[actionId];
   if (!action) {
     return { ok: false, reason: "unknown action" };
@@ -1122,7 +1187,7 @@ function runMaintenanceAction(actionId) {
   startLogTail();
 
   const closeTerminal = `osascript -e 'tell application "Terminal" to close front window'`;
-  const command = `(${action.buildCommand()}; ${closeTerminal}) | tee -a "${LOG_PATH}"`;
+  const command = `(${action.buildCommand(lang)}; ${closeTerminal}) | tee -a "${LOG_PATH}"`;
   logLine(`[DiagnuCLI] ${action.label}: ${action.detail}`);
   const escaped = escapeAppleScript(command);
   const osa = [
@@ -1134,8 +1199,8 @@ function runMaintenanceAction(actionId) {
   return { ok: true };
 }
 
-ipcMain.handle("run-action", (_event, actionId) => {
-  return runMaintenanceAction(actionId);
+ipcMain.handle("run-action", (_event, actionId, lang) => {
+  return runMaintenanceAction(actionId, lang);
 });
 
 ipcMain.handle("open-rovo", () => {

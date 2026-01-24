@@ -9,7 +9,7 @@ contextBridge.exposeInMainWorld("diagnucli", {
   sendText: (text, pressEnter = false) =>
     ipcRenderer.invoke("send-text", text, pressEnter),
   installNucli: (lang) => ipcRenderer.invoke("install-nucli", lang),
-  runAction: (actionId) => ipcRenderer.invoke("run-action", actionId),
+  runAction: (actionId, lang) => ipcRenderer.invoke("run-action", actionId, lang),
   openRovo: () => ipcRenderer.invoke("open-rovo"),
   openSupport: () => ipcRenderer.invoke("open-support"),
   openGadgetsRequest: () => ipcRenderer.invoke("open-gadgets-request"),

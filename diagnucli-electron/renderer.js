@@ -596,7 +596,7 @@ const sendAction = async (actionId) => {
     await window.diagnucli.clearLog();
     return;
   } else {
-    await window.diagnucli.runAction(actionId);
+    await window.diagnucli.runAction(actionId, currentLang);
   }
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
 };
