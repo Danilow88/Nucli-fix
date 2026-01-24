@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld("diagnucli", {
   openGadgetsRequest: () => ipcRenderer.invoke("open-gadgets-request"),
   openPeopleRequest: () => ipcRenderer.invoke("open-people-request"),
   openShuffleFix: () => ipcRenderer.invoke("open-shuffle-fix"),
+  openCertificates: () => ipcRenderer.invoke("open-certificates"),
   openSetupHelp: () => ipcRenderer.invoke("open-setup-help"),
   openAskNu: () => ipcRenderer.invoke("open-ask-nu"),
   openZscalerFeedback: () => ipcRenderer.invoke("open-zscaler-feedback"),

@@ -154,6 +154,22 @@ function openPeopleRequestInChrome() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openCertificatesInChrome() {
+  const osa = `
+    set certUrl to "${WORKSTATION_IDENTITY_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: certUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openShuffleFixInChrome() {
   const osa = `
     set shuffleUrl to "${SHUFFLE_FIX_URL}"
@@ -1158,6 +1174,12 @@ ipcMain.handle("open-people-request", () => {
   logLine(`[DiagnuCLI] Open People request: ${PEOPLE_REQUEST_URL}`);
   openPeopleRequestInChrome();
   return { ok: true, url: PEOPLE_REQUEST_URL };
+});
+
+ipcMain.handle("open-certificates", () => {
+  logLine(`[DiagnuCLI] Open certificates: ${WORKSTATION_IDENTITY_URL}`);
+  openCertificatesInChrome();
+  return { ok: true, url: WORKSTATION_IDENTITY_URL };
 });
 
 ipcMain.handle("open-shuffle-fix", () => {

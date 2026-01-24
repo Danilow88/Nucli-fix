@@ -9,6 +9,7 @@ const askNuButton = document.getElementById("openAskNu");
 const zscalerFeedbackButton = document.getElementById("openZscalerFeedback");
 const gadgetsButton = document.getElementById("openGadgets");
 const peopleButton = document.getElementById("openPeople");
+const certificatesButton = document.getElementById("openCertificates");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 let runStarted = false;
@@ -94,6 +95,8 @@ const translations = {
     shuffleFixTitle: "Chamado Shuffle Fix",
     shuffleFixDesc:
       "Cria chamado do toolio, pede scopes no AskNu e limpa cache do Chrome.",
+    certificatesTitle: "Gerar certificados",
+    certificatesDesc: "Abre o portal de certificados no Chrome.",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank.",
     requestLaptopTitle: "Pedir troca de laptop",
@@ -131,6 +134,7 @@ const translations = {
     peopleTip: "Abre o portal de People para RH e Kadence.",
     shuffleFixTip:
       "Siga os passos e aguarde aprovacao de escopo/toolio antes de acessar o Shuffle.",
+    certificatesTip: "Abre o link de certificados no Chrome.",
     supportTip: "Abre o portal de suporte.",
     requestLaptopTip: "Abre o formulário de troca de laptop.",
     oncallTip: "Abre o WhatsApp de on-call.",
@@ -240,6 +244,8 @@ const translations = {
     shuffleFixTitle: "Shuffle Fix request",
     shuffleFixDesc:
       "Creates the toolio ticket, requests scopes in AskNu, and clears Chrome cache.",
+    certificatesTitle: "Generate certificates",
+    certificatesDesc: "Opens the certificates portal in Chrome.",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens the Nubank support portal.",
     requestLaptopTitle: "Request laptop replacement",
@@ -277,6 +283,7 @@ const translations = {
     peopleTip: "Opens the People portal for HR and Kadence.",
     shuffleFixTip:
       "Follow the steps and wait for scope/toolio approval before using Shuffle.",
+    certificatesTip: "Opens the certificates link in Chrome.",
     supportTip: "Open the support portal.",
     requestLaptopTip: "Open the laptop replacement form.",
     oncallTip: "Open the on-call WhatsApp.",
@@ -388,6 +395,8 @@ const translations = {
     shuffleFixTitle: "Solicitud Shuffle Fix",
     shuffleFixDesc:
       "Crea el ticket de toolio, pide scopes en AskNu y limpia la caché de Chrome.",
+    certificatesTitle: "Generar certificados",
+    certificatesDesc: "Abre el portal de certificados en Chrome.",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank.",
     requestLaptopTitle: "Solicitar cambio de laptop",
@@ -425,6 +434,7 @@ const translations = {
     peopleTip: "Abre el portal de People para RRHH y Kadence.",
     shuffleFixTip:
       "Siga los pasos y espere la aprobación de scopes/toolio antes de usar Shuffle.",
+    certificatesTip: "Abre el enlace de certificados en Chrome.",
     supportTip: "Abre el portal de soporte.",
     requestLaptopTip: "Abre el formulario de cambio de laptop.",
     oncallTip: "Abre el WhatsApp de on-call.",
@@ -653,6 +663,13 @@ if (peopleButton) {
   peopleButton.addEventListener("click", async () => {
     await window.diagnucli.openPeopleRequest();
     appendLog("\n[DiagnuCLI] People request opened.\n");
+  });
+}
+
+if (certificatesButton) {
+  certificatesButton.addEventListener("click", async () => {
+    await window.diagnucli.openCertificates();
+    appendLog("\n[DiagnuCLI] Certificates portal opened.\n");
   });
 }
 
