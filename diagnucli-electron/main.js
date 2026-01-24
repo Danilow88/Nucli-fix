@@ -34,6 +34,8 @@ const MAC_SETUP_URL =
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
 const OKTA_PASSWORDS_URL = "chrome://password-manager/passwords?q=okta";
+const ZSCALER_OKTA_URL =
+  "https://nubank.okta.com/app/zscaler_private_access/exk20v3f4xjOjaR3e0h8/sso/saml?SAMLRequest=jZJRb5swFIX%2FCvI74BhKwAqpslXVKnVqltA%2B7KW6mJuFBmzma1C0X1%2BaEK2TpqqPlu895%2Fh8Xlwf28Yb0FJtdM5mAWceamWqWv%2FK2WNx66fserkgaBvRyVXv9nqDv3sk542LmuT5Jme91dIA1SQ1tEjSKbldfb%2BXIuCys8YZZRrmrYjQutHqq9HUt2i3aIda4ePmPmd75zqSYfgmSV3Q2XoAh8EfUtCgDZRpQxgDhCJNRZJeJdF8niWpiONZSGSYdzOmqjW400suYrovQR8Cc3BwVui6cFJ8nhyeQSkkCvF4EHyIdvHx5eEFNhHyffqmfArEvFtjFZ4ayNkOGkLm3d3kbLX5kSHssirzo4ynfrzL0C%2FnlfBVlaRRXAIvZ%2FE4S2sgqgf8u03U450mB9rlTHCR%2BHzmi7iYxTJOZMSDK578ZN56qu9Lrc9YPuq6PA%2BR%2FFYUa3%2F9sC2Y93TBOw6wCaY8udv3FD8Whgs6tvwsqBYdVODgP8QW4fsUy%2Bn47w9bvgI%3D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=Ml6yh55p7o6x7SraKmzYSxfV0ckYSuRRKYABUNHo7Ae4wx5yzHK7VpU%2BFxCjAjlinOMzu7vDDpAGVNxgsRc9fbEJPH5Zb0u8UrLydo2etq8fyvkJlRA3K145d5lHf2OZB0w8VDVjNVYchwyve4pkRfTphc7%2BIuKjecnAOdRAqSDKrlJyxm5n4JztjjgZ8z4OW%2FK2t4c3dVWnY5dQC%2BrlpcYY45f8%2FsqNtDIbF1KKeXC8kK52Q1O7qvMVnFWxVo9razhFDE0E1v4O%2BCXX7RLF0WjoiI3HJABGoEVQTF%2Bf7w3n82S%2BFW92PYjpxBRk%2FxliC0ySQUmfjThbyfU1f8%2FcXA%3D%3D";
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
@@ -138,6 +140,22 @@ function openOktaPasswordsInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: oktaUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openZscalerOktaInChrome() {
+  const osa = `
+    set zscalerUrl to "${ZSCALER_OKTA_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: zscalerUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -823,7 +841,7 @@ const MAINTENANCE_ACTIONS = {
   },
   "restart-vpn": {
     label: "Restart VPN (Zscaler)",
-    detail: "Fecha e reabre o Zscaler.app.",
+    detail: "Fecha e reabre o Zscaler.app e abre o link do Okta no Chrome.",
     runDirect: () => {
       const osa = `
         tell application "Zscaler" to quit
@@ -839,6 +857,9 @@ const MAINTENANCE_ACTIONS = {
         spawn("pkill", ["-x", "Zscaler"]);
         setTimeout(() => {
           spawn("open", ["-a", "Zscaler"]);
+          setTimeout(() => {
+            openZscalerOktaInChrome();
+          }, 800);
         }, 600);
       }, 900);
     }
