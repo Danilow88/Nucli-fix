@@ -64,32 +64,8 @@ Para qualquer usuario clonar e rodar direto pelo Terminal (evita politica de app
 ```bash
 git clone https://github.com/Danilow88/Nucli-fix
 cd Nucli-fix
-cd diagnucli-electron
-npm install --omit=dev
-npm start
+./run-cli.sh
 ```
-
-Observacao: este modo instala somente dependencias necessarias (sem `electron-builder`),
-entao nao dispara bloqueios de politica corporativa.
-
-### Instalação automática (estilo jira-monitor)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash
-```
-
-## DiagnuCLI PWA (instalacao via navegador)
-
-A PWA serve apenas para centralizar links e orientacoes. Ela **nao** executa comandos locais.
-
-Para rodar e instalar no navegador:
-
-```bash
-cd Nucli-fix/diagnucli-pwa
-./run-pwa.sh
-```
-
-Depois, abra `http://localhost:8080` no Chrome e clique em **Instalar PWA**.
 
 Para remover:
 

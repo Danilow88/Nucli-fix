@@ -601,6 +601,82 @@ const MAINTENANCE_ACTIONS = {
       spawn("osascript", ["-e", 'tell application "Finder" to empty the trash']);
     }
   },
+  "fix-time": {
+    label: "Fix time",
+    detail: "Abre Ajustes do Sistema em Data e Hora.",
+    runDirect: () => {
+      const osa = `
+        tell application "System Settings" to activate
+        delay 0.4
+        tell application "System Events"
+          tell process "System Settings"
+            set frontmost to true
+            delay 0.4
+            try
+              click button "Geral" of toolbar 1 of window 1
+            end try
+            try
+              click button "General" of toolbar 1 of window 1
+            end try
+            delay 0.3
+            try
+              click button "Data e Hora" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+            end try
+            try
+              click button "Date & Time" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+            end try
+            try
+              click button "Fecha y hora" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+            end try
+          end tell
+        end tell
+      `;
+      spawn("osascript", ["-e", osa]);
+    }
+  },
+  "uninstall-apps": {
+    label: "Uninstall apps",
+    detail: "Lista apps e move os selecionados para a Lixeira.",
+    runDirect: () => {
+      const osa = `
+        set appEntries to {}
+        tell application "System Events"
+          try
+            set sysFolder to folder "/Applications"
+            set sysApps to files of sysFolder whose name extension is "app"
+            repeat with f in sysApps
+              set appPath to POSIX path of (f as alias)
+              set end of appEntries to (name of f as text) & " — " & appPath
+            end repeat
+          end try
+          set homeAppsPath to (POSIX path of (path to home folder)) & "Applications"
+          if exists folder homeAppsPath then
+            set homeFolder to folder homeAppsPath
+            set homeApps to files of homeFolder whose name extension is "app"
+            repeat with f in homeApps
+              set appPath to POSIX path of (f as alias)
+              set end of appEntries to (name of f as text) & " — " & appPath
+            end repeat
+          end if
+        end tell
+        if (count of appEntries) is 0 then
+          display dialog "Nenhum app encontrado para desinstalar." buttons {"OK"} default button "OK"
+          return
+        end if
+        set chosen to choose from list appEntries with prompt "Selecione os apps para desinstalar" with multiple selections allowed
+        if chosen is false then return
+        set AppleScript's text item delimiters to " — "
+        repeat with entry in chosen
+          try
+            set appPath to text item 2 of (entry as text)
+            tell application "Finder" to delete POSIX file appPath
+          end try
+        end repeat
+        set AppleScript's text item delimiters to ""
+      `;
+      spawn("osascript", ["-e", osa]);
+    }
+  },
   "open-keychain": {
     label: "Open Keychain",
     detail: "Abre Keychain e seleciona login/Meus Certificados.",

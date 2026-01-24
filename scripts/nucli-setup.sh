@@ -276,6 +276,10 @@ else
 fi
 
 say ""
+say "Instalando Temurin (Java)..."
+brew install --cask temurin
+
+say ""
 say "$(tr step9_next)"
 say "  nu proj clone it-engineering"
 say "  cd dev/nu/it-engineering/setup"

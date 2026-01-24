@@ -124,8 +124,8 @@ ensure_built() {
       say "Build desatualizado. Recriando app..."
       app_path=""
     else
-      echo "$app_path"
-      return
+    echo "$app_path"
+    return
     fi
   fi
 
