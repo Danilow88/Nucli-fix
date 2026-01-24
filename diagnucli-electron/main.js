@@ -726,6 +726,7 @@ const MAINTENANCE_ACTIONS = {
         set chosen to choose from list appEntries with prompt "Selecione os apps para desinstalar" with multiple selections allowed
         if chosen is false then return
         set AppleScript's text item delimiters to " — "
+        set authPrompt to "Use Touch ID ou senha para remover o app selecionado."
         repeat with entry in chosen
           try
             set appPath to text item 2 of (entry as text)
@@ -738,7 +739,7 @@ const MAINTENANCE_ACTIONS = {
                 set destPath to trashPath & "/" & suffix & "-" & appName
               end if
             end try
-            do shell script "mv " & quoted form of appPath & " " & quoted form of destPath with administrator privileges
+            do shell script "mv " & quoted form of appPath & " " & quoted form of destPath with administrator privileges with prompt authPrompt
             -- remove residuals for this app name
             set appBase to do shell script "basename " & quoted form of appName & " .app"
             set homePath to POSIX path of (path to home folder)
