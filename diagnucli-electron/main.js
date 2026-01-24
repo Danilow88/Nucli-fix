@@ -42,6 +42,8 @@ const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
 const OKTA_PASSWORDS_URL = "chrome://password-manager/passwords?q=okta";
 const ZSCALER_OKTA_URL =
   "https://nubank.okta.com/app/zscaler_private_access/exk20v3f4xjOjaR3e0h8/sso/saml?SAMLRequest=jZJRb5swFIX%2FCvI74BhKwAqpslXVKnVqltA%2B7KW6mJuFBmzma1C0X1%2BaEK2TpqqPlu895%2Fh8Xlwf28Yb0FJtdM5mAWceamWqWv%2FK2WNx66fserkgaBvRyVXv9nqDv3sk542LmuT5Jme91dIA1SQ1tEjSKbldfb%2BXIuCys8YZZRrmrYjQutHqq9HUt2i3aIda4ePmPmd75zqSYfgmSV3Q2XoAh8EfUtCgDZRpQxgDhCJNRZJeJdF8niWpiONZSGSYdzOmqjW400suYrovQR8Cc3BwVui6cFJ8nhyeQSkkCvF4EHyIdvHx5eEFNhHyffqmfArEvFtjFZ4ayNkOGkLm3d3kbLX5kSHssirzo4ynfrzL0C%2FnlfBVlaRRXAIvZ%2FE4S2sgqgf8u03U450mB9rlTHCR%2BHzmi7iYxTJOZMSDK578ZN56qu9Lrc9YPuq6PA%2BR%2FFYUa3%2F9sC2Y93TBOw6wCaY8udv3FD8Whgs6tvwsqBYdVODgP8QW4fsUy%2Bn47w9bvgI%3D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=Ml6yh55p7o6x7SraKmzYSxfV0ckYSuRRKYABUNHo7Ae4wx5yzHK7VpU%2BFxCjAjlinOMzu7vDDpAGVNxgsRc9fbEJPH5Zb0u8UrLydo2etq8fyvkJlRA3K145d5lHf2OZB0w8VDVjNVYchwyve4pkRfTphc7%2BIuKjecnAOdRAqSDKrlJyxm5n4JztjjgZ8z4OW%2FK2t4c3dVWnY5dQC%2BrlpcYY45f8%2FsqNtDIbF1KKeXC8kK52Q1O7qvMVnFWxVo9razhFDE0E1v4O%2BCXX7RLF0WjoiI3HJABGoEVQTF%2Bf7w3n82S%2BFW92PYjpxBRk%2FxliC0ySQUmfjThbyfU1f8%2FcXA%3D%3D";
+const WORKSTATION_IDENTITY_URL =
+  "https://nubank.okta.com/app/nubank_infosecworkstationidentity_1/exk1s1je4siFhxkDv0h8/sso/saml?fromHome=true";
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
@@ -620,27 +622,90 @@ const MAINTENANCE_ACTIONS = {
   "shuffle-fix": {
     label: "Shuffle fix",
     detail:
-      "Abre chamado do Shuffle, abre AskNu para scopes e limpa cache do Chrome.",
-    runDirect: () => {
-      logLine(`[DiagnuCLI] Shuffle Fix: abrindo chamado do actor toolio.`);
-      openShuffleFixInChrome();
-      setTimeout(() => {
-        logLine(`[DiagnuCLI] Shuffle Fix: abrindo AskNu para solicitar scopes.`);
-        openAskNuInSlack();
-        logLine(
-          `[DiagnuCLI] Shuffle Fix: prompt -> "I want to request lift scope in [scope_account](br ou o pais que precisar) account to [acesso ao shuffle]".`
-        );
-        logLine(
-          `[DiagnuCLI] Shuffle Fix: scopes comuns para Shuffle: lift e cs.`
-        );
-        logLine(
-          `[DiagnuCLI] Shuffle Fix: após solicitar, aguarde a aprovação do escopo e do actor toolio.`
-        );
-      }, 700);
-      setTimeout(() => {
-        logLine(`[DiagnuCLI] Shuffle Fix: limpando cache do Chrome.`);
-        runMaintenanceAction("cache-chrome");
-      }, 1300);
+      "Cria chamado do toolio, pede scopes no AskNu, abre Okta e limpa cache do Chrome.",
+    buildCommand: () => {
+      const chromeCacheBase = path.join(
+        os.homedir(),
+        "Library",
+        "Application Support",
+        "Google",
+        "Chrome",
+        "Default"
+      );
+      const chromeTargets = [
+        path.join(os.homedir(), "Library", "Caches", "Google", "Chrome"),
+        path.join(chromeCacheBase, "Cache"),
+        path.join(chromeCacheBase, "Code Cache"),
+        path.join(chromeCacheBase, "GPUCache"),
+        path.join(chromeCacheBase, "Service Worker", "CacheStorage")
+      ];
+      const cookieFiles = [
+        path.join(chromeCacheBase, "Cookies"),
+        path.join(chromeCacheBase, "Cookies-journal")
+      ];
+      const rmTargets = chromeTargets.map((target) => `"${target}"`).join(" ");
+      const rmCookies = cookieFiles.map((file) => `"${file}"`).join(" ");
+      const openToolio = escapeAppleScript(
+        `tell application "Google Chrome" to activate
+tell application "Google Chrome"
+  if (count of windows) = 0 then
+    make new window
+  end if
+  set targetWindow to front window
+  set targetTab to make new tab at end of tabs of targetWindow with properties {URL: "${SHUFFLE_FIX_URL}"}
+  set active tab index of targetWindow to (index of targetTab)
+end tell`
+      );
+      const openAskNu = escapeAppleScript(
+        `tell application "Slack" to activate
+delay 0.3
+tell application "System Events"
+  tell process "Slack"
+    set frontmost to true
+    keystroke "k" using {command down}
+    delay 0.2
+    keystroke "@AskNu"
+    delay 0.2
+    key code 36
+    delay 0.4
+  end tell
+end tell`
+      );
+      const openWorkstation = escapeAppleScript(
+        `tell application "Google Chrome" to activate
+tell application "Google Chrome"
+  if (count of windows) = 0 then
+    make new window
+  end if
+  set targetWindow to front window
+  set targetTab to make new tab at end of tabs of targetWindow with properties {URL: "${WORKSTATION_IDENTITY_URL}"}
+  set active tab index of targetWindow to (index of targetTab)
+end tell`
+      );
+      return [
+        `echo "[DiagnuCLI] Shuffle Fix: passo 1 - abrir chamado do toolio."`,
+        `osascript -e "${openToolio}"`,
+        `read -r -p "Pode seguir para o proximo passo? (sim/nao): " shuffle_step1`,
+        `if [[ ! "$shuffle_step1" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
+        `read -r -p "Qual pais precisa do escopo? (br/mex/co): " scope_country`,
+        `scope_country=$(echo "$scope_country" | tr '[:upper:]' '[:lower:]')`,
+        `echo "[DiagnuCLI] Shuffle Fix: passo 2 - abrindo @AskNu e enviando pedido de escopo."`,
+        `osascript -e "${openAskNu}"`,
+        `sleep 1`,
+        `message="eu quero o escopo lift e cs para a conta ${"${"}scope_country${"}"} para acessar o shuffle."`,
+        `osascript -e 'on run argv' -e 'set theMessage to item 1 of argv' -e 'tell application "System Events" to tell process "Slack" to keystroke theMessage' -e 'tell application "System Events" to tell process "Slack" to key code 36' -e 'end run' -- "$message"`,
+        `echo "[DiagnuCLI] Shuffle Fix: aguarde aprovacao do escopo e do actor toolio antes de acessar o Shuffle."`,
+        `read -r -p "Pode prosseguir para o proximo passo? (sim/nao): " shuffle_step2`,
+        `if [[ ! "$shuffle_step2" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
+        `echo "[DiagnuCLI] Shuffle Fix: passo 3 - abrir workstation-identity no Okta."`,
+        `osascript -e "${openWorkstation}"`,
+        `echo "[DiagnuCLI] Shuffle Fix: esteja logado no Okta. Se pedir senha 3x, use a senha de desbloqueio da maquina."`,
+        `echo "[DiagnuCLI] Shuffle Fix: passo 4 - fechar Chrome e limpar cache/cookies."`,
+        `osascript -e 'tell application "Google Chrome" to quit' || true`,
+        `rm -rf ${rmTargets}`,
+        `rm -f ${rmCookies}`,
+        `echo "[DiagnuCLI] Shuffle Fix: finalizado."`
+      ].join("; ");
     }
   },
   "cache-mac": {

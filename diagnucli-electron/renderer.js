@@ -93,7 +93,7 @@ const translations = {
     peopleDesc: "Dúvidas de RH e NuWayOfWorking (Kadence).",
     shuffleFixTitle: "Chamado Shuffle Fix",
     shuffleFixDesc:
-      "Cria chamado do actor toolio, pede scopes no AskNu e limpa cache do Chrome.",
+      "Cria chamado do toolio, pede scopes no AskNu e limpa cache do Chrome.",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank.",
     requestLaptopTitle: "Pedir troca de laptop",
@@ -130,7 +130,7 @@ const translations = {
     gadgetsTip: "Abre o formulário para pedir itens de trabalho.",
     peopleTip: "Abre o portal de People para RH e Kadence.",
     shuffleFixTip:
-      "Abre o chamado, abre AskNu para scopes (lift/cs) e limpa cache do Chrome.",
+      "Siga os passos e aguarde aprovacao de escopo/toolio antes de acessar o Shuffle.",
     supportTip: "Abre o portal de suporte.",
     requestLaptopTip: "Abre o formulário de troca de laptop.",
     oncallTip: "Abre o WhatsApp de on-call.",
@@ -239,7 +239,7 @@ const translations = {
     peopleDesc: "HR and NuWayOfWorking questions (Kadence).",
     shuffleFixTitle: "Shuffle Fix request",
     shuffleFixDesc:
-      "Creates the actor toolio ticket, requests scopes in AskNu, and clears Chrome cache.",
+      "Creates the toolio ticket, requests scopes in AskNu, and clears Chrome cache.",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens the Nubank support portal.",
     requestLaptopTitle: "Request laptop replacement",
@@ -276,7 +276,7 @@ const translations = {
     gadgetsTip: "Opens the form to request work items.",
     peopleTip: "Opens the People portal for HR and Kadence.",
     shuffleFixTip:
-      "Opens the ticket, opens AskNu for scopes (lift/cs), and clears Chrome cache.",
+      "Follow the steps and wait for scope/toolio approval before using Shuffle.",
     supportTip: "Open the support portal.",
     requestLaptopTip: "Open the laptop replacement form.",
     oncallTip: "Open the on-call WhatsApp.",
@@ -387,7 +387,7 @@ const translations = {
     peopleDesc: "Dudas de RRHH y NuWayOfWorking (Kadence).",
     shuffleFixTitle: "Solicitud Shuffle Fix",
     shuffleFixDesc:
-      "Crea el ticket de actor toolio, pide scopes en AskNu y limpia la caché de Chrome.",
+      "Crea el ticket de toolio, pide scopes en AskNu y limpia la caché de Chrome.",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank.",
     requestLaptopTitle: "Solicitar cambio de laptop",
@@ -424,7 +424,7 @@ const translations = {
     gadgetsTip: "Abre el formulario para solicitar artículos de trabajo.",
     peopleTip: "Abre el portal de People para RRHH y Kadence.",
     shuffleFixTip:
-      "Abre el ticket, abre AskNu para scopes (lift/cs) y limpia la caché de Chrome.",
+      "Siga los pasos y espere la aprobación de scopes/toolio antes de usar Shuffle.",
     supportTip: "Abre el portal de soporte.",
     requestLaptopTip: "Abre el formulario de cambio de laptop.",
     oncallTip: "Abre el WhatsApp de on-call.",
