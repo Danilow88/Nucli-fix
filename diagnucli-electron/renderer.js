@@ -65,7 +65,7 @@ const translations = {
     emptyTrashDesc: "Esvazia a Lixeira do Finder.",
     fixTimeTitle: "Corrigir hora",
     fixTimeDesc:
-      "Abre Ajustes do Sistema > Geral > Data e Hora para configurar.",
+      "Abre Date & Time via Spotlight e ativa ajustes automáticos.",
     uninstallAppsTitle: "Desinstalar apps",
     uninstallAppsDesc:
       "Mapeia apps instalados e move os selecionados para a Lixeira.",
@@ -108,7 +108,7 @@ const translations = {
     optimizePerfTip: "Executa o script de performance.",
     activityMonitorTip: "Abre o Activity Monitor.",
     emptyTrashTip: "Esvazia a Lixeira.",
-    fixTimeTip: "Abre as configurações de Data e Hora.",
+    fixTimeTip: "Abre Date & Time e configura automaticamente.",
     uninstallAppsTip: "Lista apps e move os selecionados para a Lixeira.",
     openKeychainTip: "Abre o Keychain na área correta.",
     touchIdTip: "Abre Touch ID & Password nas Configurações.",
@@ -200,7 +200,7 @@ const translations = {
     emptyTrashTitle: "Empty Trash",
     emptyTrashDesc: "Empties the Finder Trash.",
     fixTimeTitle: "Fix time",
-    fixTimeDesc: "Opens System Settings > General > Date & Time.",
+    fixTimeDesc: "Opens Date & Time via Spotlight and enables auto settings.",
     uninstallAppsTitle: "Uninstall apps",
     uninstallAppsDesc: "Lists installed apps and moves selected ones to Trash.",
     openKeychainTitle: "Open Keychain",
@@ -242,7 +242,7 @@ const translations = {
     optimizePerfTip: "Runs the performance script.",
     activityMonitorTip: "Opens Activity Monitor.",
     emptyTrashTip: "Empties Trash.",
-    fixTimeTip: "Opens Date & Time settings.",
+    fixTimeTip: "Opens Date & Time and configures automatically.",
     uninstallAppsTip: "Lists apps and moves selected ones to Trash.",
     openKeychainTip: "Opens Keychain in the right section.",
     touchIdTip: "Opens Touch ID & Password in Settings.",
@@ -334,7 +334,7 @@ const translations = {
     emptyTrashDesc: "Vacía la Papelera del Finder.",
     fixTimeTitle: "Corregir hora",
     fixTimeDesc:
-      "Abre Ajustes del Sistema > General > Fecha y hora.",
+      "Abre Date & Time via Spotlight y activa ajustes automáticos.",
     uninstallAppsTitle: "Desinstalar apps",
     uninstallAppsDesc:
       "Enumera apps instaladas y mueve las seleccionadas a la Papelera.",
@@ -377,7 +377,7 @@ const translations = {
     optimizePerfTip: "Ejecuta el script de rendimiento.",
     activityMonitorTip: "Abre el Monitor de Actividad.",
     emptyTrashTip: "Vacía la Papelera.",
-    fixTimeTip: "Abre la configuración de Fecha y hora.",
+    fixTimeTip: "Abre Date & Time y configura automáticamente.",
     uninstallAppsTip: "Lista apps y mueve las seleccionadas a la Papelera.",
     openKeychainTip: "Abre Keychain en la sección correcta.",
     touchIdTip: "Abre Touch ID & Password en Configuración.",

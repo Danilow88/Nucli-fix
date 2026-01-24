@@ -606,27 +606,48 @@ const MAINTENANCE_ACTIONS = {
     detail: "Abre Ajustes do Sistema em Data e Hora.",
     runDirect: () => {
       const osa = `
+        tell application "System Events"
+          key code 49 using {command down}
+          delay 0.3
+          keystroke "Date & Time"
+          delay 0.2
+          key code 36
+        end tell
+        delay 1.2
         tell application "System Settings" to activate
-        delay 0.4
+        delay 0.5
         tell application "System Events"
           tell process "System Settings"
             set frontmost to true
-            delay 0.4
+            delay 0.6
             try
-              click button "Geral" of toolbar 1 of window 1
+              click checkbox "Set time and date automatically" of window 1
             end try
             try
-              click button "General" of toolbar 1 of window 1
+              click checkbox "Definir data e hora automaticamente" of window 1
+            end try
+            try
+              click checkbox "Definir fecha y hora automáticamente" of window 1
             end try
             delay 0.3
             try
-              click button "Data e Hora" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+              click button "Set" of window 1
             end try
             try
-              click button "Date & Time" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+              click button "Definir" of window 1
             end try
             try
-              click button "Fecha y hora" of scroll area 1 of group 1 of splitter group 1 of group 1 of window 1
+              click button "Establecer" of window 1
+            end try
+            delay 0.3
+            try
+              click checkbox "Set time zone automatically using your current location" of window 1
+            end try
+            try
+              click checkbox "Definir fuso horário automaticamente utilizando a localização atual" of window 1
+            end try
+            try
+              click checkbox "Definir zona horaria automáticamente usando tu ubicación actual" of window 1
             end try
           end tell
         end tell
