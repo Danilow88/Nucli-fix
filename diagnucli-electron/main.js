@@ -30,6 +30,8 @@ const GADGETS_REQUEST_URL =
   "https://nubank.atlassian.net/servicedesk/customer/portal/359/group/3385/create/4698";
 const PEOPLE_REQUEST_URL =
   "https://nubank.atlassian.net/servicedesk/customer/portal/273";
+const SHUFFLE_FIX_URL =
+  "https://nubank.atlassian.net/servicedesk/customer/portal/131/group/834/create/2941";
 const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
@@ -144,6 +146,22 @@ function openPeopleRequestInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: peopleUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openShuffleFixInChrome() {
+  const osa = `
+    set shuffleUrl to "${SHUFFLE_FIX_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: shuffleUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -599,6 +617,32 @@ const MAINTENANCE_ACTIONS = {
       ].join("; ");
     }
   },
+  "shuffle-fix": {
+    label: "Shuffle fix",
+    detail:
+      "Abre chamado do Shuffle, abre AskNu para scopes e limpa cache do Chrome.",
+    runDirect: () => {
+      logLine(`[DiagnuCLI] Shuffle Fix: abrindo chamado do actor toolio.`);
+      openShuffleFixInChrome();
+      setTimeout(() => {
+        logLine(`[DiagnuCLI] Shuffle Fix: abrindo AskNu para solicitar scopes.`);
+        openAskNuInSlack();
+        logLine(
+          `[DiagnuCLI] Shuffle Fix: prompt -> "I want to request lift scope in [scope_account](br ou o pais que precisar) account to [acesso ao shuffle]".`
+        );
+        logLine(
+          `[DiagnuCLI] Shuffle Fix: scopes comuns para Shuffle: lift e cs.`
+        );
+        logLine(
+          `[DiagnuCLI] Shuffle Fix: após solicitar, aguarde a aprovação do escopo e do actor toolio.`
+        );
+      }, 700);
+      setTimeout(() => {
+        logLine(`[DiagnuCLI] Shuffle Fix: limpando cache do Chrome.`);
+        runMaintenanceAction("cache-chrome");
+      }, 1300);
+    }
+  },
   "cache-mac": {
     label: "macOS cache cleanup",
     detail: "Remove caches em ~/Library/Caches e /Library/Caches.",
@@ -1049,6 +1093,12 @@ ipcMain.handle("open-people-request", () => {
   logLine(`[DiagnuCLI] Open People request: ${PEOPLE_REQUEST_URL}`);
   openPeopleRequestInChrome();
   return { ok: true, url: PEOPLE_REQUEST_URL };
+});
+
+ipcMain.handle("open-shuffle-fix", () => {
+  logLine(`[DiagnuCLI] Open Shuffle Fix request: ${SHUFFLE_FIX_URL}`);
+  openShuffleFixInChrome();
+  return { ok: true, url: SHUFFLE_FIX_URL };
 });
 
 ipcMain.handle("open-laptop-request", () => {

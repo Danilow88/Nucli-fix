@@ -91,6 +91,9 @@ const translations = {
     gadgetsDesc: "Solicita itens utilizados para trabalhar.",
     peopleTitle: "Falar com People",
     peopleDesc: "Dúvidas de RH e NuWayOfWorking (Kadence).",
+    shuffleFixTitle: "Chamado Shuffle Fix",
+    shuffleFixDesc:
+      "Cria chamado do actor toolio, pede scopes no AskNu e limpa cache do Chrome.",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank.",
     requestLaptopTitle: "Pedir troca de laptop",
@@ -126,6 +129,8 @@ const translations = {
     rovoTip: "Abre o Rovo no Chrome.",
     gadgetsTip: "Abre o formulário para pedir itens de trabalho.",
     peopleTip: "Abre o portal de People para RH e Kadence.",
+    shuffleFixTip:
+      "Abre o chamado, abre AskNu para scopes (lift/cs) e limpa cache do Chrome.",
     supportTip: "Abre o portal de suporte.",
     requestLaptopTip: "Abre o formulário de troca de laptop.",
     oncallTip: "Abre o WhatsApp de on-call.",
@@ -232,6 +237,9 @@ const translations = {
     gadgetsDesc: "Requests items used for work.",
     peopleTitle: "Talk to People",
     peopleDesc: "HR and NuWayOfWorking questions (Kadence).",
+    shuffleFixTitle: "Shuffle Fix request",
+    shuffleFixDesc:
+      "Creates the actor toolio ticket, requests scopes in AskNu, and clears Chrome cache.",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens the Nubank support portal.",
     requestLaptopTitle: "Request laptop replacement",
@@ -267,6 +275,8 @@ const translations = {
     rovoTip: "Open Rovo in Chrome.",
     gadgetsTip: "Opens the form to request work items.",
     peopleTip: "Opens the People portal for HR and Kadence.",
+    shuffleFixTip:
+      "Opens the ticket, opens AskNu for scopes (lift/cs), and clears Chrome cache.",
     supportTip: "Open the support portal.",
     requestLaptopTip: "Open the laptop replacement form.",
     oncallTip: "Open the on-call WhatsApp.",
@@ -375,6 +385,9 @@ const translations = {
     gadgetsDesc: "Solicita artículos utilizados para trabajar.",
     peopleTitle: "Hablar con People",
     peopleDesc: "Dudas de RRHH y NuWayOfWorking (Kadence).",
+    shuffleFixTitle: "Solicitud Shuffle Fix",
+    shuffleFixDesc:
+      "Crea el ticket de actor toolio, pide scopes en AskNu y limpia la caché de Chrome.",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank.",
     requestLaptopTitle: "Solicitar cambio de laptop",
@@ -410,6 +423,8 @@ const translations = {
     rovoTip: "Abre Rovo en Chrome.",
     gadgetsTip: "Abre el formulario para solicitar artículos de trabajo.",
     peopleTip: "Abre el portal de People para RRHH y Kadence.",
+    shuffleFixTip:
+      "Abre el ticket, abre AskNu para scopes (lift/cs) y limpia la caché de Chrome.",
     supportTip: "Abre el portal de soporte.",
     requestLaptopTip: "Abre el formulario de cambio de laptop.",
     oncallTip: "Abre el WhatsApp de on-call.",
@@ -549,6 +564,7 @@ const actionLabels = {
   "open-mac-setup": "Open Mac setup guide",
   "open-okta-passwords": "Open Okta passwords",
   "restart-vpn": "Restart VPN",
+  "shuffle-fix": "Shuffle Fix",
   "exit-app": "Exit app",
   "request-laptop": "Request laptop replacement",
   "open-oncall": "Open WhatsApp on-call",
