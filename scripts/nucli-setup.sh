@@ -32,6 +32,8 @@ tr() {
         step3_add) echo "Agregue la clave en GitHub y autorice SSO para Nubank." ;;
         step4) echo "4) Solicitar acceso AWS y grupos" ;;
         step4_desc) echo "Solicite acceso AWS y los grupos requeridos en el portal IT Eng." ;;
+        asknu_role_message1) echo "necesito la shared role en la cuenta br para acceder a NuCLI." ;;
+        asknu_role_message2) echo "necesito formar parte del grupo github casual dev para acceder a NuCLI." ;;
         step5) echo "5) Xcode Command Line Tools" ;;
         step5_installed) echo "Xcode Command Line Tools ya instalado." ;;
         step5_install) echo "Instalando Xcode Command Line Tools..." ;;
@@ -81,6 +83,8 @@ tr() {
         step3_add) echo "Add the key in GitHub and authorize SSO for Nubank." ;;
         step4) echo "4) Request AWS access and groups" ;;
         step4_desc) echo "Request AWS access and required groups in the IT Eng portal." ;;
+        asknu_role_message1) echo "I need the shared role in the BR account to access NuCLI." ;;
+        asknu_role_message2) echo "I need to be part of the github casual dev group to access NuCLI." ;;
         step5) echo "5) Xcode Command Line Tools" ;;
         step5_installed) echo "Xcode Command Line Tools already installed." ;;
         step5_install) echo "Installing Xcode Command Line Tools..." ;;
@@ -130,6 +134,8 @@ tr() {
         step3_add) echo "Adicione a chave no GitHub e autorize o SSO para Nubank." ;;
         step4) echo "4) Solicitar acesso AWS e grupos" ;;
         step4_desc) echo "Solicite acesso AWS e grupos necessários no portal do IT Eng." ;;
+        asknu_role_message1) echo "preciso da shared role na conta br para acesso ao nucli." ;;
+        asknu_role_message2) echo "preciso fazer parte do grupo github casual dev para acesso ao nucli." ;;
         step5) echo "5) Xcode Command Line Tools" ;;
         step5_installed) echo "Xcode Command Line Tools já instalado." ;;
         step5_install) echo "Instalando Xcode Command Line Tools..." ;;
@@ -226,6 +232,26 @@ section "$(tr step4)"
 say "$(tr step4_desc)"
 open "https://nubank.atlassian.net/servicedesk/customer/portal/131" || true
 pause
+osascript -e 'tell application "Slack" to activate' \
+  -e 'delay 0.3' \
+  -e 'tell application "System Events"' \
+  -e 'tell process "Slack"' \
+  -e 'set frontmost to true' \
+  -e 'keystroke "k" using {command down}' \
+  -e 'delay 0.2' \
+  -e 'keystroke "@AskNu"' \
+  -e 'delay 0.2' \
+  -e 'key code 36' \
+  -e 'delay 0.4' \
+  -e 'keystroke "'"$(tr asknu_role_message1)"'"' \
+  -e 'delay 0.1' \
+  -e 'key code 36' \
+  -e 'delay 0.3' \
+  -e 'keystroke "'"$(tr asknu_role_message2)"'"' \
+  -e 'delay 0.1' \
+  -e 'key code 36' \
+  -e 'end tell' \
+  -e 'end tell' || true
 
 section "$(tr step5)"
 if xcode-select -p >/dev/null 2>&1; then
