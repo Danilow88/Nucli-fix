@@ -669,7 +669,16 @@ const MAINTENANCE_ACTIONS = {
         repeat with entry in chosen
           try
             set appPath to text item 2 of (entry as text)
-            tell application "Finder" to delete POSIX file appPath
+            set appName to do shell script "basename " & quoted form of appPath
+            set trashPath to (POSIX path of (path to home folder)) & ".Trash"
+            set destPath to trashPath & "/" & appName
+            try
+              if (do shell script "test -e " & quoted form of destPath & " && echo 1 || echo 0") is "1" then
+                set suffix to do shell script "date +%s"
+                set destPath to trashPath & "/" & suffix & "-" & appName
+              end if
+            end try
+            do shell script "mv " & quoted form of appPath & " " & quoted form of destPath with administrator privileges
           end try
         end repeat
         set AppleScript's text item delimiters to ""
