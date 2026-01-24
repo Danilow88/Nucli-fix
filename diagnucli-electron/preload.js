@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("diagnucli", {
   runAction: (actionId) => ipcRenderer.invoke("run-action", actionId),
   openRovo: () => ipcRenderer.invoke("open-rovo"),
   openSupport: () => ipcRenderer.invoke("open-support"),
+  openGadgetsRequest: () => ipcRenderer.invoke("open-gadgets-request"),
   openSetupHelp: () => ipcRenderer.invoke("open-setup-help"),
   openAskNu: () => ipcRenderer.invoke("open-ask-nu"),
   openZscalerFeedback: () => ipcRenderer.invoke("open-zscaler-feedback"),
