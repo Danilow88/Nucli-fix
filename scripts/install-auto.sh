@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Avoid commands consuming the script stdin when running via curl | bash.
+exec </dev/null
 
 say() { printf "%s\n" "$*"; }
 section() {
