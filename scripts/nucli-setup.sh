@@ -21,6 +21,9 @@ tr() {
         step2) echo "2) Solicitar acceso a la org Nubank + grupos NuCLI" ;;
         step2_desc) echo "Solicite acceso a la org de Nubank y a los grupos del repo NuCLI." ;;
         step2_desc2) echo "Si no tiene acceso, abra un ticket con IT Eng." ;;
+        step2_desc3) echo "Para scopes/permisos, solicite vía Ask Nu en Slack." ;;
+        step2_desc4) echo "Para configurar NuCLI en la cuenta IST, solicite el scope Admin." ;;
+        step2_desc5) echo "Al final, abriremos Slack para pedir el scope Admin en IST." ;;
         step3) echo "3) Crear y registrar clave SSH" ;;
         step3_email) echo "Email de GitHub: " ;;
         step3_skip) echo "Sin email. Se omite la generación de SSH." ;;
@@ -52,6 +55,7 @@ tr() {
         guide_link_label) echo "Guía:" ;;
         asknu) echo "Para escopos/permisos, solicite via Ask Nu en Slack." ;;
         ist_admin) echo "Para configurar NuCLI en la cuenta IST, solicite el scope Admin." ;;
+        asknu_ist_message) echo "Necesito el scope admin en la cuenta IST para acceder a NuCLI." ;;
         *) echo "$key" ;;
       esac
       ;;
@@ -66,6 +70,9 @@ tr() {
         step2) echo "2) Request access to Nubank org + NuCLI groups" ;;
         step2_desc) echo "Request access to the Nubank org and NuCLI repo groups." ;;
         step2_desc2) echo "If you don't have access, open a ticket with IT Eng." ;;
+        step2_desc3) echo "For scopes/permissions, request via Ask Nu on Slack." ;;
+        step2_desc4) echo "To set up NuCLI in the IST account, request Admin scope." ;;
+        step2_desc5) echo "At the end, we will open Slack to request Admin scope in IST." ;;
         step3) echo "3) Create and register SSH key" ;;
         step3_email) echo "GitHub email: " ;;
         step3_skip) echo "No email provided. Skipping SSH key generation." ;;
@@ -97,6 +104,7 @@ tr() {
         guide_link_label) echo "Guide:" ;;
         asknu) echo "For scopes/permissions, request via Ask Nu on Slack." ;;
         ist_admin) echo "For NuCLI setup in IST account, request Admin scope." ;;
+        asknu_ist_message) echo "I need admin scope in the IST account to access NuCLI." ;;
         *) echo "$key" ;;
       esac
       ;;
@@ -111,6 +119,9 @@ tr() {
         step2) echo "2) Solicitar acesso à org Nubank + grupos NuCLI" ;;
         step2_desc) echo "Solicite acesso à org da Nubank e aos grupos do repo NuCLI." ;;
         step2_desc2) echo "Se não tiver acesso, abra um ticket com IT Eng." ;;
+        step2_desc3) echo "Para escopos/permissões, solicite via Ask Nu no Slack." ;;
+        step2_desc4) echo "Para configurar NuCLI na conta IST, solicite o escopo Admin." ;;
+        step2_desc5) echo "Ao final, abriremos o Slack para pedir o escopo Admin na conta IST." ;;
         step3) echo "3) Criar e registrar chave SSH" ;;
         step3_email) echo "Email do GitHub: " ;;
         step3_skip) echo "Sem email. Pulando geração de SSH." ;;
@@ -142,6 +153,7 @@ tr() {
         guide_link_label) echo "Guia:" ;;
         asknu) echo "Para escopos/permissões, solicite via Ask Nu no Slack." ;;
         ist_admin) echo "Para configurar NuCLI na conta IST, solicite o escopo Admin." ;;
+        asknu_ist_message) echo "preciso do escopo admin na conta ist para acesso ao nucli" ;;
         *) echo "$key" ;;
       esac
       ;;
@@ -163,10 +175,29 @@ pause
 section "$(tr step2)"
 say "$(tr step2_desc)"
 say "$(tr step2_desc2)"
+say "$(tr step2_desc3)"
+say "$(tr step2_desc4)"
+say "$(tr step2_desc5)"
 say "$(tr asknu)"
 say "$(tr ist_admin)"
 open "https://nubank.atlassian.net/servicedesk/customer/portal/131" || true
 pause
+osascript -e 'tell application "Slack" to activate' \
+  -e 'delay 0.3' \
+  -e 'tell application "System Events"' \
+  -e 'tell process "Slack"' \
+  -e 'set frontmost to true' \
+  -e 'keystroke "k" using {command down}' \
+  -e 'delay 0.2' \
+  -e 'keystroke "@AskNu"' \
+  -e 'delay 0.2' \
+  -e 'key code 36' \
+  -e 'delay 0.4' \
+  -e 'keystroke "'"$(tr asknu_ist_message)"'"' \
+  -e 'delay 0.1' \
+  -e 'key code 36' \
+  -e 'end tell' \
+  -e 'end tell' || true
 
 section "$(tr step3)"
 if [[ ! -f "$HOME/.ssh/id_ed25519.pub" ]]; then
