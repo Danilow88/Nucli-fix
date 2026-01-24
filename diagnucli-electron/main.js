@@ -620,6 +620,7 @@ const MAINTENANCE_ACTIONS = {
           tell process "System Settings"
             set frontmost to true
             delay 0.6
+            -- Toggle "Set time and date automatically"
             try
               click checkbox "Set time and date automatically" of window 1
             end try
@@ -628,6 +629,15 @@ const MAINTENANCE_ACTIONS = {
             end try
             try
               click checkbox "Definir fecha y hora automáticamente" of window 1
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Set time and date automatically")
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Definir data e hora automaticamente")
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Definir fecha y hora automáticamente")
             end try
             delay 0.3
             try
@@ -639,7 +649,27 @@ const MAINTENANCE_ACTIONS = {
             try
               click button "Establecer" of window 1
             end try
+            delay 0.4
+            try
+              if exists sheet 1 of window 1 then
+                tell sheet 1 of window 1
+                  try
+                    set value of text field 1 to "time.apple.com"
+                  end try
+                  try
+                    click button "OK"
+                  end try
+                  try
+                    click button "Ok"
+                  end try
+                  try
+                    click button "Aceptar"
+                  end try
+                end tell
+              end if
+            end try
             delay 0.3
+            -- Toggle "Set time zone automatically"
             try
               click checkbox "Set time zone automatically using your current location" of window 1
             end try
@@ -648,6 +678,15 @@ const MAINTENANCE_ACTIONS = {
             end try
             try
               click checkbox "Definir zona horaria automáticamente usando tu ubicación actual" of window 1
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Set time zone automatically")
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Definir fuso horário automaticamente")
+            end try
+            try
+              click (first UI element of window 1 whose role description is "switch" and description contains "Definir zona horaria automáticamente")
             end try
           end tell
         end tell
@@ -700,9 +739,28 @@ const MAINTENANCE_ACTIONS = {
               end if
             end try
             do shell script "mv " & quoted form of appPath & " " & quoted form of destPath with administrator privileges
+            -- remove residuals for this app name
+            set appBase to do shell script "basename " & quoted form of appName & " .app"
+            set homePath to POSIX path of (path to home folder)
+            set cleanupTargets to {¬
+              homePath & "Library/Application Support/" & appBase, ¬
+              homePath & "Library/Caches/" & appBase, ¬
+              homePath & "Library/Preferences/" & appBase & ".plist", ¬
+              homePath & "Library/Logs/" & appBase, ¬
+              homePath & "Library/Saved Application State/" & appBase & ".savedState", ¬
+              homePath & "Library/Containers/" & appBase, ¬
+              homePath & "Library/Group Containers/" & appBase}
+            repeat with t in cleanupTargets
+              try
+                do shell script "rm -rf " & quoted form of (t as text)
+              end try
+            end repeat
           end try
         end repeat
         set AppleScript's text item delimiters to ""
+        try
+          tell application "Finder" to empty the trash
+        end try
       `;
       spawn("osascript", ["-e", osa]);
     }
