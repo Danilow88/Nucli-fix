@@ -6,6 +6,7 @@ const menuCards = document.querySelectorAll(".menu-card[data-option]");
 const actionCards = document.querySelectorAll("[data-action]");
 const setupHelpButton = document.getElementById("openSetupHelp");
 const askNuButton = document.getElementById("openAskNu");
+const zscalerFeedbackButton = document.getElementById("openZscalerFeedback");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 let runStarted = false;
@@ -122,10 +123,12 @@ const translations = {
     oncallTip: "Abre o WhatsApp de on-call.",
     setupHelpTip: "Abre o canal Setup Help no Slack.",
     askNuTip: "Abre o Slack e busca @AskNu.",
+    zscalerFeedbackTip: "Abre o canal zscaler-feedback-tmp no Slack.",
     setupHelpTitle:
       "Enviar dúvida para o canal Setup Help, canal para duvidas de aws e nucli setup.",
     setupHelpButton: "Abrir canal no Slack",
     askNuButton: "Falar com @AskNu",
+    zscalerFeedbackButton: "Problemas com VPN",
     setupHelpHint: "Clique para abrir o canal e pedir ajuda.",
     howTitle: "Como funciona",
     howList: [
@@ -256,9 +259,11 @@ const translations = {
     oncallTip: "Open the on-call WhatsApp.",
     setupHelpTip: "Open the Setup Help Slack channel.",
     askNuTip: "Open Slack and search for @AskNu.",
+    zscalerFeedbackTip: "Open the zscaler-feedback-tmp Slack channel.",
     setupHelpTitle: "Send a question to the Setup Help channel",
     setupHelpButton: "Open Slack channel",
     askNuButton: "Talk to @AskNu",
+    zscalerFeedbackButton: "VPN issues",
     setupHelpHint: "Click to open the channel and ask for help.",
     howTitle: "How it works",
     howList: [
@@ -391,9 +396,11 @@ const translations = {
     oncallTip: "Abre el WhatsApp de on-call.",
     setupHelpTip: "Abre el canal Setup Help en Slack.",
     askNuTip: "Abre Slack y busca @AskNu.",
+    zscalerFeedbackTip: "Abre el canal zscaler-feedback-tmp en Slack.",
     setupHelpTitle: "Enviar duda al canal Setup Help",
     setupHelpButton: "Abrir canal en Slack",
     askNuButton: "Hablar con @AskNu",
+    zscalerFeedbackButton: "Problemas con VPN",
     setupHelpHint: "Haga clic para abrir el canal y pedir ayuda.",
     howTitle: "Cómo funciona",
     howList: [
@@ -576,6 +583,13 @@ if (askNuButton) {
   askNuButton.addEventListener("click", async () => {
     await window.diagnucli.openAskNu();
     appendLog("\n[DiagnuCLI] AskNu opened in Slack.\n");
+  });
+}
+
+if (zscalerFeedbackButton) {
+  zscalerFeedbackButton.addEventListener("click", async () => {
+    await window.diagnucli.openZscalerFeedback();
+    appendLog("\n[DiagnuCLI] zscaler-feedback-tmp opened in Slack.\n");
   });
 }
 

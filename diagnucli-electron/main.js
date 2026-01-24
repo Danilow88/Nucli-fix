@@ -268,6 +268,24 @@ function openAskNuInSlack() {
   spawn("osascript", ["-e", osa]);
 }
 
+function openZscalerFeedbackInSlack() {
+  const osa = `
+    tell application "Slack" to activate
+    delay 0.3
+    tell application "System Events"
+      tell process "Slack"
+        set frontmost to true
+        keystroke "k" using {command down}
+        delay 0.2
+        keystroke "#zscaler-feedback-tmp"
+        delay 0.2
+        key code 36
+      end tell
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
 function openKeychainMyCertificates() {
   const osa = `
     tell application "Keychain Access" to activate
@@ -959,6 +977,12 @@ ipcMain.handle("open-setup-help", () => {
 ipcMain.handle("open-ask-nu", () => {
   logLine(`[DiagnuCLI] Open Slack AskNu`);
   openAskNuInSlack();
+  return { ok: true };
+});
+
+ipcMain.handle("open-zscaler-feedback", () => {
+  logLine(`[DiagnuCLI] Open Slack zscaler-feedback-tmp`);
+  openZscalerFeedbackInSlack();
   return { ok: true };
 });
 
