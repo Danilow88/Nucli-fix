@@ -661,17 +661,7 @@ const MAINTENANCE_ACTIONS = {
       ];
       const rmTargets = chromeTargets.map((target) => `"${target}"`).join(" ");
       const rmCookies = cookieFiles.map((file) => `"${file}"`).join(" ");
-      const openToolio = escapeAppleScript(
-        `tell application "Google Chrome" to activate
-tell application "Google Chrome"
-  if (count of windows) = 0 then
-    make new window
-  end if
-  set targetWindow to front window
-  set targetTab to make new tab at end of tabs of targetWindow with properties {URL: "${SHUFFLE_FIX_URL}"}
-  set active tab index of targetWindow to (index of targetTab)
-end tell`
-      );
+      const openToolio = `open -a "Google Chrome" "${SHUFFLE_FIX_URL}"`;
       const openAskNu = escapeAppleScript(
         `tell application "Slack" to activate
 delay 0.3
@@ -687,23 +677,15 @@ tell application "System Events"
   end tell
 end tell`
       );
-      const openWorkstation = escapeAppleScript(
-        `tell application "Google Chrome" to activate
-tell application "Google Chrome"
-  if (count of windows) = 0 then
-    make new window
-  end if
-  set targetWindow to front window
-  set targetTab to make new tab at end of tabs of targetWindow with properties {URL: "${WORKSTATION_IDENTITY_URL}"}
-  set active tab index of targetWindow to (index of targetTab)
-end tell`
-      );
+      const openWorkstation = `open -a "Google Chrome" "${WORKSTATION_IDENTITY_URL}"`;
       return [
         `echo "[DiagnuCLI] Shuffle Fix: passo 1 - abrir chamado do toolio."`,
-        `osascript -e "${openToolio}"`,
-        `read -r -p "Pode seguir para o proximo passo? (sim/nao): " shuffle_step1`,
+        `${openToolio}`,
+        `printf "Pode seguir para o proximo passo? (sim/nao): "`,
+        `read -r shuffle_step1`,
         `if [[ ! "$shuffle_step1" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
-        `read -r -p "Qual pais precisa do escopo? (br/mex/co): " scope_country`,
+        `printf "Qual pais precisa do escopo? (br/mex/co): "`,
+        `read -r scope_country`,
         `scope_country=$(echo "$scope_country" | tr '[:upper:]' '[:lower:]')`,
         `echo "[DiagnuCLI] Shuffle Fix: passo 2 - abrindo @AskNu e enviando pedido de escopo."`,
         `osascript -e "${openAskNu}"`,
@@ -711,10 +693,11 @@ end tell`
         `message="eu quero o escopo lift e cs para a conta ${"${"}scope_country${"}"} para acessar o shuffle."`,
         `osascript -e 'on run argv' -e 'set theMessage to item 1 of argv' -e 'tell application "System Events" to tell process "Slack" to keystroke theMessage' -e 'tell application "System Events" to tell process "Slack" to key code 36' -e 'end run' -- "$message"`,
         `echo "[DiagnuCLI] Shuffle Fix: aguarde aprovacao do escopo e do actor toolio antes de acessar o Shuffle."`,
-        `read -r -p "Pode prosseguir para o proximo passo? (sim/nao): " shuffle_step2`,
+        `printf "Pode prosseguir para o proximo passo? (sim/nao): "`,
+        `read -r shuffle_step2`,
         `if [[ ! "$shuffle_step2" =~ ^([sS][iI][mM])$ ]]; then echo "[DiagnuCLI] Shuffle Fix: encerrado pelo usuario."; exit 0; fi`,
         `echo "[DiagnuCLI] Shuffle Fix: passo 3 - abrir workstation-identity no Okta."`,
-        `osascript -e "${openWorkstation}"`,
+        `${openWorkstation}`,
         `echo "[DiagnuCLI] Shuffle Fix: esteja logado no Okta. Se pedir senha 3x, use a senha de desbloqueio da maquina."`,
         `echo "[DiagnuCLI] Shuffle Fix: passo 4 - fechar Chrome e limpar cache/cookies."`,
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
