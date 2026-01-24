@@ -33,6 +33,7 @@ const MAC_SETUP_URL =
   "https://itops-mdm.s3.amazonaws.com/ZTD/guide/pt-macbook-onboarding.html";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
+const OKTA_PASSWORDS_URL = "chrome://password-manager/passwords?q=okta";
 const APP_NAME = "DiagnuCLI";
 const DEV_ICON_PATH = path.join(__dirname, "assets", "icon.png");
 
@@ -121,6 +122,22 @@ function openMacSetupInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: macSetupUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openOktaPasswordsInChrome() {
+  const osa = `
+    set oktaUrl to "${OKTA_PASSWORDS_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: oktaUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -632,18 +649,11 @@ const MAINTENANCE_ACTIONS = {
       openMacSetupInChrome();
     }
   },
-  "open-itenge-mfa-reset": {
-    label: "Open ITEng MFA reset",
-    detail: "Abre ITEng Self Service e seleciona Reset my MFA.",
+  "open-okta-passwords": {
+    label: "Open Okta passwords",
+    detail: "Abre o gerenciador de senhas do Chrome filtrado por Okta.",
     runDirect: () => {
-      openITEngSelfServiceAndClick("Reset my MFA");
-    }
-  },
-  "open-itenge-password-change": {
-    label: "Open ITEng password change",
-    detail: "Abre ITEng Self Service e seleciona Change my password.",
-    runDirect: () => {
-      openITEngSelfServiceAndClick("Change my password");
+      openOktaPasswordsInChrome();
     }
   },
   "restart-vpn": {
