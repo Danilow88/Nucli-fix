@@ -640,25 +640,25 @@ const MAINTENANCE_ACTIONS = {
     runDirect: () => {
       const osa = `
         set appEntries to {}
-        tell application "System Events"
+        set appPaths to {}
+        try
+          set sysPaths to paragraphs of (do shell script "find /Applications -maxdepth 1 -type d -name '*.app' 2>/dev/null")
+          repeat with p in sysPaths
+            if (p as text) is not "" then set end of appPaths to (p as text)
+          end repeat
+        end try
+        try
+          set homePaths to paragraphs of (do shell script "find ~/Applications -maxdepth 1 -type d -name '*.app' 2>/dev/null")
+          repeat with p in homePaths
+            if (p as text) is not "" then set end of appPaths to (p as text)
+          end repeat
+        end try
+        repeat with appPath in appPaths
           try
-            set sysFolder to folder "/Applications"
-            set sysApps to files of sysFolder whose name extension is "app"
-            repeat with f in sysApps
-              set appPath to POSIX path of (f as alias)
-              set end of appEntries to (name of f as text) & " — " & appPath
-            end repeat
+            set appName to do shell script "basename " & quoted form of (appPath as text)
+            set end of appEntries to appName & " — " & (appPath as text)
           end try
-          set homeAppsPath to (POSIX path of (path to home folder)) & "Applications"
-          if exists folder homeAppsPath then
-            set homeFolder to folder homeAppsPath
-            set homeApps to files of homeFolder whose name extension is "app"
-            repeat with f in homeApps
-              set appPath to POSIX path of (f as alias)
-              set end of appEntries to (name of f as text) & " — " & appPath
-            end repeat
-          end if
-        end tell
+        end repeat
         if (count of appEntries) is 0 then
           display dialog "Nenhum app encontrado para desinstalar." buttons {"OK"} default button "OK"
           return
