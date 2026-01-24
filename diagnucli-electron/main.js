@@ -28,6 +28,8 @@ const LAPTOP_REQUEST_URL =
   "https://nubank.atlassian.net/servicedesk/customer/portal/131/group/552/create/2364";
 const GADGETS_REQUEST_URL =
   "https://nubank.atlassian.net/servicedesk/customer/portal/359/group/3385/create/4698";
+const PEOPLE_REQUEST_URL =
+  "https://nubank.atlassian.net/servicedesk/customer/portal/273";
 const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
@@ -126,6 +128,22 @@ function openGadgetsRequestInChrome() {
       end if
       set targetWindow to front window
       set targetTab to make new tab at end of tabs of targetWindow with properties {URL: gadgetsUrl}
+      set active tab index of targetWindow to (index of targetTab)
+    end tell
+  `;
+  spawn("osascript", ["-e", osa]);
+}
+
+function openPeopleRequestInChrome() {
+  const osa = `
+    set peopleUrl to "${PEOPLE_REQUEST_URL}"
+    tell application "Google Chrome" to activate
+    tell application "Google Chrome"
+      if (count of windows) = 0 then
+        make new window
+      end if
+      set targetWindow to front window
+      set targetTab to make new tab at end of tabs of targetWindow with properties {URL: peopleUrl}
       set active tab index of targetWindow to (index of targetTab)
     end tell
   `;
@@ -1025,6 +1043,12 @@ ipcMain.handle("open-gadgets-request", () => {
   logLine(`[DiagnuCLI] Open gadgets request: ${GADGETS_REQUEST_URL}`);
   openGadgetsRequestInChrome();
   return { ok: true, url: GADGETS_REQUEST_URL };
+});
+
+ipcMain.handle("open-people-request", () => {
+  logLine(`[DiagnuCLI] Open People request: ${PEOPLE_REQUEST_URL}`);
+  openPeopleRequestInChrome();
+  return { ok: true, url: PEOPLE_REQUEST_URL };
 });
 
 ipcMain.handle("open-laptop-request", () => {

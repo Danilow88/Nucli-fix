@@ -8,6 +8,7 @@ const setupHelpButton = document.getElementById("openSetupHelp");
 const askNuButton = document.getElementById("openAskNu");
 const zscalerFeedbackButton = document.getElementById("openZscalerFeedback");
 const gadgetsButton = document.getElementById("openGadgets");
+const peopleButton = document.getElementById("openPeople");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
 let runStarted = false;
@@ -88,6 +89,8 @@ const translations = {
     rovoDesc: "Abre o chat do Rovo no Google Chrome.",
     gadgetsTitle: "Pedir gadgets",
     gadgetsDesc: "Solicita itens utilizados para trabalhar.",
+    peopleTitle: "Falar com People",
+    peopleDesc: "Dúvidas de RH e NuWayOfWorking (Kadence).",
     supportTitle: "Abrir chamado (Suporte)",
     supportDesc: "Abre o portal de chamados da Nubank.",
     requestLaptopTitle: "Pedir troca de laptop",
@@ -122,6 +125,7 @@ const translations = {
     exitAppTip: "Sai do DiagnuCLI.",
     rovoTip: "Abre o Rovo no Chrome.",
     gadgetsTip: "Abre o formulário para pedir itens de trabalho.",
+    peopleTip: "Abre o portal de People para RH e Kadence.",
     supportTip: "Abre o portal de suporte.",
     requestLaptopTip: "Abre o formulário de troca de laptop.",
     oncallTip: "Abre o WhatsApp de on-call.",
@@ -226,6 +230,8 @@ const translations = {
     rovoDesc: "Opens the Rovo chat in Google Chrome.",
     gadgetsTitle: "Request gadgets",
     gadgetsDesc: "Requests items used for work.",
+    peopleTitle: "Talk to People",
+    peopleDesc: "HR and NuWayOfWorking questions (Kadence).",
     supportTitle: "Open ticket (Support)",
     supportDesc: "Opens the Nubank support portal.",
     requestLaptopTitle: "Request laptop replacement",
@@ -260,6 +266,7 @@ const translations = {
     exitAppTip: "Exit DiagnuCLI.",
     rovoTip: "Open Rovo in Chrome.",
     gadgetsTip: "Opens the form to request work items.",
+    peopleTip: "Opens the People portal for HR and Kadence.",
     supportTip: "Open the support portal.",
     requestLaptopTip: "Open the laptop replacement form.",
     oncallTip: "Open the on-call WhatsApp.",
@@ -366,6 +373,8 @@ const translations = {
     rovoDesc: "Abre el chat de Rovo en Google Chrome.",
     gadgetsTitle: "Pedir gadgets",
     gadgetsDesc: "Solicita artículos utilizados para trabajar.",
+    peopleTitle: "Hablar con People",
+    peopleDesc: "Dudas de RRHH y NuWayOfWorking (Kadence).",
     supportTitle: "Abrir ticket (Soporte)",
     supportDesc: "Abre el portal de soporte de Nubank.",
     requestLaptopTitle: "Solicitar cambio de laptop",
@@ -400,6 +409,7 @@ const translations = {
     exitAppTip: "Salir de DiagnuCLI.",
     rovoTip: "Abre Rovo en Chrome.",
     gadgetsTip: "Abre el formulario para solicitar artículos de trabajo.",
+    peopleTip: "Abre el portal de People para RRHH y Kadence.",
     supportTip: "Abre el portal de soporte.",
     requestLaptopTip: "Abre el formulario de cambio de laptop.",
     oncallTip: "Abre el WhatsApp de on-call.",
@@ -620,6 +630,13 @@ if (gadgetsButton) {
   gadgetsButton.addEventListener("click", async () => {
     await window.diagnucli.openGadgetsRequest();
     appendLog("\n[DiagnuCLI] Gadgets request opened.\n");
+  });
+}
+
+if (peopleButton) {
+  peopleButton.addEventListener("click", async () => {
+    await window.diagnucli.openPeopleRequest();
+    appendLog("\n[DiagnuCLI] People request opened.\n");
   });
 }
 
