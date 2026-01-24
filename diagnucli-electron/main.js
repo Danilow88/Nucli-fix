@@ -559,6 +559,24 @@ const MAINTENANCE_ACTIONS = {
           delay 0.2
           key code 36
         end tell
+        delay 1.2
+        tell application "System Settings" to activate
+        delay 0.4
+        tell application "System Events"
+          tell process "System Settings"
+            set frontmost to true
+            delay 0.3
+            try
+              click button "Add Fingerprint" of window 1
+            end try
+            try
+              click button "Adicionar impressão digital" of window 1
+            end try
+            try
+              click button "Agregar huella digital" of window 1
+            end try
+          end tell
+        end tell
       `;
       spawn("osascript", ["-e", osa]);
     }
