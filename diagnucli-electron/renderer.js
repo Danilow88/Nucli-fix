@@ -92,7 +92,7 @@ const translations = {
     gadgetsDesc: "Solicita itens utilizados para trabalhar.",
     peopleTitle: "Falar com People",
     peopleDesc: "Dúvidas de RH e NuWayOfWorking (Kadence).",
-    shuffleFixTitle: "Chamado Shuffle Fix",
+    shuffleFixTitle: "Shuffle Fix",
     shuffleFixDesc:
       "Cria chamado do toolio, pede scopes no AskNu e limpa cache do Chrome.",
     certificatesTitle: "Gerar certificados",
@@ -241,7 +241,7 @@ const translations = {
     gadgetsDesc: "Requests items used for work.",
     peopleTitle: "Talk to People",
     peopleDesc: "HR and NuWayOfWorking questions (Kadence).",
-    shuffleFixTitle: "Shuffle Fix request",
+    shuffleFixTitle: "Shuffle Fix",
     shuffleFixDesc:
       "Creates the toolio ticket, requests scopes in AskNu, and clears Chrome cache.",
     certificatesTitle: "Generate certificates",
@@ -392,7 +392,7 @@ const translations = {
     gadgetsDesc: "Solicita artículos utilizados para trabajar.",
     peopleTitle: "Hablar con People",
     peopleDesc: "Dudas de RRHH y NuWayOfWorking (Kadence).",
-    shuffleFixTitle: "Solicitud Shuffle Fix",
+    shuffleFixTitle: "Shuffle Fix",
     shuffleFixDesc:
       "Crea el ticket de toolio, pide scopes en AskNu y limpia la caché de Chrome.",
     certificatesTitle: "Generar certificados",

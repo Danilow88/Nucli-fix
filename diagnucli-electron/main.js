@@ -61,10 +61,10 @@ const SHUFFLE_FIX_I18N = {
       "Shuffle Fix: esteja logado no Okta. Se pedir senha 3x, use a senha de desbloqueio da maquina.",
     done: "Shuffle Fix: finalizado.",
     stop: "Shuffle Fix: encerrado pelo usuario.",
-    qStep1: "Pode seguir para o proximo passo? (sim/nao): ",
+    qStep1: "Pressione Enter para continuar...",
     qCountry: "Qual pais precisa do escopo? (br/mex/co): ",
-    qStep2: "Pode prosseguir para o proximo passo? (sim/nao): ",
-    qStep3: "Pode prosseguir para o passo 4? (sim/nao): "
+    qStep2: "Pressione Enter para continuar...",
+    qStep3: "Pressione Enter para continuar..."
   },
   en: {
     step1: "Shuffle Fix: step 1 - open the toolio request ticket.",
@@ -79,10 +79,10 @@ const SHUFFLE_FIX_I18N = {
       "Shuffle Fix: make sure you are logged into Okta. If it asks for password 3x, use your machine unlock password.",
     done: "Shuffle Fix: finished.",
     stop: "Shuffle Fix: canceled by user.",
-    qStep1: "Can I proceed to the next step? (yes/no): ",
+    qStep1: "Press Enter to continue...",
     qCountry: "Which country needs the scope? (br/mex/co): ",
-    qStep2: "Can I proceed to the next step? (yes/no): ",
-    qStep3: "Can I proceed to step 4? (yes/no): "
+    qStep2: "Press Enter to continue...",
+    qStep3: "Press Enter to continue..."
   },
   es: {
     step1: "Shuffle Fix: paso 1 - abrir el ticket de toolio.",
@@ -97,10 +97,10 @@ const SHUFFLE_FIX_I18N = {
       "Shuffle Fix: asegúrese de iniciar sesión en Okta. Si pide la contraseña 3 veces, use la contraseña de desbloqueo de la máquina.",
     done: "Shuffle Fix: finalizado.",
     stop: "Shuffle Fix: cancelado por el usuario.",
-    qStep1: "¿Puedo continuar al siguiente paso? (si/no): ",
+    qStep1: "Presione Enter para continuar...",
     qCountry: "¿Qué país necesita el scope? (br/mex/co): ",
-    qStep2: "¿Puedo continuar al siguiente paso? (si/no): ",
-    qStep3: "¿Puedo continuar al paso 4? (si/no): "
+    qStep2: "Presione Enter para continuar...",
+    qStep3: "Presione Enter para continuar..."
   }
 };
 
@@ -736,7 +736,7 @@ tell application "System Events"
 end tell`
       );
       const openWorkstation = `open -a "Google Chrome" "${WORKSTATION_IDENTITY_URL}"`;
-      const yesRegex = "^(sim|si|yes|y)$";
+      const yesRegex = "^(sim|si|yes|y)?$";
       return [
         `echo "[DiagnuCLI] ${texts.step1}"`,
         `${openToolio}`,
