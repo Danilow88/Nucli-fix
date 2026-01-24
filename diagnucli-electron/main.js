@@ -768,10 +768,13 @@ const MAINTENANCE_ACTIONS = {
               homePath & "Library/Logs/" & appBase, ¬
               homePath & "Library/Saved Application State/" & appBase & ".savedState", ¬
               homePath & "Library/Containers/" & appBase, ¬
-              homePath & "Library/Group Containers/" & appBase}
+              homePath & "Library/Group Containers/" & appBase, ¬
+              "/Library/Application Support/" & appBase, ¬
+              "/Library/Caches/" & appBase, ¬
+              "/Library/Preferences/" & "com." & appBase & ".*"}
             repeat with t in cleanupTargets
               try
-                do shell script "rm -rf " & quoted form of (t as text)
+                do shell script "rm -rf " & quoted form of (t as text) with administrator privileges with prompt authPrompt
               end try
             end repeat
           end try
