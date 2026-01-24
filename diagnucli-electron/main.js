@@ -444,6 +444,31 @@ ipcMain.handle("install-nucli", (_event, lang) => {
 });
 
 const MAINTENANCE_ACTIONS = {
+  "fix-gnu-chcon": {
+    label: "Fix GNU chcon error",
+    detail: "Entra em ~/dev/nu/nucli e executa git pull --rebase.",
+    buildCommand: () => {
+      const nucliDir = path.join(os.homedir(), "dev", "nu", "nucli");
+      return [
+        `echo "[DiagnuCLI] GNU chcon fix started"`,
+        `cd "${nucliDir}"`,
+        `echo "[DiagnuCLI] cd ${nucliDir}"`,
+        `git pull --rebase`,
+        `echo "[DiagnuCLI] GNU chcon fix finished"`
+      ].join("; ");
+    }
+  },
+  "fix-java-runtime": {
+    label: "Fix Java Runtime missing",
+    detail: "Instala Temurin via Homebrew.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Java Runtime fix started"`,
+        `brew install --cask temurin`,
+        `echo "[DiagnuCLI] Java Runtime fix finished"`
+      ].join("; ");
+    }
+  },
   "cache-mac": {
     label: "macOS cache cleanup",
     detail: "Remove caches em ~/Library/Caches e /Library/Caches.",
@@ -494,24 +519,27 @@ const MAINTENANCE_ACTIONS = {
   },
   "update-app": {
     label: "DiagnuCLI app update",
-    detail: "Atualiza repo, roda install.sh e reinicia o app.",
+    detail: "Fecha apps e roda o instalador via curl.",
     buildCommand: () => {
-      const repo = REPO_PATH;
-      const electronDir = path.join(repo, "diagnucli-electron");
-      const relaunch = [
-        `osascript -e 'tell application "DiagnuCLI" to quit' || true`,
-        `sleep 1`,
-        `open -a "/Applications/DiagnuCLI.app"`
-      ].join("; ");
+      const quitAppsScript = `
+        tell application "System Events"
+          set keepApps to {"Finder", "Terminal", "System Events"}
+          repeat with proc in (application processes whose background only is false)
+            set appName to name of proc as text
+            if keepApps does not contain appName then
+              try
+                tell application appName to quit
+              end try
+            end if
+          end repeat
+        end tell
+      `;
       return [
         `echo "[DiagnuCLI] Update started"`,
-        `if [ ! -d "${repo}/.git" ]; then echo "[DiagnuCLI] Repo not found: ${repo}"; exit 1; fi`,
-        `cd "${repo}"`,
-        `git pull`,
-        `cd "${electronDir}"`,
-        `./install.sh`,
-        `echo "[DiagnuCLI] Update finished"`,
-        relaunch
+        `osascript -e '${quitAppsScript.replace(/'/g, "'\"'\"'")}'`,
+        `sleep 1`,
+        `curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash`,
+        `echo "[DiagnuCLI] Update finished"`
       ].join("; ");
     }
   },
