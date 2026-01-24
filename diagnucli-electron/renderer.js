@@ -29,6 +29,11 @@ const translations = {
     opt7Desc: "Roda nu doctor, versões e comandos-chave.",
     installNucliTitle: "Instalar NuCLI",
     installNucliDesc: "Passo a passo de acesso, SSH, Homebrew e AWS.",
+    gnuChconTitle: 'Error: "GNU version of chcon was not found" fix',
+    gnuChconDesc:
+      "Este erro ocorre por divergência de versões/caminhos. Vai para ~/dev/nu/nucli e roda git pull --rebase.",
+    javaRuntimeTitle: "Unable to locate a Java Runtime Fix",
+    javaRuntimeDesc: "Instala o Java (Temurin) via Homebrew.",
     opt10Title: "Roles, escopos e países",
     opt10Desc: "Confere roles, escopos e contas permitidas.",
     opt12Title: "Relatório consolidado",
@@ -84,6 +89,9 @@ const translations = {
     opt1Tip: "Roda a verificação completa do NuCLI/AWS.",
     opt7Tip: "Executa testes rápidos do NuCLI.",
     installNucliTip: "Guia passo a passo para instalar e configurar.",
+    gnuChconTip:
+      'Corrige o erro "GNU version of chcon was not found" com git pull --rebase.',
+    javaRuntimeTip: "Instala o Temurin para corrigir o Java Runtime.",
     opt10Tip: "Verifica roles e escopos por conta.",
     opt12Tip: "Gera um relatório consolidado final.",
     opt19Tip: "Diagnóstico para erro BR e grupos ausentes.",
@@ -151,6 +159,11 @@ const translations = {
     opt7Desc: "Runs nu doctor, versions, and key commands.",
     installNucliTitle: "Install NuCLI",
     installNucliDesc: "Step-by-step access, SSH, Homebrew, and AWS setup.",
+    gnuChconTitle: 'Error: "GNU version of chcon was not found" fix',
+    gnuChconDesc:
+      "This error happens due to version/path mismatches. Goes to ~/dev/nu/nucli and runs git pull --rebase.",
+    javaRuntimeTitle: "Unable to locate a Java Runtime Fix",
+    javaRuntimeDesc: "Installs Java (Temurin) via Homebrew.",
     opt10Title: "Roles, scopes and countries",
     opt10Desc: "Checks roles, scopes, and account access.",
     opt12Title: "Consolidated report",
@@ -206,6 +219,9 @@ const translations = {
     opt1Tip: "Runs the full NuCLI/AWS verification.",
     opt7Tip: "Runs quick NuCLI checks.",
     installNucliTip: "Step-by-step installation and setup.",
+    gnuChconTip:
+      'Fixes the "GNU version of chcon was not found" error with git pull --rebase.',
+    javaRuntimeTip: "Installs Temurin to fix the Java Runtime error.",
     opt10Tip: "Validates roles and scopes.",
     opt12Tip: "Creates the final consolidated report.",
     opt19Tip: "Diagnoses BR prod error and missing groups.",
@@ -272,6 +288,11 @@ const translations = {
     opt7Desc: "Ejecuta nu doctor, versiones y comandos clave.",
     installNucliTitle: "Instalar NuCLI",
     installNucliDesc: "Paso a paso de acceso, SSH, Homebrew y AWS.",
+    gnuChconTitle: 'Error: "GNU version of chcon was not found" fix',
+    gnuChconDesc:
+      "Este error ocurre por divergencia de versiones/rutas. Va a ~/dev/nu/nucli y ejecuta git pull --rebase.",
+    javaRuntimeTitle: "Unable to locate a Java Runtime Fix",
+    javaRuntimeDesc: "Instala Java (Temurin) con Homebrew.",
     opt10Title: "Roles, alcances y países",
     opt10Desc: "Verifica roles, alcances y cuentas.",
     opt12Title: "Informe consolidado",
@@ -327,6 +348,9 @@ const translations = {
     opt1Tip: "Ejecuta la verificación completa NuCLI/AWS.",
     opt7Tip: "Ejecuta checks rápidos de NuCLI.",
     installNucliTip: "Instalación y configuración paso a paso.",
+    gnuChconTip:
+      'Corrige el error "GNU version of chcon was not found" con git pull --rebase.',
+    javaRuntimeTip: "Instala Temurin para corregir el error de Java Runtime.",
     opt10Tip: "Valida roles y alcances.",
     opt12Tip: "Crea el informe consolidado final.",
     opt19Tip: "Diagnostica el error BR y grupos faltantes.",
@@ -466,6 +490,8 @@ const sendMenuChoice = async (choice, title) => {
 
 const actionLabels = {
   "install-nucli": "NuCLI installer",
+  "fix-gnu-chcon": "Fix GNU chcon error",
+  "fix-java-runtime": "Fix Java Runtime missing",
   "cache-mac": "macOS cache cleanup",
   "cache-chrome": "Chrome cache cleanup",
   "update-app": "DiagnuCLI app update",

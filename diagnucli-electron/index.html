@@ -20,7 +20,7 @@
             <p data-i18n="subtitle">Diagnóstico interativo NuCLI + AWS</p>
           </div>
         </div>
-          <div class="controls">
+        <div class="controls">
           <div class="lang-toggle">
             <button class="lang-btn" data-lang="pt">PT-BR</button>
             <button class="lang-btn" data-lang="en">EN</button>
@@ -51,60 +51,78 @@
           <div class="menu-group">
             <div class="menu-group-title" data-i18n="groupDiagTitle">
               Diagnóstico NuCLI/AWS
-            </div>
-            <div class="menu-grid">
+          </div>
+          <div class="menu-grid">
               <button class="menu-card" data-option="1" data-tooltip="opt1Tip">
-                <span class="menu-title" data-i18n="opt1Title">
+              <span class="menu-title" data-i18n="opt1Title">
                   <span class="menu-icon" aria-hidden="true">✅</span>
-                  Verificação completa
-                </span>
-                <span class="menu-desc" data-i18n="opt1Desc">
-                  Roda todas as verificações e gera relatório final.
-                </span>
-              </button>
+                Verificação completa
+              </span>
+              <span class="menu-desc" data-i18n="opt1Desc">
+                Roda todas as verificações e gera relatório final.
+              </span>
+            </button>
               <button class="menu-card" data-option="7" data-tooltip="opt7Tip">
-                <span class="menu-title" data-i18n="opt7Title">
+              <span class="menu-title" data-i18n="opt7Title">
                   <span class="menu-icon" aria-hidden="true">🧪</span>
-                  Testar comandos NuCLI
-                </span>
-                <span class="menu-desc" data-i18n="opt7Desc">
-                  Checa nu doctor, versões e comandos essenciais.
-                </span>
-              </button>
+                Testar comandos NuCLI
+              </span>
+              <span class="menu-desc" data-i18n="opt7Desc">
+                Checa nu doctor, versões e comandos essenciais.
+              </span>
+            </button>
               <button class="menu-card" data-option="10" data-tooltip="opt10Tip">
-                <span class="menu-title" data-i18n="opt10Title">
+              <span class="menu-title" data-i18n="opt10Title">
                   <span class="menu-icon" aria-hidden="true">🧩</span>
-                  Roles, escopos e países
-                </span>
-                <span class="menu-desc" data-i18n="opt10Desc">
-                  Valida permissões e acessos por conta.
-                </span>
-              </button>
+                Roles, escopos e países
+              </span>
+              <span class="menu-desc" data-i18n="opt10Desc">
+                Valida permissões e acessos por conta.
+              </span>
+            </button>
               <button class="menu-card" data-option="12" data-tooltip="opt12Tip">
-                <span class="menu-title" data-i18n="opt12Title">
+              <span class="menu-title" data-i18n="opt12Title">
                   <span class="menu-icon" aria-hidden="true">📄</span>
-                  Relatório consolidado
-                </span>
-                <span class="menu-desc" data-i18n="opt12Desc">
-                  Gera relatório final com detalhes completos.
-                </span>
-              </button>
+                Relatório consolidado
+              </span>
+              <span class="menu-desc" data-i18n="opt12Desc">
+                Gera relatório final com detalhes completos.
+              </span>
+            </button>
               <button class="menu-card" data-option="19" data-tooltip="opt19Tip">
-                <span class="menu-title" data-i18n="opt19Title">
+              <span class="menu-title" data-i18n="opt19Title">
                   <span class="menu-icon" aria-hidden="true">🧯</span>
-                  Erro br prod / Missing Groups
+                Erro br prod / Missing Groups
+              </span>
+              <span class="menu-desc" data-i18n="opt19Desc">
+                Diagnóstico guiado para grupos e roles BR.
+              </span>
+            </button>
+              <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
+              <span class="menu-title" data-i18n="opt22Title">
+                  <span class="menu-icon" aria-hidden="true">🔐</span>
+                Cadastrar digital
+              </span>
+              <span class="menu-desc" data-i18n="opt22Desc">
+                Configura IAM user, Okta e FIDO/Touch ID.
+              </span>
+            </button>
+              <button class="menu-card" data-action="fix-gnu-chcon" data-tooltip="gnuChconTip">
+                <span class="menu-title" data-i18n="gnuChconTitle">
+                  <span class="menu-icon" aria-hidden="true">🛠️</span>
+                  Error: "GNU version of chcon was not found" fix
                 </span>
-                <span class="menu-desc" data-i18n="opt19Desc">
-                  Diagnóstico guiado para grupos e roles BR.
+                <span class="menu-desc" data-i18n="gnuChconDesc">
+                  Atualiza o repo NuCLI via git pull --rebase.
                 </span>
               </button>
-              <button class="menu-card" data-option="22" data-tooltip="opt22Tip">
-                <span class="menu-title" data-i18n="opt22Title">
-                  <span class="menu-icon" aria-hidden="true">🔐</span>
-                  Cadastrar digital
+              <button class="menu-card" data-action="fix-java-runtime" data-tooltip="javaRuntimeTip">
+                <span class="menu-title" data-i18n="javaRuntimeTitle">
+                  <span class="menu-icon" aria-hidden="true">☕️</span>
+                  Unable to locate a Java Runtime Fix
                 </span>
-                <span class="menu-desc" data-i18n="opt22Desc">
-                  Configura IAM user, Okta e FIDO/Touch ID.
+                <span class="menu-desc" data-i18n="javaRuntimeDesc">
+                  Instala o Java (Temurin) via Homebrew.
                 </span>
               </button>
             </div>
