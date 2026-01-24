@@ -27,7 +27,10 @@ ensure_brew() {
 
 ensure_brew
 say "Reinstalling simdjson..."
-brew reinstall simdjson || brew install simdjson
+HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ENV_HINTS=1 \
+  brew reinstall simdjson </dev/null || \
+  HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ENV_HINTS=1 \
+  brew install simdjson </dev/null
 
 section "Step 1/2: Node.js 18+"
 needs_node_update() {
@@ -42,8 +45,12 @@ needs_node_update() {
 if needs_node_update; then
   ensure_brew
   say "Installing/Updating Node.js 18+..."
-  brew install node@18 || brew upgrade node@18
-  brew link --force --overwrite node@18 >/dev/null 2>&1 || true
+  HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ENV_HINTS=1 \
+    brew install node@18 </dev/null || \
+    HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ENV_HINTS=1 \
+    brew upgrade node@18 </dev/null
+  HOMEBREW_NO_INSTALL_CLEANUP=1 HOMEBREW_NO_ENV_HINTS=1 \
+    brew link --force --overwrite node@18 >/dev/null 2>&1 || true
 fi
 
 if ! command -v node >/dev/null 2>&1; then
