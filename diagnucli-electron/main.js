@@ -1040,6 +1040,45 @@ end tell`
       ].join("; ");
     }
   },
+  "clean-clutter": {
+    label: "Clean clutter",
+    detail: "Abre Armazenamento com recomendações.",
+    runDirect: () => {
+      const command = `open -b com.apple.systempreferences "x-apple.systempreferences:com.apple.StorageManagement"`;
+      spawn("/bin/bash", ["-lc", command], {
+        cwd: os.homedir(),
+        env: {
+          ...process.env,
+          PATH: "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        }
+      });
+    }
+  },
+  "startup-items": {
+    label: "Startup items",
+    detail: "Abre Itens de Início nos Ajustes do Sistema.",
+    runDirect: () => {
+      const command = `open -b com.apple.systempreferences "x-apple.systempreferences:com.apple.LoginItems-Settings.extension"`;
+      spawn("/bin/bash", ["-lc", command], {
+        cwd: os.homedir(),
+        env: {
+          ...process.env,
+          PATH: "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+        }
+      });
+    }
+  },
+  "memory-cleanup": {
+    label: "Memory cleanup",
+    detail: "Executa purge de memória.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Memory cleanup started"`,
+        `if command -v /usr/bin/purge >/dev/null 2>&1; then sudo /usr/bin/purge; else echo "[DiagnuCLI] purge not available"; fi`,
+        `echo "[DiagnuCLI] Memory cleanup finished"`
+      ].join("; ");
+    }
+  },
   "update-app": {
     label: "DiagnuCLI app update",
     detail: "Fecha apps e roda o instalador via curl.",
