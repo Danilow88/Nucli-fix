@@ -35,8 +35,7 @@ const SHUFFLE_FIX_URL =
 const ONCALL_WHATSAPP_URL = "https://wa.me/5511951857554";
 const GUIDE_URL_BASE =
   "https://nubank.atlassian.net/wiki/spaces/ITKB/pages/262490555235/How+to+Configure+NuCli+on+MacBook";
-const MAC_SETUP_URL =
-  "https://itops-mdm.s3.amazonaws.com/ZTD/guide/pt-macbook-onboarding.html";
+const MAC_SETUP_URL = "https://itops-mdm.s3.amazonaws.com/ZTD/guide/home.html";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
 const OKTA_PASSWORDS_URL = "chrome://password-manager/passwords?q=okta";

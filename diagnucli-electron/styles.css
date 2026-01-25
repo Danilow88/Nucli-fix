@@ -1,8 +1,14 @@
+html,
 body {
   margin: 0;
   font-family: "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif;
   background: radial-gradient(circle at top left, #1b0b2e 0%, #0b0715 45%);
   color: #efe7ff;
+  height: 100%;
+}
+
+body {
+  overflow: hidden;
 }
 
 .app {
@@ -12,6 +18,8 @@ body {
   gap: 24px;
   padding: 24px 32px 32px;
   box-sizing: border-box;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .note-inline {
@@ -85,6 +93,8 @@ body {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .controls button {
@@ -162,6 +172,14 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+
+.panel:first-of-type {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .panel {
@@ -227,7 +245,7 @@ body {
   text-align: left;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
-  min-height: 96px;
+  min-height: 104px;
 }
 
 .menu-card:hover {
@@ -276,6 +294,7 @@ body {
 .terminal-row {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .terminal-row input {
@@ -320,7 +339,10 @@ body {
 }
 
 .log {
-  height: 520px;
+  height: auto;
+  flex: 1;
+  min-height: 320px;
+  max-height: 55vh;
   border-radius: 12px;
   overflow: auto;
   background: #0b0715;
