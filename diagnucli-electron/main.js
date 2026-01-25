@@ -1210,6 +1210,32 @@ end tell`
       openSpeedtestWindow();
     }
   },
+  "nucli-update-credentials": {
+    label: "NuCLI update + credentials fix",
+    detail: "Atualiza NuCLI e refaz credenciais AWS/CodeArtifact.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] NuCLI update and credentials fix started"`,
+        `nu update`,
+        `nu aws credentials reset`,
+        `nu aws credentials setup`,
+        `nu aws profiles-config setup`,
+        `nu aws credentials refresh`,
+        `nu-br auth get-refresh-token`,
+        `nu-mx auth get-refresh-token`,
+        `nu-co auth get-refresh-token`,
+        `nu-ist auth get-refresh-token`,
+        `nu-us-staging auth get-refresh-token --env staging`,
+        `nu-mx auth get-refresh-token --env staging`,
+        `nu-co auth get-refresh-token --env staging`,
+        `nu-br-staging auth get-refresh-token --env staging`,
+        `nu aws credentials refresh`,
+        `nu aws shared-role-credentials refresh --interactive`,
+        `nu codeartifact login maven`,
+        `echo "[DiagnuCLI] NuCLI update and credentials fix finished"`
+      ].join(" && ");
+    }
+  },
   "activity-monitor": {
     label: "Open Activity Monitor",
     detail: "Abre o Activity Monitor.",
