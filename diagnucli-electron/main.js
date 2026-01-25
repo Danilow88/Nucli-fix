@@ -1132,6 +1132,40 @@ end tell`
       spawn("osascript", ["-e", osa]);
     }
   },
+  "clean-clutter": {
+    label: "Clean clutter",
+    detail: "Abre o gerenciamento de armazenamento do macOS.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Clean clutter started"`,
+        `open "x-apple.systempreferences:com.apple.StorageManagement-Settings.extension"`,
+        `echo "[DiagnuCLI] Clean clutter finished"`
+      ].join("; ");
+    }
+  },
+  "startup-items": {
+    label: "Startup items",
+    detail: "Abre itens de inicialização do macOS.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Opening login items"`,
+        `open "x-apple.systempreferences:com.apple.LoginItems-Settings.extension"`,
+        `echo "[DiagnuCLI] Login items opened"`
+      ].join("; ");
+    }
+  },
+  "memory-cleanup": {
+    label: "Memory cleanup",
+    detail: "Tenta liberar RAM e abre o Monitor de Atividades.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Memory cleanup started"`,
+        `if command -v purge >/dev/null 2>&1; then sudo purge; else echo "[DiagnuCLI] purge not available; opening Activity Monitor"; fi`,
+        `open -a "Activity Monitor"`,
+        `echo "[DiagnuCLI] Memory cleanup finished"`
+      ].join("; ");
+    }
+  },
   "activity-monitor": {
     label: "Open Activity Monitor",
     detail: "Abre o Activity Monitor.",
