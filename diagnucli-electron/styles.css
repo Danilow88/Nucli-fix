@@ -68,7 +68,7 @@ body {
 .logo {
   width: 88px;
   height: 88px;
-  border-radius: 18px;
+  border-radius: 14px;
   display: grid;
   place-items: center;
   overflow: hidden;
