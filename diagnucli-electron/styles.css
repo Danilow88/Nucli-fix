@@ -60,7 +60,8 @@ body {
 }
 
 .brand {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 16px;
 }
@@ -73,6 +74,7 @@ body {
   place-items: center;
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(124, 58, 237, 0.45);
+  flex-shrink: 0;
 }
 
 .logo img {
