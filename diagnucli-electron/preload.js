@@ -26,6 +26,10 @@ contextBridge.exposeInMainWorld("diagnucli", {
   toggleTrayMode: () => ipcRenderer.invoke("toggle-tray-mode"),
   toggleAutoCache: () => ipcRenderer.invoke("toggle-auto-cache"),
   getSystemStats: () => ipcRenderer.invoke("get-system-stats"),
+  onMonitorMode: (callback) => {
+    ipcRenderer.removeAllListeners("monitor-mode");
+    ipcRenderer.on("monitor-mode", (_event, enabled) => callback(enabled));
+  },
   exitApp: () => ipcRenderer.invoke("exit-app"),
   clearLog: () => ipcRenderer.invoke("clear-log")
 });

@@ -206,28 +206,29 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.control-action[data-action="exit-app"],
-.control-action[data-action="minimize-app"],
-.control-action[data-action="maximize-app"] {
-  width: 38px;
-  height: 38px;
+.window-controls .control-action {
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
+  border-radius: 10px;
   justify-content: center;
-  margin-left: auto;
+  margin-left: 0;
+  background: rgba(18, 10, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #efe7ff;
+  font-weight: 600;
+  line-height: 1;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 6px 14px rgba(0, 0, 0, 0.28);
 }
 
-.control-action[data-action="minimize-app"] {
-  font-size: 16px;
-  margin-left: 0;
+.window-controls .control-action:hover {
+  background: rgba(28, 16, 46, 0.9);
 }
 
-.control-action[data-action="maximize-app"] {
-  font-size: 16px;
-  margin-left: 0;
+.window-controls .menu-icon {
+  font-size: 14px;
 }
 
 *::-webkit-scrollbar {
@@ -633,11 +634,26 @@ body {
     justify-content: center;
   }
 
-  .control-action[data-action="exit-app"],
-  .control-action[data-action="minimize-app"],
-  .control-action[data-action="maximize-app"] {
-    width: 42px;
+  .window-controls .control-action {
+    width: 36px;
+    height: 36px;
   }
+}
+
+body.monitor-only .main {
+  grid-template-columns: 1fr;
+}
+
+body.monitor-only .panel:first-of-type {
+  display: none;
+}
+
+body.monitor-only .panel.info {
+  padding: 18px;
+}
+
+body.monitor-only .panel.info > *:not(.monitor-panel) {
+  display: none;
 }
 
 .info-overlay {

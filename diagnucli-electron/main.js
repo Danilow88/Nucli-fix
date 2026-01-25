@@ -19,6 +19,8 @@ let trayModeEnabled = false;
 let trayInterval = null;
 let autoCacheEnabled = false;
 let autoCacheInterval = null;
+let monitorModeEnabled = false;
+let monitorModeSnapshot = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -637,7 +639,22 @@ function enableTrayMode() {
   }
   trayModeEnabled = true;
   if (mainWindow && !mainWindow.isDestroyed()) {
-    mainWindow.hide();
+    monitorModeSnapshot = {
+      bounds: mainWindow.getBounds(),
+      resizable: mainWindow.isResizable(),
+      alwaysOnTop: mainWindow.isAlwaysOnTop()
+    };
+    mainWindow.setResizable(false);
+    mainWindow.setAlwaysOnTop(true, "floating");
+    mainWindow.setBounds({
+      x: monitorModeSnapshot.bounds.x,
+      y: monitorModeSnapshot.bounds.y,
+      width: 380,
+      height: 520
+    });
+    mainWindow.show();
+    mainWindow.focus();
+    mainWindow.webContents.send("monitor-mode", true);
   }
   startTrayMonitor();
   logLine("[DiagnuCLI] Tray mode enabled.");
@@ -646,8 +663,17 @@ function enableTrayMode() {
 function disableTrayMode() {
   trayModeEnabled = false;
   if (mainWindow && !mainWindow.isDestroyed()) {
+    if (monitorModeSnapshot) {
+      mainWindow.setAlwaysOnTop(monitorModeSnapshot.alwaysOnTop);
+      mainWindow.setResizable(monitorModeSnapshot.resizable);
+      mainWindow.setBounds(monitorModeSnapshot.bounds);
+    } else {
+      mainWindow.setAlwaysOnTop(false);
+      mainWindow.setResizable(true);
+    }
     mainWindow.show();
     mainWindow.focus();
+    mainWindow.webContents.send("monitor-mode", false);
   }
   stopTrayMonitor();
   if (tray) {

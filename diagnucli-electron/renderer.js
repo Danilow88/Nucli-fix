@@ -89,9 +89,9 @@ const translations = {
     autoCacheTitle: "Limpeza automática do Chrome",
     autoCacheDesc: "Ativa ou desativa a limpeza automática de cache.",
     autoCacheTip: "Limpa cache do Chrome de tempos em tempos.",
-    trayModeTitle: "Modo minimizado (barra superior)",
-    trayModeDesc: "Minimiza no menu do macOS e mostra CPU/Memória.",
-    trayModeTip: "Ativa o modo menu bar com monitor de recursos.",
+    trayModeTitle: "Modo minimizado (monitor)",
+    trayModeDesc: "Entra no modo compacto estilo Jira Monitor.",
+    trayModeTip: "Mostra apenas o painel de monitoramento.",
     activityMonitorTitle: "Abrir Monitor de Atividades",
     activityMonitorDesc: "Abre o monitor de processos.",
     emptyTrashTitle: "Esvaziar Lixeira",
@@ -262,9 +262,9 @@ const translations = {
     autoCacheTitle: "Automatic Chrome cleanup",
     autoCacheDesc: "Enable or disable automatic cache cleanup.",
     autoCacheTip: "Cleans Chrome cache periodically.",
-    trayModeTitle: "Minimized mode (menu bar)",
-    trayModeDesc: "Minimize to the macOS menu bar and show CPU/Memory.",
-    trayModeTip: "Enable menu bar mode with resource monitor.",
+    trayModeTitle: "Minimized mode (monitor)",
+    trayModeDesc: "Enter compact Jira Monitor style mode.",
+    trayModeTip: "Shows only the monitoring panel.",
     activityMonitorTitle: "Open Activity Monitor",
     activityMonitorDesc: "Opens the process monitor.",
     emptyTrashTitle: "Empty Trash",
@@ -432,9 +432,9 @@ const translations = {
     autoCacheTitle: "Limpieza automática de Chrome",
     autoCacheDesc: "Activa o desactiva la limpieza automática de caché.",
     autoCacheTip: "Limpia el caché de Chrome periódicamente.",
-    trayModeTitle: "Modo minimizado (barra superior)",
-    trayModeDesc: "Minimiza al menú de macOS y muestra CPU/Memoria.",
-    trayModeTip: "Activa el modo barra de menú con monitor.",
+    trayModeTitle: "Modo minimizado (monitor)",
+    trayModeDesc: "Entra en modo compacto estilo Jira Monitor.",
+    trayModeTip: "Muestra solo el panel de monitorización.",
     activityMonitorTitle: "Abrir Monitor de Actividad",
     activityMonitorDesc: "Abre el monitor de procesos.",
     emptyTrashTitle: "Vaciar Papelera",
@@ -872,6 +872,11 @@ langButtons.forEach((btn) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLang(currentLang);
+  if (window.diagnucli && window.diagnucli.onMonitorMode) {
+    window.diagnucli.onMonitorMode((enabled) => {
+      document.body.classList.toggle("monitor-only", Boolean(enabled));
+    });
+  }
   const updateMonitor = async () => {
     if (!window.diagnucli || !window.diagnucli.getSystemStats) {
       return;
