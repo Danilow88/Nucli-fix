@@ -707,7 +707,7 @@ const MAINTENANCE_ACTIONS = {
         `export PATH="$NUCLI_HOME:$PATH"`,
         `EOF`,
         `echo "[DiagnuCLI] Bash/NUCLI fix finished"`
-      ].join("; ");
+      ].join("\n");
     }
   },
   "shuffle-fix": {
