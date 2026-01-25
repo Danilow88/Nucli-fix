@@ -1285,6 +1285,13 @@ ipcMain.handle("exit-app", () => {
   return { ok: true };
 });
 
+ipcMain.handle("minimize-app", () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.minimize();
+  }
+  return { ok: true };
+});
+
 ipcMain.handle("clear-log", () => {
   ensureLogFile();
   fs.writeFileSync(LOG_PATH, "");

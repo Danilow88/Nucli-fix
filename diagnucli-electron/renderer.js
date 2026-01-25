@@ -57,6 +57,8 @@ const translations = {
     updateDesc: "Atualiza via Git e reinstala o app.",
     updateHeader: "Atualizar app",
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
+    minimizeHeader: "Minimizar",
+    minimizeHeaderTip: "Minimiza o DiagnuCLI para o Dock.",
     logTitle: "Logs do Terminal",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
@@ -211,6 +213,8 @@ const translations = {
     updateDesc: "Pulls the latest Git version and reinstalls.",
     updateHeader: "Update app",
     updateHeaderTip: "Update DiagnuCLI from Git.",
+    minimizeHeader: "Minimize",
+    minimizeHeaderTip: "Minimize DiagnuCLI to the Dock.",
     logTitle: "Terminal logs",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
@@ -363,6 +367,8 @@ const translations = {
     updateDesc: "Actualiza desde Git y reinstala.",
     updateHeader: "Actualizar app",
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
+    minimizeHeader: "Minimizar",
+    minimizeHeaderTip: "Minimiza DiagnuCLI al Dock.",
     logTitle: "Registros del Terminal",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
@@ -585,6 +591,7 @@ const actionLabels = {
   "open-mac-setup": "Open Mac setup guide",
   "open-okta-passwords": "Open Okta passwords",
   "restart-vpn": "Restart VPN",
+  "minimize-app": "Minimize app",
   "shuffle-fix": "Shuffle Fix",
   "exit-app": "Exit app",
   "request-laptop": "Request laptop replacement",
@@ -599,6 +606,9 @@ const sendAction = async (actionId) => {
   }
   if (actionId === "install-nucli") {
     await window.diagnucli.installNucli(currentLang);
+  } else if (actionId === "minimize-app") {
+    await window.diagnucli.minimizeApp();
+    return;
   } else if (actionId === "exit-app") {
     await window.diagnucli.exitApp();
     return;
