@@ -4,7 +4,8 @@ const {
   ipcMain,
   systemPreferences,
   Tray,
-  nativeImage
+  nativeImage,
+  Menu
 } = require("electron");
 const path = require("path");
 const os = require("os");
@@ -630,6 +631,33 @@ function enableTrayMode() {
   if (!tray) {
     const icon = nativeImage.createFromPath(getTrayIconPath());
     tray = new Tray(icon);
+    const menu = Menu.buildFromTemplate([
+      {
+        label: "Ver recursos",
+        click: () => enableTrayMode()
+      },
+      {
+        label: "Limpar cache",
+        click: () => runChromeCacheCleanupSilent()
+      },
+      {
+        label: "Maximizar",
+        click: () => {
+          disableTrayMode();
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.maximize();
+          }
+        }
+      },
+      {
+        label: "Desinstalar apps",
+        click: () => {
+          disableTrayMode();
+          runMaintenanceAction("uninstall-apps", "pt");
+        }
+      }
+    ]);
+    tray.setContextMenu(menu);
     tray.on("click", () => {
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.show();
