@@ -692,6 +692,24 @@ const MAINTENANCE_ACTIONS = {
       ].join("; ");
     }
   },
+  "fix-bash-unbound": {
+    label: "Fix Bash unbound variables",
+    detail: "Restaura PATH e variáveis do NuCLI no .zshrc.",
+    buildCommand: () => {
+      return [
+        `echo "[DiagnuCLI] Bash/NUCLI fix started"`,
+        `/bin/cat > ~/.zshrc <<'EOF'`,
+        `export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"`,
+        `eval "$(/opt/homebrew/bin/brew shellenv)"`,
+        `# NuCLI`,
+        `export NU_HOME="$HOME/dev/nu"`,
+        `export NUCLI_HOME="$NU_HOME/nucli"`,
+        `export PATH="$NUCLI_HOME:$PATH"`,
+        `EOF`,
+        `echo "[DiagnuCLI] Bash/NUCLI fix finished"`
+      ].join("; ");
+    }
+  },
   "shuffle-fix": {
     label: "Shuffle fix",
     detail:
