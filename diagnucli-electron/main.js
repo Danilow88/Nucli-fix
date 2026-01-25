@@ -1157,13 +1157,12 @@ end tell`
   },
   "startup-items": {
     label: "Startup items",
-    detail: "Abre itens de inicialização do macOS.",
-    buildCommand: () => {
-      return [
-        `echo "[DiagnuCLI] Opening login items"`,
-        `open "x-apple.systempreferences:com.apple.LoginItems-Settings.extension"`,
-        `echo "[DiagnuCLI] Login items opened"`
-      ].join("; ");
+    detail: "Abre os itens de login para selecionar apps na inicialização.",
+    runDirect: () => {
+      logLine("[DiagnuCLI] Opening Login Items in System Settings.");
+      spawn("open", [
+        "x-apple.systempreferences:com.apple.LoginItems-Settings.extension"
+      ]);
     }
   },
   "memory-cleanup": {
