@@ -1148,9 +1148,9 @@ end tell`
       const logsPath = path.join(home, "Library", "Logs");
       return [
         `echo "[DiagnuCLI] Clean clutter started"`,
-        `rm -rf "${cachePath}"/*`,
-        `rm -rf "${logsPath}"/*`,
-        `osascript -e 'tell application "Finder" to empty the trash'`,
+        `rm -rf "${cachePath}"/* >/dev/null 2>&1 || true`,
+        `rm -rf "${logsPath}"/* >/dev/null 2>&1 || true`,
+        `osascript -e 'tell application "Finder" to empty the trash' >/dev/null 2>&1 || true`,
         `echo "[DiagnuCLI] Clean clutter finished"`
       ].join("; ");
     }

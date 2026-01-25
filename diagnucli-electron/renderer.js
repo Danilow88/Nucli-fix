@@ -94,8 +94,8 @@ const translations = {
     cleanClutterDesc:
       "Abre o gerenciamento de armazenamento para liberar espaço.",
     cleanClutterTip: "Abre o painel de Armazenamento do macOS.",
-    startupItemsTitle: "Selecionar dispositivos para iniciar",
-    startupItemsDesc: "Abre itens de inicialização no macOS.",
+    startupItemsTitle: "Selecionar apps para iniciar",
+    startupItemsDesc: "Abre itens de login no macOS.",
     startupItemsTip: "Mostra apps e itens de login no sistema.",
     memoryCleanupTitle: "Limpeza de Memória",
     memoryCleanupDesc: "Alivia memória RAM e abre o Monitor de Atividades.",
