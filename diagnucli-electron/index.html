@@ -26,6 +26,16 @@
             <button class="lang-btn" data-lang="en">EN</button>
             <button class="lang-btn" data-lang="es">ES</button>
           </div>
+          <div class="search-box">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input
+              id="buttonSearch"
+              type="search"
+              data-i18n-placeholder="searchPlaceholder"
+              placeholder="Buscar botões..."
+              aria-label="Buscar botões"
+            />
+          </div>
             <button class="control-action" data-action="update-app" data-i18n="updateHeader" data-tooltip="updateHeaderTip">
               <span class="menu-icon" aria-hidden="true">🔄</span>
               Atualizar app
@@ -417,6 +427,15 @@
           <ul data-i18n-list="noteList"></ul>
           <div class="note-inline" data-i18n="installFinishHint">
             Ao finalizar a instalação do NuCLI, clique no botão Cadastrar digital.
+          </div>
+          <div class="info-overlay" id="infoOverlay" aria-hidden="true">
+            <div class="info-overlay-header">
+              <div class="info-overlay-title" id="infoOverlayTitle">Detalhes</div>
+              <button class="info-overlay-close" id="infoOverlayClose" aria-label="Fechar">
+                ✕
+              </button>
+            </div>
+            <div class="info-overlay-body" id="infoOverlayBody"></div>
           </div>
         </section>
       </main>

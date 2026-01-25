@@ -12,6 +12,11 @@ const peopleButton = document.getElementById("openPeople");
 const certificatesButton = document.getElementById("openCertificates");
 const rovoButton = document.getElementById("openRovo");
 const supportButton = document.getElementById("openSupport");
+const searchInput = document.getElementById("buttonSearch");
+const infoOverlay = document.getElementById("infoOverlay");
+const infoOverlayTitle = document.getElementById("infoOverlayTitle");
+const infoOverlayBody = document.getElementById("infoOverlayBody");
+const infoOverlayClose = document.getElementById("infoOverlayClose");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -59,6 +64,7 @@ const translations = {
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
     minimizeHeader: "Minimizar",
     minimizeHeaderTip: "Minimiza o DiagnuCLI para o Dock.",
+    searchPlaceholder: "Buscar botões...",
     logTitle: "Logs do Terminal",
     clearLogButton: "Limpar logs",
     clearLogTip: "Limpa o histórico exibido no painel de logs.",
@@ -152,23 +158,27 @@ const translations = {
     askNuButton: "Falar com @AskNu",
     zscalerFeedbackButton: "Problemas com VPN",
     setupHelpHint: "Clique para abrir o canal e pedir ajuda.",
+    overlayHintTitle: "Detalhes do comando",
+    overlayHint:
+      "Siga os prompts do Terminal e use os tooltips para entender cada etapa.",
     howTitle: "Como funciona",
     howList: [
-      "O app abre o Terminal do macOS e executa o diagnucli.",
-      "Os logs ao vivo aparecem aqui conforme os comandos rodam.",
-      "Para alterar o script: DIAGNUCLI_PATH=/caminho/diagnucli."
+      "Use a busca para encontrar botões e ações rapidamente.",
+      "Os botões executam passos automáticos e abrem links úteis.",
+      "Passe o mouse nos botões para ver tooltips explicativos.",
+      "Os logs do Terminal aparecem em tempo real na esquerda."
     ],
     guideTitle: "Orientações rápidas",
     guideList: [
-      "Mantenha o Terminal aberto para responder aos prompts.",
+      "Leia o pop-up à direita após iniciar um comando.",
+      "Responda aos prompts do Terminal quando solicitado.",
       "Se pedir MFA, confirme no Okta ou Touch ID.",
-      "Permita acesso de Acessibilidade caso solicitado.",
       "Feche o Google Chrome antes de limpar o cache."
     ],
     noteTitle: "Importante",
     noteList: [
-      "Todos os comandos rodam no Terminal do macOS.",
-      "O app principal é apenas visual e acompanha os logs."
+      "Algumas ações exigem aprovações (ex.: scopes e acessos).",
+      "O app apenas orquestra e acompanha os logs do Terminal."
     ],
     installFinishHint:
       "Ao finalizar a instalação do NuCLI, clique no botão Cadastrar digital."
@@ -215,6 +225,7 @@ const translations = {
     updateHeaderTip: "Update DiagnuCLI from Git.",
     minimizeHeader: "Minimize",
     minimizeHeaderTip: "Minimize DiagnuCLI to the Dock.",
+    searchPlaceholder: "Search buttons...",
     logTitle: "Terminal logs",
     clearLogButton: "Clear logs",
     clearLogTip: "Clears the log panel history.",
@@ -306,23 +317,26 @@ const translations = {
     askNuButton: "Talk to @AskNu",
     zscalerFeedbackButton: "VPN issues",
     setupHelpHint: "Click to open the channel and ask for help.",
+    overlayHintTitle: "Command details",
+    overlayHint: "Follow Terminal prompts and use tooltips for each step.",
     howTitle: "How it works",
     howList: [
-      "The app opens macOS Terminal and runs diagnucli.",
-      "Live logs are shown here as commands run.",
-      "To change script path: DIAGNUCLI_PATH=/path/to/diagnucli."
+      "Use search to quickly find buttons and actions.",
+      "Buttons run automated steps and open helpful links.",
+      "Hover buttons to see interactive tooltips.",
+      "Terminal logs stream live on the left."
     ],
     guideTitle: "Quick guidance",
     guideList: [
-      "Keep Terminal open to answer prompts.",
+      "Read the right-side pop-up after starting a command.",
+      "Answer Terminal prompts when requested.",
       "If MFA is requested, approve in Okta or Touch ID.",
-      "Allow Accessibility access if prompted.",
       "Close Google Chrome before clearing cache."
     ],
     noteTitle: "Important",
     noteList: [
-      "All commands run in macOS Terminal.",
-      "The main app is visual-only and mirrors logs."
+      "Some actions require approvals (scopes/access).",
+      "The app only orchestrates and mirrors Terminal logs."
     ],
     installFinishHint:
       "After finishing the NuCLI setup, click the Cadastrar digital button."
@@ -369,6 +383,7 @@ const translations = {
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
     minimizeHeader: "Minimizar",
     minimizeHeaderTip: "Minimiza DiagnuCLI al Dock.",
+    searchPlaceholder: "Buscar botones...",
     logTitle: "Registros del Terminal",
     clearLogButton: "Limpiar logs",
     clearLogTip: "Limpia el historial de registros.",
@@ -462,23 +477,27 @@ const translations = {
     askNuButton: "Hablar con @AskNu",
     zscalerFeedbackButton: "Problemas con VPN",
     setupHelpHint: "Haga clic para abrir el canal y pedir ayuda.",
+    overlayHintTitle: "Detalles del comando",
+    overlayHint:
+      "Siga los prompts del Terminal y use los tooltips para cada etapa.",
     howTitle: "Cómo funciona",
     howList: [
-      "La app abre el Terminal de macOS y ejecuta diagnucli.",
-      "Los logs en vivo se muestran aquí mientras corren los comandos.",
-      "Para cambiar el script: DIAGNUCLI_PATH=/ruta/al/diagnucli."
+      "Use la búsqueda para encontrar botones rápidamente.",
+      "Los botones ejecutan pasos automáticos y abren enlaces.",
+      "Pase el mouse para ver tooltips interactivos.",
+      "Los logs del Terminal se muestran en vivo a la izquierda."
     ],
     guideTitle: "Orientaciones rápidas",
     guideList: [
-      "Mantenga el Terminal abierto para responder a los prompts.",
+      "Lea el pop-up a la derecha al iniciar un comando.",
+      "Responda a los prompts del Terminal cuando se solicite.",
       "Si pide MFA, confirme en Okta o Touch ID.",
-      "Permita acceso de Accesibilidad si se solicita.",
       "Cierre Google Chrome antes de limpiar la caché."
     ],
     noteTitle: "Importante",
     noteList: [
-      "Todos los comandos se ejecutan en el Terminal de macOS.",
-      "La app principal es solo visual y refleja los logs."
+      "Algunas acciones requieren aprobación (scopes/accesos).",
+      "La app solo orquesta y refleja los logs del Terminal."
     ],
     installFinishHint:
       "Al finalizar la instalación de NuCLI, haga clic en el botón Cadastrar digital."
@@ -505,6 +524,7 @@ const updateLang = (lang) => {
     const key = el.getAttribute("data-tooltip");
     if (dict[key]) {
       el.setAttribute("title", dict[key]);
+      el.setAttribute("data-tooltip-text", dict[key]);
     }
   });
 
@@ -530,6 +550,53 @@ const updateLang = (lang) => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
   });
 
+};
+
+const showInfoOverlay = (title, desc) => {
+  if (!infoOverlay || !infoOverlayTitle || !infoOverlayBody) {
+    return;
+  }
+  const dict = translations[currentLang];
+  infoOverlayTitle.textContent = dict.overlayHintTitle;
+  infoOverlayBody.textContent = `${title}\n${desc}\n\n${dict.overlayHint}`;
+  infoOverlay.classList.add("show");
+  infoOverlay.setAttribute("aria-hidden", "false");
+};
+
+const hideInfoOverlay = () => {
+  if (!infoOverlay) {
+    return;
+  }
+  infoOverlay.classList.remove("show");
+  infoOverlay.setAttribute("aria-hidden", "true");
+};
+
+const getCardInfo = (element) => {
+  if (!element) {
+    return null;
+  }
+  const titleEl = element.querySelector(".menu-title");
+  const descEl = element.querySelector(".menu-desc");
+  const title = titleEl ? titleEl.textContent.trim() : "";
+  const desc = descEl ? descEl.textContent.trim() : "";
+  if (!title && !desc) {
+    return null;
+  }
+  return { title, desc };
+};
+
+const filterButtons = (term) => {
+  const needle = term.trim().toLowerCase();
+  const buttons = document.querySelectorAll(
+    ".menu-card, .terminal-row button"
+  );
+  buttons.forEach((btn) => {
+    const text = `${btn.textContent || ""} ${btn.getAttribute("title") || ""}`
+      .toLowerCase()
+      .trim();
+    const shouldShow = !needle || text.includes(needle);
+    btn.style.display = shouldShow ? "" : "none";
+  });
 };
 
 window.diagnucli.onLog((data) => {
@@ -620,6 +687,11 @@ const sendAction = async (actionId) => {
     await window.diagnucli.runAction(actionId, currentLang);
   }
   appendLog(`\n[DiagnuCLI] Action started: ${label}\n`);
+  const card = document.querySelector(`[data-action="${actionId}"]`);
+  const info = getCardInfo(card);
+  if (info) {
+    showInfoOverlay(info.title, info.desc);
+  }
 };
 
 startButton.addEventListener("click", startRun);
@@ -629,6 +701,10 @@ menuCards.forEach((card) => {
     const titleEl = card.querySelector(".menu-title");
     const title = titleEl ? titleEl.textContent.trim() : "";
     sendMenuChoice(card.dataset.option, title);
+    const info = getCardInfo(card);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 });
 
@@ -642,6 +718,10 @@ if (setupHelpButton) {
   setupHelpButton.addEventListener("click", async () => {
     await window.diagnucli.openSetupHelp();
     appendLog("\n[DiagnuCLI] Setup Help channel opened.\n");
+    const info = getCardInfo(setupHelpButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -649,6 +729,10 @@ if (askNuButton) {
   askNuButton.addEventListener("click", async () => {
     await window.diagnucli.openAskNu();
     appendLog("\n[DiagnuCLI] AskNu opened in Slack.\n");
+    const info = getCardInfo(askNuButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -656,6 +740,10 @@ if (zscalerFeedbackButton) {
   zscalerFeedbackButton.addEventListener("click", async () => {
     await window.diagnucli.openZscalerFeedback();
     appendLog("\n[DiagnuCLI] zscaler-feedback-tmp opened in Slack.\n");
+    const info = getCardInfo(zscalerFeedbackButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -663,6 +751,10 @@ if (rovoButton) {
   rovoButton.addEventListener("click", async () => {
     await window.diagnucli.openRovo();
     appendLog("\n[DiagnuCLI] Rovo support opened.\n");
+    const info = getCardInfo(rovoButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -670,6 +762,10 @@ if (supportButton) {
   supportButton.addEventListener("click", async () => {
     await window.diagnucli.openSupport();
     appendLog("\n[DiagnuCLI] Support portal opened.\n");
+    const info = getCardInfo(supportButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -677,6 +773,10 @@ if (gadgetsButton) {
   gadgetsButton.addEventListener("click", async () => {
     await window.diagnucli.openGadgetsRequest();
     appendLog("\n[DiagnuCLI] Gadgets request opened.\n");
+    const info = getCardInfo(gadgetsButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -684,6 +784,10 @@ if (peopleButton) {
   peopleButton.addEventListener("click", async () => {
     await window.diagnucli.openPeopleRequest();
     appendLog("\n[DiagnuCLI] People request opened.\n");
+    const info = getCardInfo(peopleButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
 }
 
@@ -691,7 +795,21 @@ if (certificatesButton) {
   certificatesButton.addEventListener("click", async () => {
     await window.diagnucli.openCertificates();
     appendLog("\n[DiagnuCLI] Certificates portal opened.\n");
+    const info = getCardInfo(certificatesButton);
+    if (info) {
+      showInfoOverlay(info.title, info.desc);
+    }
   });
+}
+
+if (searchInput) {
+  searchInput.addEventListener("input", (event) => {
+    filterButtons(event.target.value);
+  });
+}
+
+if (infoOverlayClose) {
+  infoOverlayClose.addEventListener("click", hideInfoOverlay);
 }
 
 langButtons.forEach((btn) => {
