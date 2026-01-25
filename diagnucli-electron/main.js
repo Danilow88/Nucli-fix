@@ -1141,11 +1141,16 @@ end tell`
   },
   "clean-clutter": {
     label: "Clean clutter",
-    detail: "Abre o gerenciamento de armazenamento do macOS.",
+    detail: "Remove caches/logs do usuário e esvazia a Lixeira.",
     buildCommand: () => {
+      const home = os.homedir();
+      const cachePath = path.join(home, "Library", "Caches");
+      const logsPath = path.join(home, "Library", "Logs");
       return [
         `echo "[DiagnuCLI] Clean clutter started"`,
-        `open "x-apple.systempreferences:com.apple.StorageManagement-Settings.extension"`,
+        `rm -rf "${cachePath}"/*`,
+        `rm -rf "${logsPath}"/*`,
+        `osascript -e 'tell application "Finder" to empty the trash'`,
         `echo "[DiagnuCLI] Clean clutter finished"`
       ].join("; ");
     }
@@ -1167,7 +1172,7 @@ end tell`
     buildCommand: () => {
       return [
         `echo "[DiagnuCLI] Memory cleanup started"`,
-        `if command -v purge >/dev/null 2>&1; then sudo purge; else echo "[DiagnuCLI] purge not available; opening Activity Monitor"; fi`,
+        `if [ -x /usr/bin/purge ]; then sudo /usr/bin/purge; elif command -v purge >/dev/null 2>&1; then sudo purge; else echo "[DiagnuCLI] purge not available; opening Activity Monitor"; fi`,
         `open -a "Activity Monitor"`,
         `echo "[DiagnuCLI] Memory cleanup finished"`
       ].join("; ");
