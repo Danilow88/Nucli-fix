@@ -1020,6 +1020,8 @@ end tell`
         `osascript -e 'tell application "Google Chrome" to quit' || true`,
         `rm -rf ${rmTargets}`,
         `rm -f ${rmCookies}`,
+        `echo "[DiagnuCLI] Opening Chrome sync settings"`,
+        `open -a "Google Chrome" "chrome://settings/syncSetup"`,
         `echo "[DiagnuCLI] ${texts.done}"`
       ].join("; ");
     }
