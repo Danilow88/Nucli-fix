@@ -22,6 +22,9 @@ contextBridge.exposeInMainWorld("diagnucli", {
   sendToRovo: (text) => ipcRenderer.invoke("rovo-send-text", text),
   openMicPermissions: () => ipcRenderer.invoke("open-mic-permissions"),
   minimizeApp: () => ipcRenderer.invoke("minimize-app"),
+  maximizeApp: () => ipcRenderer.invoke("maximize-app"),
+  toggleTrayMode: () => ipcRenderer.invoke("toggle-tray-mode"),
+  toggleAutoCache: () => ipcRenderer.invoke("toggle-auto-cache"),
   exitApp: () => ipcRenderer.invoke("exit-app"),
   clearLog: () => ipcRenderer.invoke("clear-log")
 });

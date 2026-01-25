@@ -1,4 +1,11 @@
-const { app, BrowserWindow, ipcMain, systemPreferences } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  systemPreferences,
+  Tray,
+  nativeImage
+} = require("electron");
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -7,6 +14,11 @@ const { spawn } = require("child_process");
 let mainWindow = null;
 let tailProcess = null;
 let runStarted = false;
+let tray = null;
+let trayModeEnabled = false;
+let trayInterval = null;
+let autoCacheEnabled = false;
+let autoCacheInterval = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -545,6 +557,115 @@ function logLine(message) {
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.webContents.send("run-log", line);
   }
+}
+
+function getTrayIconPath() {
+  return app.isPackaged
+    ? path.join(process.resourcesPath, "assets", "icon.png")
+    : path.join(__dirname, "assets", "icon.png");
+}
+
+function getResourceStats() {
+  const cpuCount = os.cpus().length || 1;
+  const load = os.loadavg()[0] || 0;
+  const cpuPercent = Math.min(100, Math.round((load / cpuCount) * 100));
+  const memPercent = Math.round(
+    ((os.totalmem() - os.freemem()) / os.totalmem()) * 100
+  );
+  return { cpuPercent, memPercent };
+}
+
+function updateTrayTitle() {
+  if (!tray) {
+    return;
+  }
+  const { cpuPercent, memPercent } = getResourceStats();
+  const title = `CPU ${cpuPercent}% | MEM ${memPercent}%`;
+  tray.setTitle(title);
+  tray.setToolTip(`DiagnuCLI • ${title}`);
+}
+
+function startTrayMonitor() {
+  updateTrayTitle();
+  if (!trayInterval) {
+    trayInterval = setInterval(updateTrayTitle, 10000);
+  }
+}
+
+function stopTrayMonitor() {
+  if (trayInterval) {
+    clearInterval(trayInterval);
+    trayInterval = null;
+  }
+}
+
+function enableTrayMode() {
+  if (!tray) {
+    const icon = nativeImage.createFromPath(getTrayIconPath());
+    tray = new Tray(icon);
+    tray.on("click", () => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+    });
+  }
+  trayModeEnabled = true;
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.hide();
+  }
+  startTrayMonitor();
+  logLine("[DiagnuCLI] Tray mode enabled.");
+}
+
+function disableTrayMode() {
+  trayModeEnabled = false;
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.show();
+    mainWindow.focus();
+  }
+  stopTrayMonitor();
+  if (tray) {
+    tray.destroy();
+    tray = null;
+  }
+  logLine("[DiagnuCLI] Tray mode disabled.");
+}
+
+function runChromeCacheCleanupSilent() {
+  const action = ACTIONS["cache-chrome"];
+  if (!action) {
+    return;
+  }
+  const command = action.buildCommand();
+  logLine("[DiagnuCLI] Auto Chrome cache cleanup started.");
+  spawn("/bin/bash", ["-lc", command], {
+    cwd: os.homedir(),
+    env: {
+      ...process.env,
+      PATH: "/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    }
+  }).on("close", () => {
+    logLine("[DiagnuCLI] Auto Chrome cache cleanup finished.");
+  });
+}
+
+function enableAutoCache() {
+  autoCacheEnabled = true;
+  runChromeCacheCleanupSilent();
+  if (!autoCacheInterval) {
+    autoCacheInterval = setInterval(runChromeCacheCleanupSilent, 4 * 60 * 60 * 1000);
+  }
+  logLine("[DiagnuCLI] Auto Chrome cache cleanup enabled.");
+}
+
+function disableAutoCache() {
+  autoCacheEnabled = false;
+  if (autoCacheInterval) {
+    clearInterval(autoCacheInterval);
+    autoCacheInterval = null;
+  }
+  logLine("[DiagnuCLI] Auto Chrome cache cleanup disabled.");
 }
 
 function escapeAppleScript(value) {
@@ -1290,6 +1411,35 @@ ipcMain.handle("minimize-app", () => {
     mainWindow.minimize();
   }
   return { ok: true };
+});
+
+ipcMain.handle("maximize-app", () => {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  }
+  return { ok: true };
+});
+
+ipcMain.handle("toggle-tray-mode", () => {
+  if (trayModeEnabled) {
+    disableTrayMode();
+  } else {
+    enableTrayMode();
+  }
+  return { ok: true, enabled: trayModeEnabled };
+});
+
+ipcMain.handle("toggle-auto-cache", () => {
+  if (autoCacheEnabled) {
+    disableAutoCache();
+  } else {
+    enableAutoCache();
+  }
+  return { ok: true, enabled: autoCacheEnabled };
 });
 
 ipcMain.handle("clear-log", () => {

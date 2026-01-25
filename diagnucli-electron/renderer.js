@@ -64,6 +64,7 @@ const translations = {
     updateHeaderTip: "Atualiza o DiagnuCLI a partir do Git.",
     minimizeHeader: "Minimizar",
     minimizeHeaderTip: "Minimiza o DiagnuCLI para o Dock.",
+    maximizeHeaderTip: "Alterna entre maximizar e restaurar a janela.",
     searchPlaceholder: "Buscar botões...",
     logTitle: "Logs do Terminal",
     clearLogButton: "Limpar logs",
@@ -74,6 +75,12 @@ const translations = {
     manageDiskDesc: "Abre Armazenamento via Spotlight.",
     optimizePerfTitle: "Melhorar performance do Mac",
     optimizePerfDesc: "Executa script de desempenho e limpeza.",
+    autoCacheTitle: "Limpeza automática do Chrome",
+    autoCacheDesc: "Ativa ou desativa a limpeza automática de cache.",
+    autoCacheTip: "Limpa cache do Chrome de tempos em tempos.",
+    trayModeTitle: "Modo minimizado (barra superior)",
+    trayModeDesc: "Minimiza no menu do macOS e mostra CPU/Memória.",
+    trayModeTip: "Ativa o modo menu bar com monitor de recursos.",
     activityMonitorTitle: "Abrir Monitor de Atividades",
     activityMonitorDesc: "Abre o monitor de processos.",
     emptyTrashTitle: "Esvaziar Lixeira",
@@ -225,6 +232,7 @@ const translations = {
     updateHeaderTip: "Update DiagnuCLI from Git.",
     minimizeHeader: "Minimize",
     minimizeHeaderTip: "Minimize DiagnuCLI to the Dock.",
+    maximizeHeaderTip: "Toggle between maximize and restore.",
     searchPlaceholder: "Search buttons...",
     logTitle: "Terminal logs",
     clearLogButton: "Clear logs",
@@ -235,6 +243,12 @@ const translations = {
     manageDiskDesc: "Opens Storage via Spotlight.",
     optimizePerfTitle: "Improve Mac performance",
     optimizePerfDesc: "Runs the performance and cleanup script.",
+    autoCacheTitle: "Automatic Chrome cleanup",
+    autoCacheDesc: "Enable or disable automatic cache cleanup.",
+    autoCacheTip: "Cleans Chrome cache periodically.",
+    trayModeTitle: "Minimized mode (menu bar)",
+    trayModeDesc: "Minimize to the macOS menu bar and show CPU/Memory.",
+    trayModeTip: "Enable menu bar mode with resource monitor.",
     activityMonitorTitle: "Open Activity Monitor",
     activityMonitorDesc: "Opens the process monitor.",
     emptyTrashTitle: "Empty Trash",
@@ -383,6 +397,7 @@ const translations = {
     updateHeaderTip: "Actualiza DiagnuCLI desde Git.",
     minimizeHeader: "Minimizar",
     minimizeHeaderTip: "Minimiza DiagnuCLI al Dock.",
+    maximizeHeaderTip: "Alterna entre maximizar y restaurar.",
     searchPlaceholder: "Buscar botones...",
     logTitle: "Registros del Terminal",
     clearLogButton: "Limpiar logs",
@@ -393,6 +408,12 @@ const translations = {
     manageDiskDesc: "Abre Almacenamiento via Spotlight.",
     optimizePerfTitle: "Mejorar rendimiento del Mac",
     optimizePerfDesc: "Ejecuta el script de rendimiento y limpieza.",
+    autoCacheTitle: "Limpieza automática de Chrome",
+    autoCacheDesc: "Activa o desactiva la limpieza automática de caché.",
+    autoCacheTip: "Limpia el caché de Chrome periódicamente.",
+    trayModeTitle: "Modo minimizado (barra superior)",
+    trayModeDesc: "Minimiza al menú de macOS y muestra CPU/Memoria.",
+    trayModeTip: "Activa el modo barra de menú con monitor.",
     activityMonitorTitle: "Abrir Monitor de Actividad",
     activityMonitorDesc: "Abre el monitor de procesos.",
     emptyTrashTitle: "Vaciar Papelera",
@@ -658,6 +679,9 @@ const actionLabels = {
   "open-mac-setup": "Open Mac setup guide",
   "open-okta-passwords": "Open Okta passwords",
   "restart-vpn": "Restart VPN",
+  "toggle-auto-cache": "Auto cache cleanup",
+  "toggle-tray-mode": "Tray mode",
+  "maximize-app": "Maximize app",
   "minimize-app": "Minimize app",
   "shuffle-fix": "Shuffle Fix",
   "exit-app": "Exit app",
@@ -675,6 +699,15 @@ const sendAction = async (actionId) => {
     await window.diagnucli.installNucli(currentLang);
   } else if (actionId === "minimize-app") {
     await window.diagnucli.minimizeApp();
+    return;
+  } else if (actionId === "maximize-app") {
+    await window.diagnucli.maximizeApp();
+    return;
+  } else if (actionId === "toggle-tray-mode") {
+    await window.diagnucli.toggleTrayMode();
+    return;
+  } else if (actionId === "toggle-auto-cache") {
+    await window.diagnucli.toggleAutoCache();
     return;
   } else if (actionId === "exit-app") {
     await window.diagnucli.exitApp();

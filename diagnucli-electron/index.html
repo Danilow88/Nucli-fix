@@ -46,10 +46,15 @@
             <span class="menu-icon" aria-hidden="true">🚀</span>
             Iniciar diagnóstico
           </button>
-            <button class="control-action" data-action="minimize-app" data-tooltip="minimizeHeaderTip" aria-label="Minimizar app">
-              <span class="menu-icon" aria-hidden="true">🗕</span>
-            </button>
-          <button class="control-action" data-action="exit-app" data-tooltip="exitAppTip" aria-label="Sair do app">
+        </div>
+        <div class="window-controls">
+          <button class="control-action" data-action="minimize-app" data-tooltip="minimizeHeaderTip" aria-label="Minimizar app">
+            <span class="menu-icon" aria-hidden="true">🗕</span>
+          </button>
+          <button class="control-action" data-action="maximize-app" data-tooltip="maximizeHeaderTip" aria-label="Maximizar app">
+            <span class="menu-icon" aria-hidden="true">🗖</span>
+          </button>
+          <button class="control-action" data-action="exit-app" data-tooltip="exitAppTip" aria-label="Fechar app">
             ✕
           </button>
         </div>
@@ -260,6 +265,24 @@
                 </span>
                 <span class="menu-desc" data-i18n="optimizePerfDesc">
                   Executa ajustes e limpezas para melhorar o desempenho.
+                </span>
+              </button>
+              <button class="menu-card" data-action="toggle-auto-cache" data-tooltip="autoCacheTip">
+                <span class="menu-title" data-i18n="autoCacheTitle">
+                  <span class="menu-icon" aria-hidden="true">🧼</span>
+                  Limpeza automática do Chrome
+                </span>
+                <span class="menu-desc" data-i18n="autoCacheDesc">
+                  Ativa ou desativa a limpeza automática de cache.
+                </span>
+              </button>
+              <button class="menu-card" data-action="toggle-tray-mode" data-tooltip="trayModeTip">
+                <span class="menu-title" data-i18n="trayModeTitle">
+                  <span class="menu-icon" aria-hidden="true">📊</span>
+                  Modo minimizado (barra superior)
+                </span>
+                <span class="menu-desc" data-i18n="trayModeDesc">
+                  Minimiza no menu do macOS e mostra uso de CPU/Memória.
                 </span>
               </button>
               <button class="menu-card" data-action="activity-monitor" data-tooltip="activityMonitorTip">
