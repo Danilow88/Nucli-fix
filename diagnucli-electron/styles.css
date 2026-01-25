@@ -69,13 +69,16 @@ body {
   width: 56px;
   height: 56px;
   border-radius: 18px;
-  background: linear-gradient(140deg, #a855f7, #7c3aed 45%, #4c1d95);
   display: grid;
   place-items: center;
-  font-weight: 800;
-  font-size: 18px;
-  letter-spacing: 2px;
+  overflow: hidden;
   box-shadow: 0 10px 24px rgba(124, 58, 237, 0.45);
+}
+
+.logo img {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .header h1 {
