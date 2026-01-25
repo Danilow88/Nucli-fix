@@ -333,6 +333,17 @@ else
 fi
 
 say ""
+say "Atualizando ~/.zshrc com configuracao limpa..."
+/bin/cat > ~/.zshrc <<'EOF'
+export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+# NuCLI
+export NU_HOME="$HOME/dev/nu"
+export NUCLI_HOME="$NU_HOME/nucli"
+export PATH="$NUCLI_HOME:$PATH"
+EOF
+
+say ""
 say "Instalando Temurin (Java)..."
 brew install --cask temurin
 
