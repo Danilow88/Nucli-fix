@@ -22,6 +22,7 @@ let autoCacheEnabled = false;
 let autoCacheInterval = null;
 let monitorModeEnabled = false;
 let monitorModeSnapshot = null;
+let speedtestWindow = null;
 
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
@@ -53,6 +54,7 @@ const GUIDE_URL_BASE =
 const MAC_SETUP_URL = "https://itops-mdm.s3.amazonaws.com/ZTD/guide/home.html";
 const SETUP_HELP_URL = "https://nubank.enterprise.slack.com/archives/CBJGG73AM";
 const SETUP_HELP_CHANNEL_ID = "CBJGG73AM";
+const SPEEDTEST_URL = "https://www.speedtest.net/";
 const OKTA_PASSWORDS_URL = "chrome://password-manager/passwords?q=okta";
 const ZSCALER_OKTA_URL =
   "https://nubank.okta.com/app/zscaler_private_access/exk20v3f4xjOjaR3e0h8/sso/saml?SAMLRequest=jZJRb5swFIX%2FCvI74BhKwAqpslXVKnVqltA%2B7KW6mJuFBmzma1C0X1%2BaEK2TpqqPlu895%2Fh8Xlwf28Yb0FJtdM5mAWceamWqWv%2FK2WNx66fserkgaBvRyVXv9nqDv3sk542LmuT5Jme91dIA1SQ1tEjSKbldfb%2BXIuCys8YZZRrmrYjQutHqq9HUt2i3aIda4ePmPmd75zqSYfgmSV3Q2XoAh8EfUtCgDZRpQxgDhCJNRZJeJdF8niWpiONZSGSYdzOmqjW400suYrovQR8Cc3BwVui6cFJ8nhyeQSkkCvF4EHyIdvHx5eEFNhHyffqmfArEvFtjFZ4ayNkOGkLm3d3kbLX5kSHssirzo4ynfrzL0C%2FnlfBVlaRRXAIvZ%2FE4S2sgqgf8u03U450mB9rlTHCR%2BHzmi7iYxTJOZMSDK578ZN56qu9Lrc9YPuq6PA%2BR%2FFYUa3%2F9sC2Y93TBOw6wCaY8udv3FD8Whgs6tvwsqBYdVODgP8QW4fsUy%2Bn47w9bvgI%3D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2001%2F04%2Fxmldsig-more%23rsa-sha256&Signature=Ml6yh55p7o6x7SraKmzYSxfV0ckYSuRRKYABUNHo7Ae4wx5yzHK7VpU%2BFxCjAjlinOMzu7vDDpAGVNxgsRc9fbEJPH5Zb0u8UrLydo2etq8fyvkJlRA3K145d5lHf2OZB0w8VDVjNVYchwyve4pkRfTphc7%2BIuKjecnAOdRAqSDKrlJyxm5n4JztjjgZ8z4OW%2FK2t4c3dVWnY5dQC%2BrlpcYY45f8%2FsqNtDIbF1KKeXC8kK52Q1O7qvMVnFWxVo9razhFDE0E1v4O%2BCXX7RLF0WjoiI3HJABGoEVQTF%2Bf7w3n82S%2BFW92PYjpxBRk%2FxliC0ySQUmfjThbyfU1f8%2FcXA%3D%3D";
@@ -754,6 +756,29 @@ function disableAutoCache() {
   logLine("[DiagnuCLI] Auto Chrome cache cleanup disabled.");
 }
 
+function openSpeedtestWindow() {
+  if (speedtestWindow && !speedtestWindow.isDestroyed()) {
+    speedtestWindow.show();
+    speedtestWindow.focus();
+    return;
+  }
+  speedtestWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
+    backgroundColor: "#0b0715",
+    title: "Speedtest",
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true
+    }
+  });
+  speedtestWindow.loadURL(SPEEDTEST_URL);
+  speedtestWindow.on("closed", () => {
+    speedtestWindow = null;
+  });
+}
+
 function escapeAppleScript(value) {
   return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
@@ -1175,6 +1200,14 @@ end tell`
         `open -a "Activity Monitor"`,
         `echo "[DiagnuCLI] Memory cleanup finished"`
       ].join("; ");
+    }
+  },
+  "speedtest": {
+    label: "Speedtest",
+    detail: "Abre o Speedtest dentro do app.",
+    runDirect: () => {
+      logLine("[DiagnuCLI] Opening Speedtest window.");
+      openSpeedtestWindow();
     }
   },
   "activity-monitor": {
