@@ -9,7 +9,7 @@ const {
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 
 let mainWindow = null;
 let tailProcess = null;
@@ -573,6 +573,31 @@ function getResourceStats() {
     ((os.totalmem() - os.freemem()) / os.totalmem()) * 100
   );
   return { cpuPercent, memPercent };
+}
+
+function getDiskUsagePercent() {
+  try {
+    const result = spawnSync("df", ["-k", "/"], { encoding: "utf8" });
+    if (result.status !== 0) {
+      return null;
+    }
+    const lines = result.stdout.trim().split("\n");
+    if (lines.length < 2) {
+      return null;
+    }
+    const parts = lines[1].trim().split(/\s+/);
+    if (parts.length < 5) {
+      return null;
+    }
+    const total = parseInt(parts[1], 10);
+    const used = parseInt(parts[2], 10);
+    if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(used)) {
+      return null;
+    }
+    return Math.min(100, Math.round((used / total) * 100));
+  } catch (error) {
+    return null;
+  }
 }
 
 function updateTrayTitle() {
@@ -1440,6 +1465,16 @@ ipcMain.handle("toggle-auto-cache", () => {
     enableAutoCache();
   }
   return { ok: true, enabled: autoCacheEnabled };
+});
+
+ipcMain.handle("get-system-stats", () => {
+  const { cpuPercent, memPercent } = getResourceStats();
+  const diskPercent = getDiskUsagePercent();
+  return {
+    cpuPercent,
+    memPercent,
+    diskPercent: diskPercent ?? 0
+  };
 });
 
 ipcMain.handle("clear-log", () => {

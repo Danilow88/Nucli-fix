@@ -17,6 +17,12 @@ const infoOverlay = document.getElementById("infoOverlay");
 const infoOverlayTitle = document.getElementById("infoOverlayTitle");
 const infoOverlayBody = document.getElementById("infoOverlayBody");
 const infoOverlayClose = document.getElementById("infoOverlayClose");
+const monitorCpuValue = document.getElementById("monitorCpuValue");
+const monitorMemValue = document.getElementById("monitorMemValue");
+const monitorDiskValue = document.getElementById("monitorDiskValue");
+const monitorCpuBar = document.getElementById("monitorCpuBar");
+const monitorMemBar = document.getElementById("monitorMemBar");
+const monitorDiskBar = document.getElementById("monitorDiskBar");
 let runStarted = false;
 let currentLang = "pt";
 
@@ -75,6 +81,11 @@ const translations = {
     manageDiskDesc: "Abre Armazenamento via Spotlight.",
     optimizePerfTitle: "Melhorar performance do Mac",
     optimizePerfDesc: "Executa script de desempenho e limpeza.",
+    monitorTitle: "Monitor de recursos",
+    monitorCpu: "CPU",
+    monitorMem: "Memória",
+    monitorDisk: "Disco",
+    monitorHint: "Atualiza automaticamente enquanto o app estiver aberto.",
     autoCacheTitle: "Limpeza automática do Chrome",
     autoCacheDesc: "Ativa ou desativa a limpeza automática de cache.",
     autoCacheTip: "Limpa cache do Chrome de tempos em tempos.",
@@ -243,6 +254,11 @@ const translations = {
     manageDiskDesc: "Opens Storage via Spotlight.",
     optimizePerfTitle: "Improve Mac performance",
     optimizePerfDesc: "Runs the performance and cleanup script.",
+    monitorTitle: "Resource monitor",
+    monitorCpu: "CPU",
+    monitorMem: "Memory",
+    monitorDisk: "Disk",
+    monitorHint: "Updates automatically while the app is open.",
     autoCacheTitle: "Automatic Chrome cleanup",
     autoCacheDesc: "Enable or disable automatic cache cleanup.",
     autoCacheTip: "Cleans Chrome cache periodically.",
@@ -408,6 +424,11 @@ const translations = {
     manageDiskDesc: "Abre Almacenamiento via Spotlight.",
     optimizePerfTitle: "Mejorar rendimiento del Mac",
     optimizePerfDesc: "Ejecuta el script de rendimiento y limpieza.",
+    monitorTitle: "Monitor de recursos",
+    monitorCpu: "CPU",
+    monitorMem: "Memoria",
+    monitorDisk: "Disco",
+    monitorHint: "Se actualiza automáticamente mientras la app está abierta.",
     autoCacheTitle: "Limpieza automática de Chrome",
     autoCacheDesc: "Activa o desactiva la limpieza automática de caché.",
     autoCacheTip: "Limpia el caché de Chrome periódicamente.",
@@ -851,4 +872,35 @@ langButtons.forEach((btn) => {
 
 window.addEventListener("DOMContentLoaded", () => {
   updateLang(currentLang);
+  const updateMonitor = async () => {
+    if (!window.diagnucli || !window.diagnucli.getSystemStats) {
+      return;
+    }
+    try {
+      const stats = await window.diagnucli.getSystemStats();
+      if (!stats) {
+        return;
+      }
+      const cpu = Math.min(100, Math.max(0, stats.cpuPercent ?? 0));
+      const mem = Math.min(100, Math.max(0, stats.memPercent ?? 0));
+      const disk = Math.min(100, Math.max(0, stats.diskPercent ?? 0));
+
+      if (monitorCpuValue && monitorCpuBar) {
+        monitorCpuValue.textContent = `${cpu}%`;
+        monitorCpuBar.style.width = `${cpu}%`;
+      }
+      if (monitorMemValue && monitorMemBar) {
+        monitorMemValue.textContent = `${mem}%`;
+        monitorMemBar.style.width = `${mem}%`;
+      }
+      if (monitorDiskValue && monitorDiskBar) {
+        monitorDiskValue.textContent = `${disk}%`;
+        monitorDiskBar.style.width = `${disk}%`;
+      }
+    } catch (error) {
+      // Ignore stats failures to keep UI responsive.
+    }
+  };
+  updateMonitor();
+  setInterval(updateMonitor, 4000);
 });
