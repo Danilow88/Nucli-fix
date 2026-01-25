@@ -655,6 +655,13 @@ function enableTrayMode() {
           disableTrayMode();
           runMaintenanceAction("uninstall-apps", "pt");
         }
+      },
+      {
+        label: "Limpar Memoria",
+        click: () => {
+          disableTrayMode();
+          runMaintenanceAction("memory-cleanup", "pt");
+        }
       }
     ]);
     tray.setContextMenu(menu);
