@@ -1175,6 +1175,13 @@ end tell`
         end tell
       `;
       const repoPath = REPO_PATH;
+      const repoAppPath = path.join(
+        repoPath,
+        "diagnucli-electron",
+        "dist",
+        "mac-universal",
+        "DiagnuCLI.app"
+      );
       return [
         `echo "[DiagnuCLI] Update started"`,
         `osascript -e '${quitAppsScript.replace(/'/g, "'\"'\"'")}'`,
@@ -1182,7 +1189,7 @@ end tell`
         `if [ -d "${repoPath}/.git" ]; then git -C "${repoPath}" pull --rebase || git -C "${repoPath}" pull; fi`,
         `curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash`,
         `sleep 1`,
-        `open -a "DiagnuCLI" || open -a "Diagnu" || open "/Applications/DiagnuCLI.app" || true`,
+        `if [ -d "${repoAppPath}" ]; then open "${repoAppPath}"; else open -a "DiagnuCLI" || open -a "Diagnu" || open "/Applications/DiagnuCLI.app" || true; fi`,
         `echo "[DiagnuCLI] Update finished"`
       ].join("; ");
     }
