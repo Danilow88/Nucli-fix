@@ -1174,11 +1174,15 @@ end tell`
           end repeat
         end tell
       `;
+      const repoPath = REPO_PATH;
       return [
         `echo "[DiagnuCLI] Update started"`,
         `osascript -e '${quitAppsScript.replace(/'/g, "'\"'\"'")}'`,
         `sleep 1`,
+        `if [ -d "${repoPath}/.git" ]; then git -C "${repoPath}" pull --rebase || git -C "${repoPath}" pull; fi`,
         `curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash`,
+        `sleep 1`,
+        `open -a "DiagnuCLI" || open -a "Diagnu" || open "/Applications/DiagnuCLI.app" || true`,
         `echo "[DiagnuCLI] Update finished"`
       ].join("; ");
     }
