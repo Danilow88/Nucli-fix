@@ -1182,11 +1182,13 @@ end tell`
         "mac-universal",
         "DiagnuCLI.app"
       );
+      const repoElectronPath = path.join(repoPath, "diagnucli-electron");
       return [
         `echo "[DiagnuCLI] Update started"`,
         `osascript -e '${quitAppsScript.replace(/'/g, "'\"'\"'")}'`,
         `sleep 1`,
         `if [ -d "${repoPath}/.git" ]; then git -C "${repoPath}" pull --rebase || git -C "${repoPath}" pull; fi`,
+        `if [ -d "${repoElectronPath}" ]; then cd "${repoElectronPath}"; npm install; npm run build -- --mac --universal || npm run build -- --mac; fi`,
         `curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash`,
         `sleep 1`,
         `if [ -d "${repoAppPath}" ]; then open "${repoAppPath}"; else open -a "DiagnuCLI" || open -a "Diagnu" || open "/Applications/DiagnuCLI.app" || true; fi`,
