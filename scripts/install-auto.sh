@@ -17,6 +17,11 @@ if [[ ! -d "$APP_REPO_PATH/.git" ]]; then
   git clone "$APP_REPO_URL" "$APP_REPO_PATH"
 else
   say "Updating DiagnuCLI app repository..."
+  if git -C "$APP_REPO_PATH" remote get-url origin >/dev/null 2>&1; then
+    git -C "$APP_REPO_PATH" remote set-url origin "$APP_REPO_URL"
+  else
+    git -C "$APP_REPO_PATH" remote add origin "$APP_REPO_URL"
+  fi
   git -C "$APP_REPO_PATH" pull
 fi
 
