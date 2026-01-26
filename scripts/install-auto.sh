@@ -10,7 +10,17 @@ section "DiagnuCLI app installer"
 say "This script updates and installs the DiagnuCLI app."
 
 section "Step 1/1: DiagnuCLI app"
-APP_REPO_PATH="${DIAGNUCLI_REPO_PATH:-$HOME/diagnucli}"
+DEFAULT_REPO_PATH="$HOME/Nucli-fix"
+LEGACY_REPO_PATH="$HOME/diagnucli"
+if [[ -n "${DIAGNUCLI_REPO_PATH:-}" ]]; then
+  APP_REPO_PATH="$DIAGNUCLI_REPO_PATH"
+elif [[ -d "$DEFAULT_REPO_PATH/.git" ]]; then
+  APP_REPO_PATH="$DEFAULT_REPO_PATH"
+elif [[ -d "$LEGACY_REPO_PATH/.git" ]]; then
+  APP_REPO_PATH="$LEGACY_REPO_PATH"
+else
+  APP_REPO_PATH="$DEFAULT_REPO_PATH"
+fi
 APP_REPO_URL="${DIAGNUCLI_REPO_URL:-https://github.com/Danilow88/Nucli-fix.git}"
 if [[ ! -d "$APP_REPO_PATH/.git" ]]; then
   say "Cloning DiagnuCLI app repository..."
