@@ -120,6 +120,32 @@ const SHUFFLE_FIX_I18N = {
   }
 };
 
+const ZTD_FIX_I18N = {
+  pt: {
+    start: "ZTD fix: iniciando comandos Jamf.",
+    passwordHint: "Se pedir senha, use a mesma que desbloqueia a máquina.",
+    restartHint: "Reinicie o dispositivo após finalizar.",
+    selfServiceHint: "Depois do reboot, rode o ZTD no IT Eng Self Service.",
+    done: "ZTD fix: finalizado."
+  },
+  en: {
+    start: "ZTD fix: starting Jamf commands.",
+    passwordHint:
+      "If it asks for a password, use the same one you use to unlock the machine.",
+    restartHint: "Restart the device after finishing.",
+    selfServiceHint: "After reboot, run ZTD in IT Eng Self Service.",
+    done: "ZTD fix: finished."
+  },
+  es: {
+    start: "ZTD fix: iniciando comandos de Jamf.",
+    passwordHint:
+      "Si pide contraseña, usa la misma que desbloquea la máquina.",
+    restartHint: "Reinicia el dispositivo al finalizar.",
+    selfServiceHint: "Después del reinicio, ejecuta ZTD en IT Eng Self Service.",
+    done: "ZTD fix: finalizado."
+  }
+};
+
 function getGuideUrl(lang) {
   const localeMap = {
     pt: "pt_BR",
@@ -939,6 +965,24 @@ const MAINTENANCE_ACTIONS = {
         `EOF`,
         `echo "[DiagnuCLI] Bash/NUCLI fix finished"`
       ].join("\n");
+    }
+  },
+  "ztd-fix": {
+    label: "ZTD fix",
+    detail: "Executa comandos Jamf e orienta reboot/ZTD no Self Service.",
+    buildCommand: (lang = "pt") => {
+      const texts = ZTD_FIX_I18N[lang] || ZTD_FIX_I18N.pt;
+      return [
+        `echo "[DiagnuCLI] ${texts.start}"`,
+        `echo "[DiagnuCLI] ${texts.passwordHint}"`,
+        `sudo jamf manage`,
+        `sudo jamf policy`,
+        `sudo jamf recon`,
+        `sudo jamf policy -event enrollmentComplete`,
+        `echo "[DiagnuCLI] ${texts.restartHint}"`,
+        `echo "[DiagnuCLI] ${texts.selfServiceHint}"`,
+        `echo "[DiagnuCLI] ${texts.done}"`
+      ].join("; ");
     }
   },
   "shuffle-fix": {

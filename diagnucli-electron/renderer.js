@@ -124,6 +124,9 @@ const translations = {
     fixTimeTitle: "Corrigir hora",
     fixTimeDesc:
       "Abre Date & Time via Spotlight e ativa ajustes automáticos.",
+    ztdFixTitle: "ZTD fix",
+    ztdFixDesc:
+      "Executa comandos Jamf. Se pedir senha, use a mesma que desbloqueia a máquina. Reinicie e depois rode o ZTD no IT Eng Self Service.",
     uninstallAppsTitle: "Desinstalar apps",
     uninstallAppsDesc:
       "Mapeia apps instalados e move os selecionados para a Lixeira.",
@@ -177,6 +180,7 @@ const translations = {
     activityMonitorTip: "Abre o Activity Monitor.",
     emptyTrashTip: "Esvazia a Lixeira.",
     fixTimeTip: "Abre Date & Time e configura automaticamente.",
+    ztdFixTip: "Executa comandos Jamf e orienta o pós-reboot.",
     uninstallAppsTip: "Lista apps e move os selecionados para a Lixeira.",
     openKeychainTip: "Abre o Keychain na área correta.",
     touchIdTip: "Abre Touch ID & Password nas Configurações.",
@@ -320,6 +324,9 @@ const translations = {
     emptyTrashDesc: "Empties the Finder Trash.",
     fixTimeTitle: "Fix time",
     fixTimeDesc: "Opens Date & Time via Spotlight and enables auto settings.",
+    ztdFixTitle: "ZTD fix",
+    ztdFixDesc:
+      "Runs Jamf commands. If it asks for a password, use your machine unlock password. Restart, then run ZTD in IT Eng Self Service.",
     uninstallAppsTitle: "Uninstall apps",
     uninstallAppsDesc: "Lists installed apps and moves selected ones to Trash.",
     openKeychainTitle: "Open Keychain",
@@ -372,6 +379,7 @@ const translations = {
     activityMonitorTip: "Opens Activity Monitor.",
     emptyTrashTip: "Empties Trash.",
     fixTimeTip: "Opens Date & Time and configures automatically.",
+    ztdFixTip: "Runs Jamf commands and guides the post-reboot step.",
     uninstallAppsTip: "Lists apps and moves selected ones to Trash.",
     openKeychainTip: "Opens Keychain in the right section.",
     touchIdTip: "Opens Touch ID & Password in Settings.",
@@ -515,6 +523,9 @@ const translations = {
     fixTimeTitle: "Corregir hora",
     fixTimeDesc:
       "Abre Date & Time via Spotlight y activa ajustes automáticos.",
+    ztdFixTitle: "ZTD fix",
+    ztdFixDesc:
+      "Ejecuta comandos Jamf. Si pide contraseña, usa la misma que desbloquea la máquina. Reinicia y luego ejecuta ZTD en IT Eng Self Service.",
     uninstallAppsTitle: "Desinstalar apps",
     uninstallAppsDesc:
       "Enumera apps instaladas y mueve las seleccionadas a la Papelera.",
@@ -568,6 +579,7 @@ const translations = {
     activityMonitorTip: "Abre el Monitor de Actividad.",
     emptyTrashTip: "Vacía la Papelera.",
     fixTimeTip: "Abre Date & Time y configura automáticamente.",
+    ztdFixTip: "Ejecuta comandos Jamf y guía el paso post-reinicio.",
     uninstallAppsTip: "Lista apps y mueve las seleccionadas a la Papelera.",
     openKeychainTip: "Abre Keychain en la sección correcta.",
     touchIdTip: "Abre Touch ID & Password en Configuración.",
@@ -775,6 +787,7 @@ const actionLabels = {
   "activity-monitor": "Open Activity Monitor",
   "empty-trash": "Empty Trash",
   "fix-time": "Fix time",
+  "ztd-fix": "ZTD fix",
   "uninstall-apps": "Uninstall apps",
   "open-keychain": "Open Keychain",
   "open-touch-id": "Open Touch ID & Password",
