@@ -211,9 +211,9 @@ const translations = {
     howTitle: "Como funciona",
     howList: [
       "Use a busca para encontrar botões e ações rapidamente.",
-      "Os botões executam passos automáticos e abrem links úteis.",
-      "Passe o mouse nos botões para ver tooltips explicativos.",
-      "Os logs do Terminal aparecem em tempo real na esquerda."
+      "Os botões executam diagnósticos, correções e abrem portais úteis.",
+      "Cada botão descreve o que faz e mostra um tooltip com detalhes.",
+      "A execução roda no Terminal e os logs aparecem em tempo real."
     ],
     guideTitle: "Orientações rápidas",
     guideList: [
@@ -409,9 +409,9 @@ const translations = {
     howTitle: "How it works",
     howList: [
       "Use search to quickly find buttons and actions.",
-      "Buttons run automated steps and open helpful links.",
-      "Hover buttons to see interactive tooltips.",
-      "Terminal logs stream live on the left."
+      "Buttons run diagnostics, fixes, or open helpful portals.",
+      "Each button explains its purpose and shows a tooltip with details.",
+      "Execution runs in Terminal and logs appear in real time."
     ],
     guideTitle: "Quick guidance",
     guideList: [
@@ -610,9 +610,9 @@ const translations = {
     howTitle: "Cómo funciona",
     howList: [
       "Use la búsqueda para encontrar botones rápidamente.",
-      "Los botones ejecutan pasos automáticos y abren enlaces.",
-      "Pase el mouse para ver tooltips interactivos.",
-      "Los logs del Terminal se muestran en vivo a la izquierda."
+      "Los botones ejecutan diagnósticos, correcciones o abren portales útiles.",
+      "Cada botón explica su propósito y muestra un tooltip con detalles.",
+      "La ejecución corre en Terminal y los logs aparecen en tiempo real."
     ],
     guideTitle: "Orientaciones rápidas",
     guideList: [
