@@ -24,6 +24,8 @@ let monitorModeEnabled = false;
 let monitorModeSnapshot = null;
 let speedtestWindow = null;
 
+app.setName("Diagnu");
+
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
   : path.resolve(__dirname, "..", "diagnucli");
