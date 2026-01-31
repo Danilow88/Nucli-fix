@@ -16,7 +16,7 @@
   },
   "build": {
     "appId": "com.diagnucli.app",
-    "productName": "Diagnu",
+    "productName": "DiagnuCLI",
     "directories": {
       "output": "dist"
     },
