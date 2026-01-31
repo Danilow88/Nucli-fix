@@ -1862,84 +1862,277 @@ diagnose_stepup_auth_error() {
 
 # Diagnóstico específico: Erro "br prod not found" e "Missing Groups"
 diagnose_br_prod_groups_error() {
-    print_header "Diagnóstico: Erro 'br prod not found' e 'Missing Groups'"
+    print_header "Diagnóstico: Erro 'br group not found'"
     
-    print_info "Verificando grupos e roles necessários..."
-    
-    local current_user=$(whoami)
-    local issues_found=0
-    
-    # Verificar grupos necessários
-    print_info "Grupos necessários: casual-dev, eng"
+    echo ""
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "CHECKLIST DE SOLUÇÃO PARA ERRO BR GROUP NOT FOUND"
+    print_info "═══════════════════════════════════════════════════════════════"
     echo ""
     
-    # Tentar verificar grupos via nu sec (se disponível)
-    if command -v nu &> /dev/null; then
-        print_info "Verificando grupos via NuCLI..."
-        
-        # Executar comando uma única vez e capturar saída
-        local iam_output=$(nu sec shared-role-iam show "$current_user" --target-aws-account=br 2>&1)
-        
-        # Mostrar saída usando execute_command para registro no log
-        if [ -n "$iam_output" ]; then
-            echo "$iam_output" | head -30 | while IFS= read -r line; do
-                print_info "  $line"
-            done
-            register_command_success "nu sec shared-role-iam show $current_user --target-aws-account=br" "$(echo "$iam_output" | head -3 | tr '\n' '; ')"
-        fi
-        
-        if echo "$iam_output" | grep -qiE "Missing Groups|missing.*groups|casual-dev.*eng|eng.*casual-dev"; then
-            print_error "Problema detectado: Grupos faltando (casual-dev, eng)"
-            ((issues_found++))
-        fi
-        
-        if echo "$iam_output" | grep -qiE "br.*prod.*not found|br-prod.*not found|profile.*br-prod.*not found"; then
-            print_error "Problema detectado: Perfil br-prod não encontrado"
-            ((issues_found++))
-        fi
+    # Passo 1: Verificar se possui o papel correto
+    print_info "PASSO 1: Verificar acesso à conta AWS 'br'"
+    echo ""
+    print_warning "Confirme se você possui o papel (role) correto na conta AWS 'br'."
+    echo ""
+    print_info "Se você NÃO possui acesso, solicite através de:"
+    print_info "  → AWS Request access / Add role"
+    print_info "  → Portal: https://nubank.atlassian.net/servicedesk/customer/portal/131"
+    echo ""
+    print_info "Instruções para solicitar:"
+    print_info "  1. Abra o Slack e procure por 'asknu'"
+    print_info "  2. Escreva: 'quero a shared role na conta br para acesso ao nucli'"
+    print_info "  3. Aguarde aprovação antes de continuar"
+    echo ""
+    
+    read -p "Você JÁ possui o role na conta 'br'? (s/n): " tem_role
+    if [[ ! "$tem_role" =~ ^[sS]$ ]]; then
+        print_warning "Por favor, solicite o acesso conforme as instruções acima antes de prosseguir."
+        print_info "Após obter o acesso, execute este diagnóstico novamente."
+        return 1
     fi
     
-    # Verificar Java (necessário para ler shared roles)
-    print_info "Verificando instalação do Java..."
+    echo ""
+    print_success "Ótimo! Vamos configurar suas credenciais."
+    echo ""
+    
+    # Passo 2: Obter informações do usuário
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "PASSO 2: Configuração do usuário IAM"
+    print_info "═══════════════════════════════════════════════════════════════"
+    echo ""
+    
+    local iam_user=""
+    local is_partner=""
+    
+    print_info "Você é parceiro da Nubank (terceiro/empresa externa)?"
+    read -p "Resposta (s/n): " is_partner
+    echo ""
+    
+    if [[ "$is_partner" =~ ^[sS]$ ]]; then
+        print_info "Como parceiro, seu usuário deve seguir o formato: nome.sobrenome.empresa"
+        print_info "Exemplo: joao.silva.accenture"
+    else
+        print_info "Como colaborador Nubank, seu usuário deve seguir o formato: nome.sobrenome"
+        print_info "Exemplo: joao.silva"
+    fi
+    echo ""
+    
+    read -p "Digite seu usuário IAM (firstname.lastname ou firstname.lastname.empresa): " iam_user
+    
+    # Validar formato do usuário
+    if [[ ! "$iam_user" =~ ^[a-z]+\.[a-z]+(\.[a-z]+)?$ ]]; then
+        print_error "Formato de usuário inválido!"
+        print_info "Use apenas letras minúsculas e pontos, no formato:"
+        print_info "  - nome.sobrenome (colaborador)"
+        print_info "  - nome.sobrenome.empresa (parceiro)"
+        return 1
+    fi
+    
+    echo ""
+    print_success "Usuário IAM configurado: $iam_user"
+    echo ""
+    
+    # Passo 3: Executar comandos de configuração
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "PASSO 3: Executando comandos de configuração"
+    print_info "═══════════════════════════════════════════════════════════════"
+    echo ""
+    
+    print_warning "Os comandos serão executados um por vez."
+    print_warning "Aguarde a conclusão de cada comando antes de prosseguir."
+    echo ""
+    
+    # Comando 1: Reset das credenciais
+    print_info "Comando 1/7: Resetar credenciais AWS"
+    print_info "  → nu aws credentials reset --force"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu aws credentials reset --force; then
+        print_success "✓ Credenciais resetadas com sucesso"
+    else
+        print_error "✗ Erro ao resetar credenciais"
+        print_warning "Continuando mesmo assim..."
+    fi
+    echo ""
+    
+    # Comando 2: Configurar arquivo iam_user
+    print_info "Comando 2/7: Configurar arquivo iam_user"
+    print_info "  → echo \"$iam_user\" > ~/dev/nu/.nu/about/me/iam_user"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    # Criar diretório se não existir
+    mkdir -p ~/dev/nu/.nu/about/me
+    
+    if echo "$iam_user" > ~/dev/nu/.nu/about/me/iam_user; then
+        print_success "✓ Arquivo iam_user configurado"
+        print_info "  Localização: ~/dev/nu/.nu/about/me/iam_user"
+        print_info "  Conteúdo: $iam_user"
+    else
+        print_error "✗ Erro ao configurar iam_user"
+        return 1
+    fi
+    echo ""
+    
+    # Comando 3: Setup das credenciais
+    print_info "Comando 3/7: Configurar credenciais AWS"
+    print_info "  → nu aws credentials setup"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu aws credentials setup; then
+        print_success "✓ Credenciais configuradas"
+    else
+        print_error "✗ Erro ao configurar credenciais"
+        print_warning "Continuando mesmo assim..."
+    fi
+    echo ""
+    
+    # Comando 4: Okta login config
+    print_info "Comando 4/7: Configurar Okta login"
+    print_info "  → nu aws okta-login-config setup"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu aws okta-login-config setup; then
+        print_success "✓ Okta login configurado"
+    else
+        print_error "✗ Erro ao configurar Okta login"
+        print_warning "Continuando mesmo assim..."
+    fi
+    echo ""
+    
+    # Comando 5: Profiles config
+    print_info "Comando 5/7: Configurar perfis AWS"
+    print_info "  → nu aws profiles-config setup"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu aws profiles-config setup; then
+        print_success "✓ Perfis AWS configurados"
+    else
+        print_error "✗ Erro ao configurar perfis"
+        print_warning "Continuando mesmo assim..."
+    fi
+    echo ""
+    
+    # Comando 6: Shared role credentials refresh
+    print_info "Comando 6/7: Atualizar shared role credentials para conta 'br'"
+    print_info "  → nu aws shared-role-credentials refresh --account-alias=br"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu aws shared-role-credentials refresh --account-alias=br; then
+        print_success "✓ Shared role credentials atualizadas para conta 'br'"
+    else
+        print_error "✗ Erro ao atualizar shared role credentials"
+        print_warning "Verifique se você tem as permissões necessárias"
+    fi
+    echo ""
+    
+    # Comando 7: CodeArtifact login
+    print_info "Comando 7/7: Configurar CodeArtifact Maven"
+    print_info "  → nu codeartifact login maven"
+    echo ""
+    read -p "Pressione ENTER para executar... "
+    
+    if nu codeartifact login maven; then
+        print_success "✓ CodeArtifact configurado"
+    else
+        print_error "✗ Erro ao configurar CodeArtifact"
+        print_warning "Isso pode indicar problemas com Java/JDK"
+    fi
+    echo ""
+    
+    # Verificar se há erro relacionado ao Java
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "VERIFICAÇÃO: Java/JDK"
+    print_info "═══════════════════════════════════════════════════════════════"
+    echo ""
     
     if ! command -v java &> /dev/null; then
-        print_error "Java não está instalado"
-        print_warning "Java é necessário para ler shared roles"
-        print_info "Solução: brew install --cask temurin"
-        ((issues_found++))
+        print_error "Java não está instalado!"
+        echo ""
+        print_info "Se você viu erros relacionados ao Java/JDK, instale o Temurin:"
+        print_info "  → brew install --cask temurin"
+        echo ""
+        print_info "Após instalar, execute novamente os comandos acima."
+        echo ""
+        read -p "Deseja instalar o Temurin agora? (s/n): " install_java
+        
+        if [[ "$install_java" =~ ^[sS]$ ]]; then
+            print_info "Instalando Temurin..."
+            if brew install --cask temurin; then
+                print_success "✓ Temurin instalado com sucesso"
+                print_info "Execute este diagnóstico novamente para reconfigurar."
+            else
+                print_error "✗ Erro ao instalar Temurin"
+                print_info "Tente instalar manualmente: brew install --cask temurin"
+            fi
+        fi
     else
         local java_version=$(java -version 2>&1 | head -1)
-        print_success "Java instalado: $java_version"
+        print_success "✓ Java instalado: $java_version"
     fi
+    echo ""
     
-    if [ $issues_found -gt 0 ]; then
-        echo ""
-        print_info "Soluções recomendadas:"
-        echo ""
-        print_info "1. Solicitar roles BR e br-staging:"
-        print_info "   https://nubank.atlassian.net/servicedesk/customer/portal/131/group/679/create/9937"
-        echo ""
-        print_info "2. Solicitar grupos casual-dev e eng:"
-        print_info "   https://nubank.atlassian.net/servicedesk/customer/portal/131/group/680/create/2117"
-        echo ""
-        print_info "3. Solicitar admin no ist (word wilde account):"
-        print_info "   - Via Ask Nu ou Identity Hub"
-        echo ""
-        print_info "4. Reset e configurar credenciais:"
-        print_info "   nu aws credentials reset"
-        print_info "   nu aws credentials setup"
-        print_info "   (para todas as roles exceto BR)"
-        echo ""
-        print_info "4. Reset e configurar credenciais:"
-        print_info "   nu aws credentials reset"
-        print_info "   nu aws credentials setup"
-        print_info "   (para todas as roles exceto BR)"
-        echo ""
-        print_info "   OU para conta BR:"
-        print_info "   nu aws shared-role-credentials refresh --account-alias=br"
-        echo ""
-        print_info "5. Se não funcionar:"
-        print_info "   Deletar pasta .aws local inteira ou executar:"
+    # Verificação final
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "VERIFICAÇÃO FINAL"
+    print_info "═══════════════════════════════════════════════════════════════"
+    echo ""
+    
+    print_info "Verificando arquivo iam_user..."
+    if [ -f ~/dev/nu/.nu/about/me/iam_user ]; then
+        local arquivo_content=$(cat ~/dev/nu/.nu/about/me/iam_user)
+        print_success "✓ Arquivo iam_user existe"
+        print_info "  Conteúdo: $arquivo_content"
+        
+        if [ "$arquivo_content" = "$iam_user" ]; then
+            print_success "✓ Conteúdo correto!"
+        else
+            print_warning "⚠ Conteúdo diferente do esperado"
+            print_info "  Esperado: $iam_user"
+            print_info "  Encontrado: $arquivo_content"
+        fi
+    else
+        print_error "✗ Arquivo iam_user não encontrado"
+        print_info "  Crie manualmente: echo \"$iam_user\" > ~/dev/nu/.nu/about/me/iam_user"
+    fi
+    echo ""
+    
+    # Respostas prontas e links úteis
+    print_info "═══════════════════════════════════════════════════════════════"
+    print_info "RESPOSTAS PRONTAS E LINKS ÚTEIS"
+    print_info "═══════════════════════════════════════════════════════════════"
+    echo ""
+    
+    print_info "1. Sempre execute o reset e setup das credenciais antes de tentar novamente."
+    echo ""
+    
+    print_info "2. Se não possuir o role, solicite pelo portal:"
+    print_info "   → https://nubank.atlassian.net/servicedesk/customer/portal/131"
+    echo ""
+    
+    print_info "3. Para roles compartilhadas, consulte o guia oficial:"
+    print_info "   → https://nubank.atlassian.net/wiki/spaces/SECENG/pages/263220954522/User+Guide+-+Accessing+AWS+via+User+Shared+Roles"
+    echo ""
+    
+    print_info "4. Documentação AWS Request access:"
+    print_info "   → https://nubank.atlassian.net/wiki/spaces/SECENG/pages/263220954522/"
+    echo ""
+    
+    print_success "Configuração concluída!"
+    echo ""
+    print_info "Se ainda houver problemas:"
+    print_info "  • Execute: nu doctor"
+    print_info "  • Verifique os logs de erro específicos"
+    print_info "  • Contate o suporte através do @AskNu no Slack"
+    echo ""
+    
+    return 0
         print_info "   rm -rf ~/.aws"
         print_info "   OU apenas o arquivo config:"
         print_info "   rm ~/.aws/config"
