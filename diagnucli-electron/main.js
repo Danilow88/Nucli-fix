@@ -24,8 +24,6 @@ let monitorModeEnabled = false;
 let monitorModeSnapshot = null;
 let speedtestWindow = null;
 
-app.setName("Diagnu");
-
 const DEFAULT_SCRIPT_PATH = app.isPackaged
   ? path.join(process.resourcesPath, "diagnucli")
   : path.resolve(__dirname, "..", "diagnucli");
@@ -1161,7 +1159,7 @@ end tell`
   },
   "update-app": {
     label: "DiagnuCLI app update",
-    detail: "Fecha apps e roda o instalador via curl.",
+    detail: "Fecha apps, atualiza via Git e reinstala o app.",
     buildCommand: () => {
       const quitAppsScript = `
         tell application "System Events"
@@ -1177,23 +1175,18 @@ end tell`
         end tell
       `;
       const repoPath = REPO_PATH;
-      const repoAppPath = path.join(
-        repoPath,
-        "diagnucli-electron",
-        "dist",
-        "mac-universal",
-        "DiagnuCLI.app"
-      );
       const repoElectronPath = path.join(repoPath, "diagnucli-electron");
+      const installScriptPath = path.join(repoElectronPath, "install.sh");
+      const repoUrl = "https://github.com/Danilow88/Nucli-fix.git";
+      const openAppCommand = `open -a "${APP_NAME}" || open "/Applications/${APP_NAME}.app" || true`;
       return [
         `echo "[DiagnuCLI] Update started"`,
         `osascript -e '${quitAppsScript.replace(/'/g, "'\"'\"'")}'`,
         `sleep 1`,
-        `if [ -d "${repoPath}/.git" ]; then git -C "${repoPath}" pull --rebase || git -C "${repoPath}" pull; fi`,
-        `if [ -d "${repoElectronPath}" ]; then cd "${repoElectronPath}"; npm install; npm run build -- --mac --universal || npm run build -- --mac; fi`,
-        `curl -fsSL https://raw.githubusercontent.com/Danilow88/Nucli-fix/main/scripts/install-auto.sh | bash`,
+        `if [ -d "${repoPath}/.git" ]; then git -C "${repoPath}" pull --rebase || git -C "${repoPath}" pull; else git clone "${repoUrl}" "${repoPath}"; fi`,
+        `if [ -f "${installScriptPath}" ]; then /bin/bash "${installScriptPath}"; else echo "[DiagnuCLI] install.sh not found: ${installScriptPath}"; fi`,
         `sleep 1`,
-        `if [ -d "${repoAppPath}" ]; then open "${repoAppPath}"; else open -a "DiagnuCLI" || open -a "Diagnu" || open "/Applications/DiagnuCLI.app" || true; fi`,
+        `${openAppCommand}`,
         `echo "[DiagnuCLI] Update finished"`
       ].join("; ");
     }

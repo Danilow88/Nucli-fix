@@ -7,7 +7,7 @@ section() {
 }
 
 section "DiagnuCLI app installer"
-say "This script updates and installs the DiagnuCLI app."
+say "This script updates the repo and installs the DiagnuCLI app."
 
 section "Step 1/1: DiagnuCLI app"
 DEFAULT_REPO_PATH="$HOME/Nucli-fix"
@@ -40,22 +40,16 @@ if [[ ! -d "$APP_REPO_PATH/diagnucli-electron" ]]; then
   exit 1
 fi
 
-if ! command -v node >/dev/null 2>&1; then
-  say "Node.js not found. Install Node 18+ and rerun this script."
+say "Running installer..."
+INSTALL_SCRIPT="$APP_REPO_PATH/diagnucli-electron/install.sh"
+if [[ ! -f "$INSTALL_SCRIPT" ]]; then
+  say "Installer not found at $INSTALL_SCRIPT"
   exit 1
 fi
 
-say "Installing dependencies..."
-if [[ -f "$APP_REPO_PATH/diagnucli-electron/package-lock.json" ]]; then
-  (cd "$APP_REPO_PATH/diagnucli-electron" && npm ci)
-else
-  (cd "$APP_REPO_PATH/diagnucli-electron" && npm install)
-fi
-
-say "Starting DiagnuCLI via npm start (background)..."
-LOG_PATH="${DIAGNUCLI_NPM_LOG:-/tmp/diagnucli-npm-start.log}"
-(cd "$APP_REPO_PATH/diagnucli-electron" && nohup npm start >"$LOG_PATH" 2>&1 & disown)
-say "DiagnuCLI started. Logs: $LOG_PATH"
+/bin/bash "$INSTALL_SCRIPT"
+say "Opening DiagnuCLI..."
+open -a "DiagnuCLI" || open "/Applications/DiagnuCLI.app" || true
 
 # Close the Terminal window that ran the curl|bash command (no prompt)
 osascript -e 'tell application "Terminal" to close front window' >/dev/null 2>&1 || true
